@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('assets/head') %>
+<%- include('assets/header', {oldal: "ertekelesek"}) %>
+<body>
+    <div id="page-container">
+        <div class="card text-bg-dark">
+            <img src="img/login04.jpg" class="card-img" alt="kep" style="opacity: 0.7; width: 100%; height:auto;">
+            <div class="card-img-overlay">
+                </br>
+                <% for(let i = 0; i < ertekelesek.length; i++){ %>
+                    <div class="container" style="background-color: rgb(181, 189, 189)">
+                        <% if(locals.ertekeles_id != ertekelesek[i].id){ %>
+                            <% if(locals.current_role == 'ROLE_ADMIN' || locals.current_email == ertekelesek[i].email){ %>
+                                <a class="gomb float-right m-3 btn btn-primary" href="/ertekeles?id=<%- ertekelesek[i].id %>">Szerkeszt</a>
+                                <form class="float-right m-3" action="/delErtekeles" method="post">
+                                    <input type="hidden" name="id" value="<%- ertekelesek[i].id %>">
+                                    <input class="delete float-right btn btn-danger" type="submit" value="Törlés">
+                                </form>
+                            <% } %>
+
+                            <h3><%- ertekelesek[i].nev %></h3>
+                            <p>
+                                <% for(let j = 0; j < ertekelesek[i].csillag; j++){ %>★<% } %>
+                            </p>
+                            <p><%- ertekelesek[i].leiras %></p>
+                        <% }else{ %>
+                            <h3><%- ertekelesek[i].nev %></h3>
+                            <form class="form" action="/editErtekeles" method="post">
+                                <input type="hidden" name="uj_id" value="<%- ertekeles_id %>"></input>
+                                <label>Csillag:
+                                    <select class="form-select" name="csillag">
+                                        <option>-</option>
+                                        <% for(let j = 5; j > 0; j--){ %>
+                                            <option  <% if(ertekelesek[i].csillag == j){ %> selected <% } %> ><%- j %></option>
+                                        <% } %>
+                                    </select>
+                                </label>
+                                <label>Leírás:<br>
+                                    <input type="text" name="leiras" value="<%- ertekelesek[i].leiras %>">
+                                </label>
+                                <input class="m-3 gomb float-right btn btn-primary" type="submit" value="Hozzáad">
+                            </form>
+                        <% } %>
+                    </div>
+                <% } %>
+                <div class="container" style="background-color: rgb(181, 189, 189)">
+                    <% if(locals.current_email && !locals.vanErtekeles){ %>
+                        <form  action="/addErtekeles" method="post">
+                            <div class="form-group" style="max-width: 100%; padding: 0.5em; position: relative; margin:auto">
+                                <input type="hidden" name="email" value="<%- current_email %>"></input>
+                                <label>Csillag:
+                                    <select class="form-select" name="csillag">
+                                        <option>-</option>
+                                        <% for(let i = 5; i > 0; i--){ %>
+                                            <option><%- i %></option>
+                                        <% } %>
+                                    </select>
+                                </label><br>
+                            </div>
+                            <div class="form-group" style="max-width: 100%; padding: 0.5em; position: relative; margin:auto">
+                                <label>Leírás:<br>
+                                    <textarea rows="4" cols="50" name="leiras" ></textarea>
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-group" style="max-width: 100%; padding: 0.5em; padding-top: 0px; position: relative; margin:auto">
+                                <input class="btn btn-primary" type="submit" value="Hozzáad">
+                            </div>
+                        </form>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <%- include('assets/footer') %>
+</body>
+</html>

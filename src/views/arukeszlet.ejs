@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('assets/head') %>
+<%- include('assets/header', {oldal: "arukeszlet"}) %>
+<body>
+    <div id="page-container">
+        <h2 class="text-center m-4">Árukészlet</h2>
+        <table class="table w-50">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nev</th>
+                    <th scope="col">Mennyiség</th>
+                    <th scope="col">Hol van tárolva</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for (let i=0; i<aruk.length; i++) { %>
+                <tr>
+                    <td><%= aruk[i].id %></td>
+                    <td><%= aruk[i].nev %></td>
+                    <td><%= aruk[i].mennyiseg %> db</td>
+                    <td><%= aruk[i].holvantarolva %></td>
+                    <%# if (current_email === user_mails[i] || current_role === 'ROLE_ADMIN') { %>
+                    <td><a  class="btn btn-primary" href="/arukeszlet/<%= aruk[i].id %>">Szerkeszt</a></td>
+                    <%# } %>
+                    <% if (current_role === 'ROLE_ADMIN') { %>
+                        <td><button data-toggle="modal" data-target="#modal-toTrash<%= aruk[i].id %>" class="btn btn-danger">Törlés
+                                <span class="glyphicon glyphicon-trash" data-toggle="tooltip"
+                                      data-placement="top" title="Sent to Trash Box"></span></button>
+                        </td>
+                    <% } %>
+                    <div class="modal modal-toTrash" id="modal-toTrash<%= aruk[i].id %>">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">×
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="error-text"><strong>Biztos hogy törlöd ezt az elemet?: <%= aruk[i].nev %></strong></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn-sm btn-dark details" data-dismiss="modal" aria-hidden="true">
+                                        mégsem
+                                    </button>
+                                    <form action="/deleteAru/<%= aruk[i].id %>" method="post">
+                                        <button class="btn-sm btn-dark details" value="delete">Igen</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+        <div class="mt-5">
+            <% if (aru) { %>
+                <h2 class="text-center"><%- aru.nev %> szerkesztése</h2>
+                <form action="/editAru/<%- aru.id %>" method="post" class="text-center">
+                    <div class="form-horizontal">
+                        <label>Név:
+                            <input type="text" class="form-control" name="nev" id="nev" value="<%- aru.nev %>"/>
+                        </label>
+                        <label>Mennyiség:
+                            <input type="text" class="form-control" name="mennyiseg" id="mennyiseg" value="<%- aru.mennyiseg %>"/>
+                        </label>
+                        <label>Hol van tárolva:
+                            <input type="text" class="form-control" name="holvantarolva" id="holvantarolva" value="<%- aru.holvantarolva %>"/>
+                        </label>
+                        <input class="btn btn-primary" type="submit" value="Frissít">
+                    </div>
+                </form>
+            <% } %>
+            <% if (!aru) { %>
+                <h2 class="text-center">Termék hozzáadása</h2>
+                <form action="/addAru" method="post" class="text-center">
+                    <div class="form-horizontal">
+                        <label>Név:
+                            <input type="text" class="form-control" name="nev" id="nev"/>
+                        </label>
+                        <label>Mennyiség:
+                            <input type="text" class="form-control" name="mennyiseg" id="mennyiseg"/>
+                        </label>
+                        <label>Hol van tárolva:
+                            <input type="text" class="form-control" name="holvantarolva" id="holvantarolva"/>
+                        </label>
+                        <input class="btn btn-primary" type="submit" value="Hozzáad">
+                    </div>
+                </form>
+            <% } %>
+        </div>
+    </div>
+    <%- include('assets/footer') %>
+</body>
+</html>

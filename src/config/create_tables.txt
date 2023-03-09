@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS etelek;
+
+CREATE TABLE etelek (
+    id SERIAL PRIMARY KEY,
+    nev text NOT NULL,
+    leiras text NOT NULL,
+    kepnev text NOT NULL,
+    ar int NOT NULL
+);

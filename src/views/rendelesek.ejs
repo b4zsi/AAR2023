@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('assets/head') %>
+<%- include('assets/header', {oldal: "rendelesek"}) %>
+<body>
+    <div id="page-container">
+        <% if (current_role === 'ROLE_USER') { %>
+            <h2 class="text-center m-4">Rendeléseim</h2>
+            <table class="table w-50">
+                <thead>
+                <tr>
+                    <th scope="col">Rendelés ID</th>
+                    <th scope="col">Étel neve</th>
+                    <th scope="col">Mennyiség</th>
+                    <th scope="col">Ár</th>
+                    <th scope="col">Teljes ár</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <% for (let i=0; i < rendelesek.length; i++) { %>
+                        <tr>
+                            <td rowspan="<%= rendelesek[i].length %>" style="vertical-align: middle"><%= rendelesek[i][0].rendeles_id %></td>
+                            <% for (let j=0; j < rendelesek[i].length; j++) { %>
+                                <td><%= rendelesek[i][j].nev %></td>
+                                <td><%= rendelesek[i][j].mennyiseg %></td>
+                                <td><%= rendelesek[i][j].ar * rendelesek[i][j].mennyiseg %></td>
+                                <% if(j === 0) { %>
+                                    <td rowspan="<%= rendelesek[i].length %>" style="vertical-align: middle"><%= arak[i] %></td>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                        <td colspan="5"></td>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <h2 class="text-center m-4">Rendelések</h2>
+            <table class="table w-50">
+                <thead>
+                <tr>
+                    <th scope="col">Rendelés ID</th>
+                    <th scope="col">Rendelő</th>
+                    <th scope="col">Időpont</th>
+                    <th scope="col">Ár</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (let i=0; i < rendelesek.length; i++) { %>
+                    <tr>
+                        <td><%= rendelesek[i].id %></td>
+                        <td><%= rendelesek[i].email %></td>
+                        <td><%= rendelesek[i].idopont.toLocaleString("hu-HU") %></td>
+                        <td><%= rendelesek[i].ar %></td>
+                        <%# if (current_email === user_mails[i] || current_role === 'ROLE_ADMIN') { %>
+                        <td><a  class="btn btn-primary" href="/rendelesek/<%= rendelesek[i].id %>">Szerkezt</a></td>
+                        <%# } %>
+                        <% if (current_role === 'ROLE_ADMIN') { %>
+                            <td><button data-toggle="modal" data-target="#modal-toTrash<%= rendelesek[i].id %>" class="btn btn-danger">Törlés
+                                    <span class="glyphicon glyphicon-trash" data-toggle="tooltip"
+                                          data-placement="top" title="Sent to Trash Box"></span></button>
+                            </td>
+                        <% } %>
+                        <div class="modal modal-toTrash" id="modal-toTrash<%= rendelesek[i].id %>">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">×
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="error-text"><strong>Biztos hogy törlöd ezt a megrendelést: <%= rendelesek[i].email %></strong></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn-sm btn-dark details" data-dismiss="modal" aria-hidden="true">
+                                            mégsem
+                                        </button>
+                                        <form action="/deleteAru/<%= rendelesek[i].id %>" method="post">
+                                            <button class="btn-sm btn-dark details" value="delete">Igen</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                <% } %>
+                </tbody>
+            </table>
+            <div class="mt-5">
+                <% if (rendeles) { %>
+                    <h2 class="text-center"><%- id %>. rendelés szerkesztése</h2>
+                    <form action="/editRendelesek/<%- id %>" method="post" class="text-center">
+                        <% for (let i=0; i < rendeles.length; i++) { %>
+                            <div class="form-horizontal">
+                                <span ><%- rendeles[i].nev %>:</span>
+                                <input type="hidden" class="form-control" name="nev<%- i %>" id="nev" value="<%- rendeles[i].nev %>"/>
+                                <label>Mennyiség:
+                                    <input type="text" class="form-control" name="mennyiseg<%- i %>" id="mennyiseg" value="<%- rendeles[i].mennyiseg %>"/>
+                                </label>
+                            </div>
+                        <% } %>
+                            <input class="btn btn-primary" type="submit" value="Frissít">
+                    </form>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+    <%- include('assets/footer') %>
+</body>
+</html>
