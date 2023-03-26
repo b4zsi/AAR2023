@@ -1,8 +1,6 @@
 const oracledb = require('oracledb');
 
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
-
-const mypw = ""
 oracledb.initOracleClient({configDir: '/opt/instantclient_19_8'});
 
 async function run() {
@@ -11,13 +9,13 @@ async function run() {
 
   try {
     connection = await oracledb.getConnection( {
-      user          : "C##M8KMOR",
-      password      : mypw,
+      user          : "C##KG009O",
+      password      : "C##KG009O",
       connectString : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=9999))(CONNECT_DATA=(SERVER=DEDICATED)(SID=orania2)))"
     });
 
     const result = await connection.execute(
-      `SELECT * FROM EMP`
+      `SELECT * FROM BOLT`
     );
     console.log(result.rows);
 
