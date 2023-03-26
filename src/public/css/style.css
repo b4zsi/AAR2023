@@ -1,98 +1,15 @@
-form{
-    margin: 1em;
-}
-
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
-}
-a {
-    color: #0366d6;
-}
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-a:link, a:active, a:visited{
+a:link, a:active, a:visited, a:hover{
     text-decoration: none !important;
-    /*color: aqua; !important;*/
 }
-a:active{
-    color: rgba(200, 200, 200, .9);
+a:hover{
 }
 
 html {
     font-size: 14px;
 }
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-.border-top {
-    border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-    border-bottom: 1px solid #e5e5e5;
-}
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
-}
 
-html {
-    position: relative;
-    min-height: 100%;
-}
-body {
-    margin-bottom: 60px;
-}
-.footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
-}
-table, th, td {
-    border: 1px solid black;
-    padding: 1px;
-}
-table {
-    text-align: center;
-    padding: 10px;
-    border: 1px solid black;
-    margin: auto;
-}
-.center{
-    padding: 10px;
-    border: 1px solid black;
-    margin: auto;
-}
-
-.active {
-    color: black;
-}
-
-#page-container {
-    position: relative;
-    height:auto;
-    min-height: 80vh;
-    font-size: 16px;
-}
 
 footer {
-    position: relative;
     bottom: 0;
     padding: 0;
     margin: 0;
@@ -100,6 +17,27 @@ footer {
     color: black;
     background-color: black !important;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.active {
+    font-weight: bold;
+    color: black;
+    background-color: rgb(123, 98, 223, 0.6);
+    border-radius: 6px;
+
+}
+
+.center{
+    margin: auto;
+}
+
 .copyright{
     width: 100%;
     text-align: center;
@@ -110,25 +48,35 @@ footer {
 
 }
 .gomb{
-    background-color: rgba(88,133,22,80);
+    background-color: rgba(50, 149, 168);
     color: white;
-    border: 0;
+    padding: 0.5em;
     border-radius: 4px;
+    border: 0;
+    text-decoration: none !important;
 }
-.delete{
-    background-color: red;
+.gomb:hover{
     color: white;
-    border: 0;
+    background-color: rgba(45, 182, 227);
+}
+.torol{
+    background-color: rgba(255, 50, 57);
+    color: white;
+    padding: 0.3em 1em ;
     border-radius: 4px;
+    border: 0;
+    text-decoration: none !important;
+    color: white;
+}
+.torol:hover{
+    color: white;
+    background-color: rgba(255, 2, 2);
 }
 
 .hiba{
     background-color: red;
-    padding: 0.8em;
-    color: white;
+    color: white !important;
     border-radius: 4px;
-    width: 80%;
-    margin: 20px auto 0 auto;
 }
 .siker {
     background-color: green;
@@ -139,24 +87,68 @@ footer {
     margin: auto;
 }
 
-.table thead th {
-    border-bottom: none;
+.form{
+    max-width: ;
+    margin: auto auto;
 }
 
-table{
-    border: 1px solid black;
-    padding: 1px;
+.fade-out {
+    animation: fadeOut 3s ease-in-out 0s forwards;
+    -webkit-animation: fadeOut 3s ease-in-out 0s forwards;
+    -moz-animation: fadeOut 3s ease-in-out 0s forwards;
+    -o-animation: fadeOut 3s ease-in-out 0s forwards;
+    -ms-animation: fadeOut 3s ease-in-out 0s forwards;
+}
+@keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+}
+@-moz-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
 }
 
-td{
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
 }
 
-table {
-    text-align: center;
-    padding: 10px;
-    border: 2px solid black;
-    border-collapse: collapse;
-    letter-spacing: 1px;
+@-o-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
 }
+
+@-ms-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+    }
+}
+
+.inline {
+    display: inline;
+}
+.block {
+    display: block;
+}
+
+
+
+

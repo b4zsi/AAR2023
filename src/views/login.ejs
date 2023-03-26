@@ -1,43 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('assets/head') %>
-<%- include('assets/header', {oldal: "login"}) %>
-<body>
-    <div id="page-container">
-        <img src="img/login04.jpg" class="card-img" alt="kep" style="width: 100%; height:auto;">
-        <div class="card-img-overlay">
-            <% if(hibak){ %>
-                <% hibak.forEach((hiba) => { %>
-                    <div class=" d-flex"><p class="hiba"><%= hiba %></p></div>
-                <% }); %>
-            <% } %>
-            <form style="margin-top: 50px; margin-left: 100px; margin-right: 100px" action="/login" method="post">
-                <div class="row mb-3" >
-                    <label for="inputEmail3" class="col-sm-2 col-form-label" style="color: white ;">Email:</label>
-                    <div class="col-sm-10">
-                        <input type="email" name="email" class="form-control" id="inputEmail3" value="<%- email %>">
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label" style="color: white ;">Jelszó:</label>
-                    <div class="col-sm-10">
-                        <input type="password" name="password" class="form-control" id="inputPassword3">
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary ">Bejelentkezés</button>
-                    </div>
-                </div>
-
+    <head>
+        <%- include('assets/head') %>
+    </head>
+    <body>
+        <div class="center p-4">
+            <form class="form text-center" action="/login" method="post">
+                <label>E-mail:
+                    <input type="text" class="form-control" name="email" >
+                </label><br>
+                <label>Jelszó:
+                    <input type="password" class="form-control" name="jelszo" >
+                </label><br>
+                <input class="gomb mt-2" type="submit" value="Bejelentkezés">
             </form>
+            it
+
+            <% for(let i = 0; i < hibak.length; i++){ %>
+            <p> <%- hibak[i] %> </p> 
+            <% } %>
         </div>
-    </div>
-    <%- include('assets/footer') %>
-  <!-- <div>
-    <div>
-      <img src="img/login.jpg" alt="meals" style="width: 80%;  display: block; margin-left: auto; margin-right: auto;">
-    </div>
-  </div> -->
-</body>
+    </body>
 </html>

@@ -1,14 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('assets/head') %>
-<%- include('assets/header', {oldal: "index"}) %>
-<body>
-   <div id="page-container">
-      <div>
-         <p style="font-size:4vw; text-align: center;">Fullos étterem</p>
-         <img src="/img/pizza01.jpg" alt="pizza" style="width: 100%; height:auto;">
-      </div>
-   </div>
-   <%- include('assets/footer') %>
-</body>
+    <head>
+        <%- include('assets/head') %>
+    </head>
+    <header>
+        <%- include('assets/header', {oldal: "index"}) %>
+    </header>
+    <body>
+        <div >
+            <div>
+                <% if(locals.siker){ %>
+                    <p class="fade-out siker">Sikeres bejelentkezés!</p>
+                <% } %>
+            <p style="font-size:5vw; text-align: center;">Üdv a weboldalon!</p>
+
+        <table class="table align-middle w-75 mx-auto">
+            <thead>
+                <tr>
+                <% for(let i = 0; i < konyv['metaData'].length; i++){ %>
+                    <th><%= konyv['metaData'][i]['name'] %></th>
+                <% } %>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i = 0; i < konyv['rows'].length; i++){ %>
+                <tr>
+                    <% for(let j = 0; j < konyv['metaData'].length; j++){ %>
+                        <td><%= konyv['rows'][i][j] %></td>
+                    <% } %>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+            </div>
+        </div>
+
+    </body>
+    <%#- include('assets/footer') %>
 </html>

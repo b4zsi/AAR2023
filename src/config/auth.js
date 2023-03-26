@@ -1,34 +1,25 @@
-const jwt = require("jsonwebtoken")
-const jwtSecret = "eecd871acfc3149f25bfe0sadf2a2fdsa0faa71d61942aa9270e286b84c04";
+const jwtSecret =  "adslfkjaslkdhfh23kjrh3iuy87y8t8ds7t765654ads54efasdgfhjsdfiasdf";
+const jwt = require('jsonwebtoken');
 
-userAuth = (req, res, next) => {
-    const token = req.cookies.jwt
-
+exports.auth = (req, res, next) => {
+    let token = req.cookies.jwt;
+    let curr_email, curr_role;
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
-            if (err) {
-                return res.status(401).json({
-                    message: "Not authorized"
-                })
-            } else {
-                if ((decodedToken.role !== "ROLE_USER") && (decodedToken.role !== "ROLE_ADMIN")) {
-                    return res.status(401).json({
-                        message: "Not authorized"
-                    })
-                } else {
-                    next()
-                }
-            }
-        })
-    } else {
-        return res
-            .status(401)
-            .json({
-                message: "Not authorized, token not available"
-            })
+            curr_email = decodedToken.email;
+            curr_role = decodedToken.role;
+        });
+
+        req.body.curr_email = curr_email;
+        req.body.curr_role = curr_role;
+        next()
     }
 }
-module.exports = {
-    jwtSecret,
-    userAuth
-};
+
+exports.restrict = (req, res, next) => {
+        if(!req.body.curr_email){
+            res.redirect('login');
+        }
+}
+
+exports.jwtSecret = jwtSecret;
