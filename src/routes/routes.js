@@ -9,13 +9,57 @@ const router = express.Router();
 // userek
 //////////////
 
-router.get("/", async (req, res) => {
-    const konyv= await db.getKonyv();
+/**
+ * header-höz automatikusan hozzáadja az uj hivatkozást.
+ * Kulcs az ejs fájlban az oldalváltozó neve.
+ * Listában első az elérési út a rout-ban a második a megjelenítési neve.
+ *
+ * */
+router.use((req, res, next) => {
+    res.locals.header = {
+        "index": ["/", "Főoldal"]
+        ,"bolt" : ["/bolt", "Bolt"]
+        ,"fiok" : ["/fiok", "Fiok"]
+        ,"szerzo" : ["/szerzo", "Szerzok"]
+    };
+    next()
+});
 
-    return res.render('index',{
-        konyv: konyv
+router.get("/", async (req, res) => {
+    return res.render('index');
+});
+
+router.get("/szerzo", async (req, res) => {
+    const table = await db.getSzerzok();
+
+    return res.render('show_table.ejs', {
+        oldal: "szerzo"
+        ,cim: "Szerzok:"
+        ,table: table
     });
 });
+
+router.get("/fiok", async (req, res) => {
+    const table = await db.getFiok();
+
+    return res.render('show_table.ejs', {
+        oldal: "fiok"
+        ,cim: "Fiokok:"
+        ,table: table
+    });
+});
+
+router.get("/bolt", async (req, res) => {
+    const table = await db.getKonyv();
+
+    return res.render('show_table.ejs', {
+        oldal: "bolt"
+        ,cim: "Fiokok:"
+        ,table: table
+    });
+});
+
+/*
 
 router.get("/register", async (req, res) => {
     //const {curr_role} = req.body;
@@ -620,5 +664,5 @@ router.get('/statok', auth, async (req, res) => {
     });
 
 });
-
+*/
 module.exports = router;

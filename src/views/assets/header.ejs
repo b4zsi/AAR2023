@@ -2,40 +2,11 @@
    <div class="container">
       <div class="navbar-collapse collapse">
          <ul class="navbar-nav">
+             <% for(let i in locals.header){ %>
                 <li class="nav-item">
-                    <a class="nav-link <%- oldal === "raktar" ?"active":"" %>" href="/raktar">Raktárok</a>
+                    <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- locals.header[i][0] %>"><%- locals.header[i][1] %></a>
                 </li>
-             <% if(locals.curr_role !== 'ADMIN'){ %> 
-                <li class="nav-item">
-                    <a class="nav-link <%- locals.sajat?"active":"" %>" href="/sajatRaktar">Saját raktár</a>
-                </li>
-            <% } %>
-             <% if(locals.curr_role == 'ADMIN'){ %> 
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === "aruk"?"active":"" %>" href="/aruk">Áruk</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === "users"?"active":"" %>" href="/users">Felhasználók</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === "register"?"active":"" %>" href="/register">Regisztráció</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === "statok"?"active":"" %>" href="/statok">Statisztikák</a>
-                </li>
-            <% } %>
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === "szallitmany" ?"active":"" %>" href="/szallitmany">Szallítmányok</a>
-                </li>
-         </ul>
-         <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-               <a class="nav-link <%- oldal === "profile"?"active":"" %>" href="/profile">Profil</a>
-            </li>
-            <li class="nav-item">
-               <a class="nav-link" href="/logout">Kijelentkez</a>
-            </li>
-         </ul>
+             <% } %>
       </div>
    </div>
 </nav>

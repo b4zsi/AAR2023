@@ -14,27 +14,6 @@
                 <% } %>
             <p style="font-size:5vw; text-align: center;">Üdv a weboldalon!</p>
 
-        <table class="table align-middle w-75 mx-auto">
-            <thead>
-                <tr>
-                <% for(let i = 0; i < konyv['metaData'].length; i++){ %>
-                    <th><%= konyv['metaData'][i]['name'] %></th>
-                <% } %>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(let i = 0; i < konyv['rows'].length; i++){ %>
-                <tr>
-                    <% for(let j = 0; j < konyv['metaData'].length; j++){ %>
-                    <td><%= konyv['rows'][i][j] %>
-                        <% if(konyv['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
-                    </td>
-                    <% } %>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-
             </div>
         </div>
 
