@@ -14,7 +14,7 @@ exports.getKonyv = async () => {
     let conn;
     try {
         conn = await db.getConnection(dbConfig);
-        result = await conn.execute(`SELECT * FROM KONYV`);
+        result = await conn.execute(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
 
     } catch (err) {
         console.log(err);

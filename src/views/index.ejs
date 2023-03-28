@@ -26,7 +26,9 @@
                 <% for(let i = 0; i < konyv['rows'].length; i++){ %>
                 <tr>
                     <% for(let j = 0; j < konyv['metaData'].length; j++){ %>
-                        <td><%= konyv['rows'][i][j] %></td>
+                    <td><%= konyv['rows'][i][j] %>
+                        <% if(konyv['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
+                    </td>
                     <% } %>
                 </tr>
                 <% } %>
