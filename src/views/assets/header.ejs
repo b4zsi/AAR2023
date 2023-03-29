@@ -3,8 +3,9 @@
       <div class="navbar-collapse collapse">
          <ul class="navbar-nav">
              <% for(let i in locals.header){ %>
+
                 <li class="nav-item">
-                    <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- locals.header[i][0] %>"><%- locals.header[i][1] %></a>
+                    <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- i %>"><%- locals.header[i] %></a>
                 </li>
              <% } %>
       </div>

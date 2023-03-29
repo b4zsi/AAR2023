@@ -17,19 +17,24 @@ const router = express.Router();
  * */
 router.use((req, res, next) => {
     res.locals.header = {
-        "index": ["/", "Főoldal"]
-        ,"konyv" : ["/konyv", "Konyv"]
-        ,"fiok" : ["/fiok", "Fiók"]
-        ,"szerzo" : ["/szerzo", "Szerzők"]
-        ,"kiado" : ["/kiado", "Kiadók"]
-        ,"kategoria" : ["/kategoria", "Kategoriák"]
-        ,"nyitvatartas" : ["/nyitvatartas", "Nyitvatartás"]
-        ,"bolt" : ["/bolt", "Bolt"]
+        "index": "Főoldal"
+        ,"konyv" : "Konyv"
+        ,"fiok" : "Fiók"
+        ,"szerzo" : "Szerzők"
+        ,"kiado" : "Kiadók"
+        ,"kategoria" : "Kategoriák"
+        ,"nyitvatartas" : "Nyitvatartás"
+        ,"bolt" : "Bolt"
     };
+    res.locals.oldal = req.path.replace('/','')
     next()
 });
 
 router.get("/", async (req, res) => {
+    return res.redirect('index');
+});
+
+router.get("/index", async (req, res) => {
     return res.render('index');
 });
 
@@ -37,8 +42,7 @@ router.get("/szerzo", async (req, res) => {
     const table = await db.getSzerzok();
 
     return res.render('show_table.ejs', {
-        oldal: "szerzo"
-        ,cim: "Szerzők:"
+        cim: "Szerzők:"
         ,table: table
     });
 });
@@ -46,8 +50,7 @@ router.get("/kiado", async (req, res) => {
     const table = await db.getKiadok();
 
     return res.render('show_table.ejs', {
-        oldal: "kiado"
-        ,cim: "Kiadók"
+        cim: "Kiadók"
         ,table: table
     });
 });
@@ -56,8 +59,7 @@ router.get("/fiok", async (req, res) => {
     const table = await db.getFiok();
 
     return res.render('show_table.ejs', {
-        oldal: "fiok"
-        ,cim: "Fiókok:"
+        cim: "Fiókok:"
         ,table: table
     });
 });
@@ -65,8 +67,7 @@ router.get("/kategoria", async (req, res) => {
     const table = await db.getKategoria();
 
     return res.render('show_table.ejs', {
-        oldal: "kategoria"
-        ,cim: "Kategóriák:"
+        cim: "Kategóriák:"
         ,table: table
     });
 });
@@ -75,8 +76,7 @@ router.get("/konyv", async (req, res) => {
     const table = await db.getKonyv();
 
     return res.render('show_table.ejs', {
-        oldal: "konyv"
-        ,cim: "Konyv:"
+        cim: "Konyv:"
         ,table: table
     });
 });
@@ -85,8 +85,7 @@ router.get("/nyitvatartas", async (req, res) => {
     const table = await db.getNyitvatartas();
 
     return res.render('show_table.ejs', {
-        oldal: "nyitvatartas"
-        ,cim: "Nyitvatartas:"
+        cim: "Nyitvatartas:"
         ,table: table
     });
 });
@@ -95,8 +94,7 @@ router.get("/bolt", async (req, res) => {
     const table = await db.getBolt();
 
     return res.render('show_table.ejs', {
-        oldal: "bolt"
-        ,cim: "Bolt:"
+        cim: "Bolt:"
         ,table: table
     });
 });
