@@ -18,9 +18,13 @@ const router = express.Router();
 router.use((req, res, next) => {
     res.locals.header = {
         "index": ["/", "Főoldal"]
+        ,"konyv" : ["/konyv", "Konyv"]
+        ,"fiok" : ["/fiok", "Fiók"]
+        ,"szerzo" : ["/szerzo", "Szerzők"]
+        ,"kiado" : ["/kiado", "Kiadók"]
+        ,"kategoria" : ["/kategoria", "Kategoriák"]
+        ,"nyitvatartas" : ["/nyitvatartas", "Nyitvatartás"]
         ,"bolt" : ["/bolt", "Bolt"]
-        ,"fiok" : ["/fiok", "Fiok"]
-        ,"szerzo" : ["/szerzo", "Szerzok"]
     };
     next()
 });
@@ -34,7 +38,16 @@ router.get("/szerzo", async (req, res) => {
 
     return res.render('show_table.ejs', {
         oldal: "szerzo"
-        ,cim: "Szerzok:"
+        ,cim: "Szerzők:"
+        ,table: table
+    });
+});
+router.get("/kiado", async (req, res) => {
+    const table = await db.getKiadok();
+
+    return res.render('show_table.ejs', {
+        oldal: "kiado"
+        ,cim: "Kiadók"
         ,table: table
     });
 });
@@ -44,21 +57,49 @@ router.get("/fiok", async (req, res) => {
 
     return res.render('show_table.ejs', {
         oldal: "fiok"
-        ,cim: "Fiokok:"
+        ,cim: "Fiókok:"
+        ,table: table
+    });
+});
+router.get("/kategoria", async (req, res) => {
+    const table = await db.getKategoria();
+
+    return res.render('show_table.ejs', {
+        oldal: "kategoria"
+        ,cim: "Kategóriák:"
+        ,table: table
+    });
+});
+
+router.get("/konyv", async (req, res) => {
+    const table = await db.getKonyv();
+
+    return res.render('show_table.ejs', {
+        oldal: "konyv"
+        ,cim: "Konyv:"
+        ,table: table
+    });
+});
+
+router.get("/nyitvatartas", async (req, res) => {
+    const table = await db.getNyitvatartas();
+
+    return res.render('show_table.ejs', {
+        oldal: "nyitvatartas"
+        ,cim: "Nyitvatartas:"
         ,table: table
     });
 });
 
 router.get("/bolt", async (req, res) => {
-    const table = await db.getKonyv();
+    const table = await db.getBolt();
 
     return res.render('show_table.ejs', {
         oldal: "bolt"
-        ,cim: "Fiokok:"
+        ,cim: "Bolt:"
         ,table: table
     });
 });
-
 /*
 
 router.get("/register", async (req, res) => {
@@ -73,12 +114,12 @@ router.get("/register", async (req, res) => {
 
 router.post("/register", auth,  async (req, res) => {
     const raktar = await db.getAllRaktar(); 
-    let {email_cim, nev, jelszo, jelszo2, selected_raktar} = req.body;
+    let {email_cim, knev, vnev, jelszo, jelszo2, selected_raktar} = req.body;
 
-    if(!email_cim && !nev && !jelszo && !jelszo2){
+    if(!email_cim && !knev && !vnev && !jelszo && !jelszo2){
         return res.redirect('/register');
     }
-    if(email_cim && nev && jelszo && jelszo2){
+    if(email_cim && knev && vnev && jelszo && jelszo2){
         const user = await db.getUserByEmail(email_cim);
         if(user){
             return res.render('regist', {
@@ -100,7 +141,7 @@ router.post("/register", auth,  async (req, res) => {
     }
 
     await bcrypt.hash(jelszo, 10).then(async(hash) => {
-        await db.addUser(email_cim, nev, selected_raktar, hash);
+        await db.addUser(email_cim, hash, knev, vnev);
     });
     return res.redirect('/users');
 });

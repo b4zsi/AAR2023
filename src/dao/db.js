@@ -1,20 +1,32 @@
 const db = require("oracledb");
 const dbConfig = require("../config/database");
 
+const addUserQuery = `insert into fiok(email, jelszo, torzsvasarlo, regisztralas_idopontja, keresztnev, vezeteknev) \
+values(:email, :jelszo, 0, :regisztralas_idopontja, keresztnev, vezeteknev)`;
+
 /////////////
 // USER
 ////////////
-
 exports.getSzerzok = async () => {
-    return await query(`SELECT * from SZERZO`);
+    return await query(`SELECT * from SZERZO order by id`);
 }
-
+exports.getKategoria = async () => {
+    return await query(`SELECT * from kategoria`);
+}
+exports.getKiadok = async () => {
+    return await query(`SELECT * from KIADO`);
+}
 exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
-
 exports.getKonyv = async () => {
     return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+}
+exports.getNyitvatartas = async () => {
+    return await query(`SELECT * from nyitvatartas`);
+}
+exports.getBolt = async () => {
+    return await query(`SELECT * from bolt`);
 }
 
 async function query(query, list = []){
