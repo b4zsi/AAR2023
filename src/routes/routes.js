@@ -18,13 +18,15 @@ const router = express.Router();
 router.use((req, res, next) => {
     res.locals.header = {
         "index": "Főoldal"
-        ,"konyv" : "Konyv"
+        ,"konyv" : "Könyv"
         ,"fiok" : "Fiók"
         ,"szerzo" : "Szerzők"
         ,"kiado" : "Kiadók"
         ,"kategoria" : "Kategoriák"
         ,"nyitvatartas" : "Nyitvatartás"
         ,"bolt" : "Bolt"
+        ,"login" : "Bejelentkezés"
+        ,"regist" : "Regisztráció"
     };
     res.locals.oldal = req.path.replace('/','')
     next()
@@ -98,6 +100,35 @@ router.get("/bolt", async (req, res) => {
         ,table: table
     });
 });
+
+router.get("/login", async (req, res) => {
+
+    return res.render('login.ejs', {
+        cim: "Bejelentkezes:"
+    });
+});
+
+router.get("/regist", async (req, res) => {
+    
+    return res.render('regist.ejs', {
+        cim: "Regisztracio:"
+    });
+});
+
+router.post("/regist", async (req, res) => {
+    let {email_cim, knev, vnev, jelszo, jelszo2} = req.body;
+    if(!email_cim || !knev || !vnev || !jelszo || !jelszo2){
+        console.log("missing data");
+    }
+        await db.addUser(email_cim, jelszo, knev, vnev)
+        .then(console.log("successful registration"));
+
+        return res.redirect('index');
+});
+router.post("/login", async (req, res)=>{   
+
+});
+
 /*
 
 router.get("/register", async (req, res) => {
@@ -111,9 +142,6 @@ router.get("/register", async (req, res) => {
 });
 
 router.post("/register", auth,  async (req, res) => {
-    const raktar = await db.getAllRaktar(); 
-    let {email_cim, knev, vnev, jelszo, jelszo2, selected_raktar} = req.body;
-
     if(!email_cim && !knev && !vnev && !jelszo && !jelszo2){
         return res.redirect('/register');
     }
