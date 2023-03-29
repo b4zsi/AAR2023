@@ -26,6 +26,11 @@ router.use((req, res, next) => {
         ,"nyitvatartas" : "Nyitvatartás"
         ,"bolt" : "Bolt"
     };
+
+    res.locals.restricted = [
+        "fiok"
+    ];
+
     res.locals.oldal = req.path.replace('/','')
     next()
 });
@@ -98,6 +103,7 @@ router.get("/bolt", async (req, res) => {
         ,table: table
     });
 });
+
 /*
 
 router.get("/register", async (req, res) => {
