@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const secret = require('../config/auth').jwtSecret;
-const auth = require('../config/auth').auth;
+const secret = require('../middleware/auth').jwtSecret;
+const auth = require('../middleware/auth').auth;
 const express = require("express");
-const db = require('../dao/db');
+const db = require('../modell/db');
 const router = express.Router();
 ////////////////
 // userek
