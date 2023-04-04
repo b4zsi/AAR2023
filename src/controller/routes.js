@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = require('../middleware/auth').jwtSecret;
-const auth = require('../middleware/auth').auth;
+const auth = require('../middleware/auth');
 const express = require("express");
 const db = require('../modell/db');
 const router = express.Router();
@@ -15,7 +15,7 @@ const router = express.Router();
  * Listában első az elérési út a rout-ban a második a megjelenítési neve.
  *
  * */
-router.use((req, res, next) => {
+router.use(auth.auth, (req, res, next) => {
     res.locals.header = {
         "index": "Főoldal"
         , "konyv": "Könyv"
@@ -30,7 +30,7 @@ router.use((req, res, next) => {
     };
 
     res.locals.restricted = [
-        "fiok"
+        "fiok", "nyitvatartas"
     ];
 
     res.locals.oldal = req.path.replace('/', '')
@@ -50,7 +50,7 @@ router.get("/szerzo", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Szerzők:"
-        , table: table
+        ,table
     });
 });
 router.get("/kiado", async (req, res) => {
@@ -58,7 +58,7 @@ router.get("/kiado", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Kiadók"
-        , table: table
+        , table
     });
 });
 
@@ -67,7 +67,7 @@ router.get("/fiok", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Fiókok:"
-        , table: table
+        , table
     });
 });
 router.get("/kategoria", async (req, res) => {
@@ -75,7 +75,7 @@ router.get("/kategoria", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Kategóriák:"
-        , table: table
+        , table
     });
 });
 
@@ -84,16 +84,16 @@ router.get("/konyv", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Konyv:"
-        , table: table
+        , table
     });
 });
 
-router.get("/nyitvatartas", async (req, res) => {
+router.get("/nyitvatartas", auth.restrict, async (req, res) => {
     const table = await db.getNyitvatartas();
 
     return res.render('show_table.ejs', {
         cim: "Nyitvatartas:"
-        , table: table
+        , table
     });
 });
 
@@ -102,7 +102,7 @@ router.get("/bolt", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Bolt:"
-        , table: table
+        , table
     });
 });
 

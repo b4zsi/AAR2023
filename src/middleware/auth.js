@@ -1,4 +1,4 @@
-const jwtSecret =  "adslfkjaslkdhfh23kjrh3iuy87y8t8ds7t765654ads54efasdgfhjsdfiasdf";
+const jwtSecret = "adslfkjaslkdhfh23kjrh3iuy87y8t8ds7t765654ads54efasdgfhjsdfiasdf";
 const jwt = require('jsonwebtoken');
 
 exports.auth = (req, res, next) => {
@@ -12,14 +12,15 @@ exports.auth = (req, res, next) => {
 
         req.body.curr_email = curr_email;
         req.body.curr_role = curr_role;
-        next()
     }
+    console.log('itt');
+    next()
 }
 
 exports.restrict = (req, res, next) => {
-        if(!req.body.curr_email){
-            res.redirect('login');
-        }
+    if (!req.body.curr_email) {
+        res.redirect('login');
+    }
 }
 
 exports.jwtSecret = jwtSecret;

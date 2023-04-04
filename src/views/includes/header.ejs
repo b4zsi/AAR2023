@@ -3,11 +3,13 @@
       <div class="navbar-collapse collapse">
          <ul class="navbar-nav">
              <% for(let i in locals.header){ %>
-                <% if(locals.restricted.includes(i)) continue %>
+
+                <% if(locals.restricted.includes(i) ) continue %>
                 <li class="nav-item">
                     <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- i %>"><%- locals.header[i] %></a>
                 </li>
              <% } %>
+
       </div>
    </div>
 </nav>
