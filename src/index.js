@@ -1,4 +1,4 @@
-const express =  require("express");
+const express = require("express");
 const path = require("path");
 const oracledb = require("oracledb");
 const dbConfig = require("./config/database.js");
@@ -18,9 +18,8 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(express.urlencoded({ extended: false }));
 app.use(router);
 
-async function init(){
+async function init() {
     await oracledb.createPool(dbConfig);
-    
 
     app.listen(PORT, () => console.log('Server running at http://localhost:' + PORT));
 }

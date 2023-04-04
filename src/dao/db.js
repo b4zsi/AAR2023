@@ -1,8 +1,6 @@
 const db = require("oracledb");
 const dbConfig = require("../config/database");
-
-const addUserQuery = `insert into fiok(email, jelszo, torzsvasarlo, regisztralas_idopontja, keresztnev, vezeteknev) \
-values(:email, :jelszo, 0, :regisztralas_idopontja, keresztnev, vezeteknev)`;
+db.autoCommit = true;
 
 /////////////
 // USER
@@ -29,6 +27,17 @@ exports.getBolt = async () => {
     return await query(`SELECT * from bolt`);
 }
 
+exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
+    return await query(`insert into
+     fiok(email, jelszo, torzsvasarlo, regisztralas_idopontja, keresztnev, vezeteknev)
+     values(:email, :jelszo, 0, current_date, :keresztnev, :vezeteknev)`,
+     [email, jelszo, keresztnev, vezeteknev]);
+}
+
+exports.loginUser = async (email, password) => {
+    return await query("select email from fiok where email = :email and jelszo = :jelszo",[email, jelszo]);
+}
+ 
 async function query(query, list = []){
     let result;
     let conn;
