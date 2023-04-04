@@ -117,98 +117,57 @@ router.get("/regist", async (req, res) => {
 router.post("/regist", async (req, res) => {
     let { email_cim, knev, vnev, jelszo, jelszo2 } = req.body;
     if (!email_cim || !knev || !vnev || !jelszo || !jelszo2) {
-        console.log("missing data");
+        return res.render('regist', {
+            hiba : "Hiányzó adatok!"
+        });
     }
-    await db.addUser(email_cim, jelszo, knev, vnev)
-        .then(console.log("successful registration"));
-
+    if(jelszo !== jelszo2){
+        return res.render('regist',{
+            email_cim : email_cim,
+            hiba: "A két jelszó nem egyezik!"
+        });
+    }
+    const user = await db.getFiokByEmail(email_cim);
+        if(user){
+            return res.render('regist', {
+                email_cim,
+                hiba: "Iilyen email-cím már szerepel az adatbázisban!"
+            });
+        }
+    await bcrypt.hash(jelszo, 128).then(async(hash)=>
+        db.addUser(email_cim, hash, knev, vnev)
+        .then(console.log("successful registration"))
+    );
     return res.redirect('index');
 });
 
 router.get("/login", async (req, res) => {
-
+    let {email} = req.body
+    const user = await db.getFiokByEmail(email);
+    console.log(user)
     return res.render('login.ejs', {
         cim: "Bejelentkezes:"
     });
 });
 
 router.post("/login", async (req, res) => {
-
-    return res.redirect('index');
-
-});
-
-/*
-
-router.get("/register", async (req, res) => {
-    //const {curr_role} = req.body;
-    //if(curr_role !== 'ADMIN')
-        //return res.redirect('/raktar');
-    //const raktar = await db.getAllRaktar(); 
-
-    return res.render('regist', {
-    });
-});
-
-router.post("/register", auth,  async (req, res) => {
-    if(!email_cim && !knev && !vnev && !jelszo && !jelszo2){
-        return res.redirect('/register');
-    }
-    if(email_cim && knev && vnev && jelszo && jelszo2){
-        const user = await db.getUserByEmail(email_cim);
-        if(user){
-            return res.render('regist', {
-                raktar: raktar,
-                hiba: "Iilyen email-cím már szerepel az adatbázisban!"
-            });
-        }
-        if(jelszo !== jelszo2){
-            return res.render('regist',{
-                raktar: raktar,
-                hiba: "A két jelszó nem egyezik!"
-            });
-        }
-    }else{
-        return res.render('regist', {
-            raktar: raktar,
-            hiba: "Kérem minden mezőt töltsön ki!"
-        });
-    }
-
-    await bcrypt.hash(jelszo, 10).then(async(hash) => {
-        await db.addUser(email_cim, hash, knev, vnev);
-    });
-    return res.redirect('/users');
-});
-
-router.get("/login", async (req, res) => {
-    return res.render('login', {
-        email: "",
-        hibak: []
-    });
-});
-
-router.post("/login", async (req, res) => {
-    let {email, jelszo} = req.body;
-    if(!email && !jelszo){
+    let {email_cim, jelszo} = req.body;
+    if(!email_cim && !jelszo){
         return res.redirect('/login');
     }
-
-    if(!email || !jelszo){
+    if(!email_cim || !jelszo){
         return res.render('login', {
-            email: email,
+            email_cim,
             hibak: ["Kérem mindem mezőt töltsön ki!"]
         });
     }
-
-    const user = await db.getUserByEmail(email);
+    const user = await db.getFiokByEmail(email_cim);
     if(!user){
         return res.render('login', {
-            email: email,
+            email_cim,
             hibak: ["Hibás felhasználónév vagy jelszó!"]
         });
     }
-
     bcrypt.compare(jelszo, user.jelszo).then(function(siker) {
         if (siker) {
             const token = jwt.sign({
@@ -229,7 +188,7 @@ router.post("/login", async (req, res) => {
             });
         }
     });
-
+    return res.redirect('index');
 });
 
 router.get("/logout", (req, res) => {
@@ -238,7 +197,17 @@ router.get("/logout", (req, res) => {
     })
     return res.redirect("/")
 });
+/*
 
+router.get("/register", async (req, res) => {
+    //const {curr_role} = req.body;
+    //if(curr_role !== 'ADMIN')
+        //return res.redirect('/raktar');
+    //const raktar = await db.getAllRaktar(); 
+
+    return res.render('regist', {
+    });
+});
 router.get("/profile", auth, async (req, res) => {
     const {curr_email, curr_role} = req.body;
     const user = await db.getUserByEmail(curr_email);

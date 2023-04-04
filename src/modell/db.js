@@ -26,6 +26,9 @@ exports.getNyitvatartas = async () => {
 exports.getBolt = async () => {
     return await query(`SELECT * from bolt`);
 }
+exports.getFiokByEmail = async (email) => {
+    return await query(`SELECT * from FIOK WHERE email = :email`,[email]);
+}
 
 exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
     return await query(`insert into
@@ -35,7 +38,7 @@ exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
 }
 
 exports.loginUser = async (email, password) => {
-    return await query("select email from fiok where email = :email and jelszo = :jelszo",[email, jelszo]);
+    return await query("select email from fiok where email = :email and jelszo = :jelszo",[email, password]);
 }
  
 async function query(query, list = []){
