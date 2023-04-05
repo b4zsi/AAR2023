@@ -183,7 +183,7 @@ router.post("/login", async (req, res) => {
             return res.redirect('/?siker=true');
         }else{
             return res.render('login', {
-                email: email,
+                email: email_cim,
                 hibak: ["Hibás felhasználónév vagy jelszó!"]
             });
         }
