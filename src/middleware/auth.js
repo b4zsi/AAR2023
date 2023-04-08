@@ -13,7 +13,6 @@ exports.auth = (req, res, next) => {
         req.body.curr_email = curr_email;
         req.body.curr_role = curr_role;
     }
-    console.log('itt');
     next()
 }
 

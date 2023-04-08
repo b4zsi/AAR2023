@@ -17,20 +17,20 @@ const router = express.Router();
  * */
 router.use(auth.auth, (req, res, next) => {
     res.locals.header = {
-        "index": "Főoldal"
-        , "konyv": "Könyv"
-        , "fiok": "Fiók"
-        , "szerzo": "Szerzők"
-        , "kiado": "Kiadók"
-        , "kategoria": "Kategoriák"
-        , "nyitvatartas": "Nyitvatartás"
-        , "bolt": "Bolt"
-        , "login": "Bejelentkezés"
-        , "regist": "Regisztráció"
+        "index": "Főoldal",
+        "konyv": "Könyv",
+        "fiok": "Fiók",
+        "szerzo": "Szerzők",
+        "kiado": "Kiadók",
+        "kategoria": "Kategoriák",
+        "nyitvatartas": "Nyitvatartás",
+        "bolt": "Bolt",
+        "login": "Bejelentkezés",
+        "regist": "Regisztráció",
     };
 
     res.locals.restricted = [
-        "fiok", "nyitvatartas"
+        //"fiok", "nyitvatartas"
     ];
 
     res.locals.oldal = req.path.replace('/', '')
@@ -50,7 +50,7 @@ router.get("/szerzo", async (req, res) => {
 
     return res.render('show_table.ejs', {
         cim: "Szerzők:"
-        ,table
+        , table
     });
 });
 router.get("/kiado", async (req, res) => {
@@ -118,51 +118,51 @@ router.post("/regist", async (req, res) => {
     let { email_cim, knev, vnev, jelszo, jelszo2 } = req.body;
     if (!email_cim || !knev || !vnev || !jelszo || !jelszo2) {
         return res.render('regist', {
-            hiba : "Hiányzó adatok!"
+            hiba: "Hiányzó adatok!"
         });
     }
-    if(jelszo !== jelszo2){
-        return res.render('regist',{
-            email_cim : email_cim,
+
+    const user = await db.getFiokByEmail(email_cim);
+    if (user['rows'].length) {
+        return res.render('regist', {
+            email_cim,
+            hiba: "Iilyen email-cím már szerepel az adatbázisban!"
+        });
+    }
+
+    if (jelszo !== jelszo2) {
+        return res.render('regist', {
+            email_cim: email_cim,
             hiba: "A két jelszó nem egyezik!"
         });
     }
-    const user = await db.getFiokByEmail(email_cim);
-        if(user){
-            return res.render('regist', {
-                email_cim,
-                hiba: "Iilyen email-cím már szerepel az adatbázisban!"
-            });
-        }
-    await bcrypt.hash(jelszo, 128).then(async(hash)=>
-        db.addUser(email_cim, hash, knev, vnev)
-        .then(console.log("successful registration"))
-    );
+
+    await bcrypt.hash(jelszo, 10).then(function(hash){
+        db.addUser(email_cim, hash, knev, vnev);
+    });
     return res.redirect('index');
 });
 
+router.get("/proba", async (req, res) => {
+
+    //db.addUser("a", "jelszo", "ambrus", "attila");
+    res.send("hello");
+});
+
 router.get("/login", async (req, res) => {
-    let {email} = req.body
-    const user = await db.getFiokByEmail(email);
-    console.log(user)
-    return res.render('login.ejs', {
-        cim: "Bejelentkezes:"
-    });
+    return res.render('login.ejs');
 });
 
 router.post("/login", async (req, res) => {
-    let {email_cim, jelszo} = req.body;
-    if(!email_cim && !jelszo){
-        return res.redirect('/login');
-    }
-    if(!email_cim || !jelszo){
+    let { email_cim, jelszo } = req.body;
+    if (!email_cim || !jelszo) {
         return res.render('login', {
             email_cim,
             hibak: ["Kérem mindem mezőt töltsön ki!"]
         });
     }
     const user = await db.getFiokByEmail(email_cim);
-    if(!user){
+    if (!user) {
         return res.render('login', {
             email_cim,
             hibak: ["Hibás felhasználónév vagy jelszó!"]
@@ -174,14 +174,14 @@ router.post("/login", async (req, res) => {
                 email: user.email,
                 role: user.role
             },
-                secret 
+                secret
             );
 
             res.cookie("jwt", token, {
                 httpOnly: true
             });
             return res.redirect('/?siker=true');
-        }else{
+        } else {
             return res.render('login', {
                 email: email_cim,
                 hibak: ["Hibás felhasználónév vagy jelszó!"]

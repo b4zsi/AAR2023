@@ -3,9 +3,16 @@
   <head>
     <%- include('includes/head') %>
   </head>
-  <header><%- include('includes/header', {oldal: locals.oldal}) %></header>
+
+  <header>
+      <%- include('includes/header', {oldal: locals.oldal}) %>
+  </header>
+
   <body>
     <h1 class="text-center">Regisztrálás</h1>
+
+    <%- include('includes/hiba') %>
+
     <div class="center">
       <form class="form text-center" action="/regist" method="post">
         <label
