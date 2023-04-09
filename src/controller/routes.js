@@ -27,13 +27,21 @@ router.use(auth.auth, (req, res, next) => {
         "bolt": "Bolt",
         "login": "Bejelentkezés",
         "regist": "Regisztráció",
+        "logout": "Kilépés",
     };
 
-    res.locals.restricted = [
+    res.locals.guest_only = [
+        "login", "regist"
+    ];
+    res.locals.user_only = [
+        "logout"
+    ];
+    res.locals.admin_only = [
         //"fiok", "nyitvatartas"
     ];
 
     res.locals.oldal = req.path.replace('/', '')
+    res.locals.curr_email = req.body.curr_email;
     next()
 });
 
@@ -123,7 +131,7 @@ router.post("/regist", async (req, res) => {
     }
 
     const user = await db.getFiokByEmail(email_cim);
-    if (user['rows'].length) {
+    if (user && user['rows'].length) {
         return res.render('regist', {
             email_cim,
             hiba: "Iilyen email-cím már szerepel az adatbázisban!"
@@ -145,8 +153,10 @@ router.post("/regist", async (req, res) => {
 
 router.get("/proba", async (req, res) => {
 
-    //db.addUser("a", "jelszo", "ambrus", "attila");
-    res.send("hello");
+    const user = await db.getFiokByEmail("a");
+
+    console.log(user['rows'][0][2]);
+    return res.send("");
 });
 
 router.get("/login", async (req, res) => {
@@ -158,36 +168,34 @@ router.post("/login", async (req, res) => {
     if (!email_cim || !jelszo) {
         return res.render('login', {
             email_cim,
-            hibak: ["Kérem mindem mezőt töltsön ki!"]
+            hiba: ["Kérem mindem mezőt töltsön ki!"]
         });
     }
     const user = await db.getFiokByEmail(email_cim);
-    if (!user) {
+    if (!user || !user['rows'].length) {
         return res.render('login', {
             email_cim,
-            hibak: ["Hibás felhasználónév vagy jelszó!"]
+            hiba: ["Hibás felhasználónév vagy jelszó!"]
         });
     }
-    bcrypt.compare(jelszo, user.jelszo).then(function(siker) {
-        if (siker) {
-            const token = jwt.sign({
-                email: user.email,
-                role: user.role
-            },
-                secret
-            );
 
-            res.cookie("jwt", token, {
-                httpOnly: true
-            });
-            return res.redirect('/?siker=true');
-        } else {
-            return res.render('login', {
-                email: email_cim,
-                hibak: ["Hibás felhasználónév vagy jelszó!"]
-            });
-        }
-    });
+    const match = await bcrypt.compare(jelszo, user['rows'][0][2]);
+    if (match) {
+        const token = jwt.sign({
+            email: user['rows'][0][1],
+        },
+            secret
+        );
+
+        res.cookie("jwt", token, {
+            httpOnly: true
+        });
+    } else {
+        return res.render('login', {
+            email: email_cim,
+            hiba: ["Hibás felhasználónév vagy jelszó!"]
+        });
+    }
     return res.redirect('index');
 });
 
