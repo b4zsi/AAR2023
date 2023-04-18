@@ -19,12 +19,19 @@
             kepek <% for(let j = 0; j < locals.table['metaData'].length; j++){
             %>
             <div class="container">
-              <%= locals.table['rows'][i][j] %> <%
-              if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
+              <label name="{{ locals.table['metaData'][j]['name'] }}">
+                <%= locals.table['rows'][i][j] %> <%
+                if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
+              </label>
             </div>
             <% } %> <% if(locals.curr_role === 1){%>
-            <button type="button" value="modifiy">szerkesztés</button>
-            <button type="button" value="delete">törlés</button>
+            <form action="/upload" method="get">
+              <button type="submit" value="modifiy">szerkesztés</button>
+            </form>
+            <form action="/deleteKonyv" method="post">
+              <button type="submit" value="delete">törlés</button>
+            </form>
+
             <% } %>
           </div>
           <% } %> <% if(locals.curr_role === 1){%>

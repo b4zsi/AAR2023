@@ -213,8 +213,14 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/upload", (req, res) => {
-    console.log("dikdik")
-    return res.render("upload");
+        let {nev} = req.body
+        console.log(nev)
+    return res.render("upload",{
+        nev
+    });
+})
+router.get("/deleteKonyv", (req, res) => {
+
 })
 
 router.post("/uploadImg", async (req, res) => {
@@ -230,8 +236,9 @@ router.post("/uploadImg", async (req, res) => {
 
 router.post("/uploadKonyv", async (req, res) => {
     let {isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev} = req.body
-    if(isbn && kiado_id && kategoria_id && oldalszam && ar && mikor && nev) {
+    if(isbn && kiado_id && kategoria_id && oldalszam && ar && nev) {
         await db.uploadKonyv(isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev)
+        return res.redirect('index');
     }else {
         console.log("missing data");
     }
