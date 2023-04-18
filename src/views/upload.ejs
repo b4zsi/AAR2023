@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('includes/head') %>
+  </head>
+  <header><%- include('includes/header', {oldal: oldal}) %></header>
+  <body>
+    <form action="/uploadKonyv" method="post">
+      <label> ISBN szám: <input type="text" placeholder="isbn" /></label>
+      <label> KiadóID: <input type="text" placeholder="kiadoid" /></label>
+      <label>
+        KategoriaID: <input type="text" placeholder="kategoriaID"
+      /></label>
+      <label> Oldalszám: <input type="text" placeholder="oldalszám" /></label>
+      <label>
+        Kiadás dátuma: <input type="text" placeholder="kiadas datum"
+      /></label>
+      <label> Név: <input type="text" placeholder="név" name="nev" /></label>
+      <button type="submit">Hozzáadás</button>
+    </form>
+  </body>
+</html>

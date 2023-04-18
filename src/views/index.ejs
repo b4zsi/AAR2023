@@ -22,8 +22,15 @@
               <%= locals.table['rows'][i][j] %> <%
               if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
             </div>
+            <% } %> <% if(locals.curr_role === 1){%>
+            <button type="button" value="modifiy">szerkesztés</button>
+            <button type="button" value="delete">törlés</button>
             <% } %>
           </div>
+          <% } %> <% if(locals.curr_role === 1){%>
+          <form action="/upload" method="get">
+            <button type="submit" value="upload">hozzáadás</button>
+          </form>
           <% } %>
         </div>
       </div>

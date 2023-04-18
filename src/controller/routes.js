@@ -42,6 +42,7 @@ router.use(auth.auth, (req, res, next) => {
 
     res.locals.oldal = req.path.replace('/', '')
     res.locals.curr_email = req.body.curr_email;
+    res.locals.curr_role = req.body.curr_role;
     next()
 });
 
@@ -52,9 +53,9 @@ router.get("/", async (req, res) => {
 router.get("/index", async (req, res) => {
     const table = await db.getKonyv();
     const kepek = await db.getKep();
+    const user = await db.getFiok();
         return res.render('index', {
         table,
-        kepek
     });
 });
 
@@ -187,6 +188,7 @@ router.post("/login", async (req, res) => {
     if (match) {
         const token = jwt.sign({
             email: user['rows'][0][1],
+            role: user['rows'][0][7]
         },
             secret
         );
@@ -209,6 +211,11 @@ router.get("/logout", (req, res) => {
     })
     return res.redirect("/")
 });
+
+router.get("/upload", (req, res) => {
+    console.log("dikdik")
+    return res.render("upload");
+})
 
 router.post("/uploadImg", async (req, res) => {
     const {name, data} = req.files.pic
