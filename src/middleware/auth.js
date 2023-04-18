@@ -7,9 +7,11 @@ exports.auth = (req, res, next) => {
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             curr_email = decodedToken.email;
+            curr_role = decodedToken.role;
         });
 
         req.body.curr_email = curr_email;
+        req.body.curr_role = curr_role;
     }
     next()
 }

@@ -8,6 +8,10 @@ module.exports = function(app) {
     });
 
     app.get("/index", async (req, res) => {
+        const table = await db.getKonyv();
+        return res.render('index', {
+        table,
+    });
         return res.render('index');
     });
 
