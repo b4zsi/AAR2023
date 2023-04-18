@@ -50,7 +50,12 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/index", async (req, res) => {
-    return res.render('index');
+    const table = await db.getKonyv();
+    const kepek = await db.getKep();
+        return res.render('index', {
+        table,
+        kepek
+    });
 });
 
 router.get("/szerzo", async (req, res) => {
@@ -113,7 +118,6 @@ router.get("/bolt", async (req, res) => {
         , table
     });
 });
-
 
 router.get("/regist", async (req, res) => {
 
@@ -205,6 +209,27 @@ router.get("/logout", (req, res) => {
     })
     return res.redirect("/")
 });
+
+router.post("/uploadImg", async (req, res) => {
+    const {name, data} = req.files.pic
+    if(name && data) {
+        await db.uploadImage({name:name, img:data});
+        res.sendStatus(200);
+    }else{
+        console.log("missing data!")
+    }
+    
+});
+
+router.post("/uploadKonyv", async (req, res) => {
+    let {isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev} = req.body
+    if(isbn && kiado_id && kategoria_id && oldalszam && ar && mikor && nev) {
+        await db.uploadKonyv(isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev)
+    }else {
+        console.log("missing data");
+    }
+
+})
 /*
 
 router.get("/register", async (req, res) => {

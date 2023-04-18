@@ -45,6 +45,15 @@ exports.getNyitvatartas = async () => {
 exports.getBolt = async () => {
     return await query(`SELECT * from bolt`);
 }
+exports.getKep = async () => {
+    return await query(`SELECT * from kep`);
+}
+exports.uploadKonyv = async (isbn, kiado_id, kategoria_id, oldalszam, ar,mikor, nev) => {
+    return await query(`INSERT INTO konyv(isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev) 
+    values(:isbn, :kiado_id, :kategoria_id, :oldalszam, :ar, :mikor, :nev)`, 
+    [isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev])
+}
+
 exports.getFiokByEmail = async (email) => {
     return await query(`SELECT * from FIOK WHERE email = :email`, [email]);
 }
@@ -54,6 +63,10 @@ exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
      fiok(email, jelszo, torzsvasarlo, regisztralas_idopontja, keresztnev, vezeteknev)
      values(:email, :jelszo, 0, current_date, :keresztnev, :vezeteknev)`,
         [email, jelszo, keresztnev, vezeteknev]);
+}
+
+exports.uploadImage = async (kep) => {
+    return await query(`insert into kep(kep) values (:kep)`,[kep]);
 }
 
 exports.loginUser = async (email, password) => {

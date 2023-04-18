@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('includes/head') %>
-    </head>
-    <header>
-        <%- include('includes/header', {oldal: oldal}) %>
-    </header>
-    <body>
-        <div >
-            <div>
-                <% if(locals.siker){ %>
-                    <p class="fade-out siker">Sikeres bejelentkezés!</p>
-                <% } %>
-            <p style="font-size:5vw; text-align: center;">Üdv a weboldalon!</p>
+  <head>
+    <%- include('includes/head') %>
+  </head>
+  <header><%- include('includes/header', {oldal: oldal}) %></header>
+  <body>
+    <div>
+      <div>
+        <% if(locals.siker){ %>
+        <p class="fade-out siker">Sikeres bejelentkezés!</p>
+        <% } %>
+        <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
 
-            <h1><%- locals.curr_email %></h1>
-
+        <h1><%- locals.curr_email %></h1>
+        <div class="card-container">
+          <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+          <div class="card">
+            kepek <% for(let j = 0; j < locals.table['metaData'].length; j++){
+            %>
+            <div class="container">
+              <%= locals.table['rows'][i][j] %> <%
+              if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
             </div>
+            <% } %>
+          </div>
+          <% } %>
         </div>
-
-    </body>
-    <%#- include('includes/footer') %>
+      </div>
+    </div>
+  </body>
+  <%#- include('includes/footer') %>
 </html>
