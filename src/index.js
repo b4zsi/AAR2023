@@ -6,7 +6,8 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-const router = require("./controller/routes.js");
+//const router = require("./controller/all.js");
+
 
 const PORT = process.env.PORT || 8000;
 
@@ -17,7 +18,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "views/assets")));
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(express.urlencoded({ extended: false }));
-app.use(router);
+
+require("./controller/routes.js")(app);
+//app.use(router);
 
 async function init() {
     await oracledb.createPool(dbConfig);
