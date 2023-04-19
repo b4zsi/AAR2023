@@ -10,10 +10,12 @@
         <% if(locals.siker){ %>
         <p class="fade-out siker">Sikeres bejelentkezés!</p>
         <% } %>
+        <%- locals.curr_role %>
         <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
 
         <h1><%- locals.curr_email %></h1>
         <div class="card-container">
+        <% if(locals.table){ %>
           <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
           <div class="card">
             kepek <% for(let j = 0; j < locals.table['metaData'].length; j++){
@@ -39,6 +41,7 @@
             <button type="submit" value="upload">hozzáadás</button>
           </form>
           <% } %>
+        <% } %>
         </div>
       </div>
     </div>
