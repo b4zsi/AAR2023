@@ -10,16 +10,12 @@
         <% if(locals.siker){ %>
         <p class="fade-out siker">Sikeres bejelentkezés!</p>
         <% } %>
-        <%- locals.curr_role %>
         <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
-
-        <h1><%- locals.curr_email %></h1>
         <div class="card-container">
-        <% if(locals.table){ %>
-          <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+          <% if(locals.table){ %> <% for(let i = 0; i <
+          locals.table['rows'].length; i++){ %>
           <div class="card">
-            kepek <% for(let j = 0; j < locals.table['metaData'].length; j++){
-            %>
+            <% for(let j = 0; j < locals.table['metaData'].length; j++){ %>
             <div class="container">
               <label name="{{ locals.table['metaData'][j]['name'] }}">
                 <%= locals.table['rows'][i][j] %> <%
@@ -33,15 +29,23 @@
             <form action="/deleteKonyv" method="post">
               <button type="submit" value="delete">törlés</button>
             </form>
-
+            <% } else { %>
+            <form action="/addToKosar" method="post">
+              <button
+                type="submit"
+                value="<%= locals.table['rows'][i][4] %>"
+                name="isbn"
+              >
+                Kosárba
+              </button>
+            </form>
             <% } %>
           </div>
           <% } %> <% if(locals.curr_role === 1){%>
           <form action="/upload" method="get">
             <button type="submit" value="upload">hozzáadás</button>
           </form>
-          <% } %>
-        <% } %>
+          <% } %> <% } %>
         </div>
       </div>
     </div>

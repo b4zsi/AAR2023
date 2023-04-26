@@ -18,7 +18,7 @@ exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
 exports.getKonyv = async () => {
-    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar",KONYV.ISBN as "isbn" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
 }
 
 /////////////
@@ -37,7 +37,10 @@ exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
 exports.getKonyv = async () => {
-    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar",KONYV.ISBN as "isbn" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+}
+exports.getKonyByISBN = async (isbn) => {
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID AND KONYV.ISBN = :isbn`, [isbn])
 }
 exports.getNyitvatartas = async () => {
     return await query(`SELECT * from nyitvatartas`);

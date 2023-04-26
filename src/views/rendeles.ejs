@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('includes/head') %>
+  </head>
+  <header><%- include('includes/header', {oldal: oldal}) %></header>
+  <body>
+    <p>
+    <h1 class="mb-3 text-center">További adatok megadása</h1>
+    </p>
+    <% if(locals.konyvek) { %>
+      <table class="table align-middle w-75 mx-auto">
+
+        <tr>
+          <th>Név</th>
+          <th>Oldalszám</th>
+          <th>Kiadó</th>
+          <th>Ár</th>
+        </tr>
+      <% for(let i = 0; i < locals.konyvek.length; i++){ %> 
+        <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
+          <tr>
+            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
+            <td>
+          <%= locals.konyvek[i]['rows'][j][k] %>
+          </td>
+          <% } %>
+          <td>
+            <%= locals.darabszam[i] %> darab
+          </td>
+          </tr>
+        <% } %> 
+      <% } %> 
+      </table>
+    <% } %>
+     <form action="/rendelesLeadas">
+      <div class="form-group" style="width: 300px; margin: auto;">
+      <input type="text" name="varos" placeholder="varos" class="form-control text-center">
+      <input type="text" name="varos" placeholder="iranyitoszam" class="form-control text-center">
+      <input type="text" name="varos" placeholder="utca" class="form-control text-center">
+      <input type="text" name="varos" placeholder="varos" class="form-control text-center">
+      <label> Fizetési lehetőségek</label>
+      <select name="fizetes" id="fizetes">
+        <option value="Paypal">Paypal</option>
+        <option value="Utanvet">Utanvet</option>
+        <option value="Bankkartya" selected>Bankkartya</option>
+      </select>
+      </div>
+      
+
+      <button type="submit" value="rendel" 
+      class="btn btn-secondary"
+      style="margin: auto;"
+      >Megrendel</button>
+     </form>
+  </body>
+</html>
