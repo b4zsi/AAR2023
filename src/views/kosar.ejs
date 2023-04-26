@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('includes/head') %>
+  </head>
+  <header><%- include('includes/header', {oldal: locals.oldal}) %></header>
+  <body>
+    <script type="module">
+      import {plusButton} from '../controller/oldalak.js'
+    </script>
+    <% if(locals.konyvek) { %>
+      <table class="table align-middle w-75 mx-auto">
+
+        <tr>
+          <th>Név</th>
+          <th>Oldalszám</th>
+          <th>Kiadó</th>
+          <th>Ár</th>
+        </tr>
+      <% for(let i = 0; i < locals.konyvek.length; i++){ %> 
+        <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
+          <tr>
+            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
+            <td>
+          <%= locals.konyvek[i]['rows'][j][k] %>
+          </td>
+          <% } %>
+          <td>
+            <button type="button" class="btn" onclick="plusButton()">+</button>
+            <%= locals.darabszam[i] %>
+            <button type="button" class="btn">-</button>
+          </td>
+          </tr>
+        <% } %> 
+      <% } %> 
+      </table>
+    <% } %>
+    <form action="/rendeles" method="get" style ="margin: auto;">
+      <button type="submit" class="btn btn-secondary">Tovabb</button>
+    </form>
+  </body>
+</html>
