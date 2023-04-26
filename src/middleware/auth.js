@@ -18,8 +18,9 @@ exports.auth = (req, res, next) => {
 
 exports.restrict = (req, res, next) => {
     if (!req.body.curr_email) {
-        res.redirect('login');
+        return res.redirect('login');
     }
+    next();
 }
 
 exports.jwtSecret = jwtSecret;
