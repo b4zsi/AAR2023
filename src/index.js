@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "views/assets")));
+app.use(express.static(path.join(__dirname, "public/img")));
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(express.urlencoded({ extended: false }));
 

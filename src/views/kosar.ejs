@@ -2,12 +2,10 @@
 <html lang="en">
   <head>
     <%- include('includes/head') %>
+    <script src="../controller/oldalak.js" type="application/json"></script>
   </head>
   <header><%- include('includes/header', {oldal: locals.oldal}) %></header>
   <body>
-    <script type="module">
-      import {plusButton} from '../controller/oldalak.js'
-    </script>
     <% if(locals.konyvek) { %>
       <table class="table align-middle w-75 mx-auto">
 
@@ -26,9 +24,9 @@
           </td>
           <% } %>
           <td>
-            <button type="button" class="btn" onclick="plusButton()">+</button>
+            <a class="btn" href="/item?mennyi=1&isbn=<%- locals.konyvek[i]['rows'][j][4] %>">+</a>
             <%= locals.darabszam[i] %>
-            <button type="button" class="btn">-</button>
+            <a class="btn" href="/item?mennyi=-1&isbn=<%- locals.konyvek[i]['rows'][j][4] %>">-</a>
           </td>
           </tr>
         <% } %> 

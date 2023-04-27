@@ -35,23 +35,19 @@
     <% } %>
      <form action="/rendelesLeadas">
       <div class="form-group" style="width: 300px; margin: auto;">
-      <input type="text" name="varos" placeholder="varos" class="form-control text-center">
-      <input type="text" name="varos" placeholder="iranyitoszam" class="form-control text-center">
-      <input type="text" name="varos" placeholder="utca" class="form-control text-center">
-      <input type="text" name="varos" placeholder="varos" class="form-control text-center">
-      <label> Fizetési lehetőségek</label>
-      <select name="fizetes" id="fizetes">
-        <option value="Paypal">Paypal</option>
-        <option value="Utanvet">Utanvet</option>
-        <option value="Bankkartya" selected>Bankkartya</option>
+      <input type="text" name="varos" required placeholder="Város" class="form-control text-center">
+      <input type="text" name="irszam" required placeholder="Irányítószám" class="form-control text-center">
+      <input type="text" name="utca" required placeholder="Utca" class="form-control text-center">
+      <input type="text" name="hazszam" required placeholder="Házszám" class="form-control text-center">
+      <label> Fizetési lehetőségek: </label>
+      <select name="fizetes" id="fizetes" class="form-select mb-3">
+        <option value="Paypal">PayPal</option>
+        <option value="Utanvét">Utánvétel</option>
+        <option value="Bankkártya" selected>Bankkártya</option>
       </select>
       </div>
-      
-
-      <button type="submit" value="rendel" 
-      class="btn btn-secondary"
-      style="margin: auto;"
-      >Megrendel</button>
+      <a class="btn btn-secondary"
+       href="/rendel">Megrendel</a>
      </form>
   </body>
 </html>
