@@ -150,21 +150,53 @@ module.exports = function(app) {
             res.cookie('isbn', jsonStr, {maxAge:86400000})
             }
             else {
-                const obj = {isbn: isbn, darab:1}
+                let van = false
                 const jsonStr = req.cookies.isbn;
                 const array = JSON.parse(jsonStr);
-                array.push(obj)
-                const updatedJsonStr = JSON.stringify(array);
-                res.cookie('isbn', updatedJsonStr);
+
+                for(let i = 0;i < array.length;i++){
+                    if(isbn === array[i].isbn) {
+                        array[i].darab += 1*1;
+                        van = true;
+                    }
+                }
+                if(van){
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }else {
+                    const obj = {isbn: isbn, darab:1}
+                    array.push(obj)
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }
+                
             }
         return res.redirect('index');
     })
-    function plusButton() {
+
+    app.get("/item", async (req, res)=>{
+        let { mennyi, isbn } = req.query;
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
+        
+        for(let i = 0;i < array.length;i++){
+            if(isbn === array[i].isbn) {
+                array[i].darab += mennyi*1;
+            }
+        }
+        const updatedJsonStr = JSON.stringify(array);
+        res.cookie('isbn', updatedJsonStr);
 
-        console.log('igiygyfg')
+        return res.redirect('/kosar');
+    });
 
-    }
+    app.get('/rendel', async (req,res)=>{
+        //res.cookies.set('isbn',{maxAge:0});
+        console.log(res)
+        //res.redirect('index');
+        //res.end()
+        //add to rendelesek
+        
+    });
 
 }
