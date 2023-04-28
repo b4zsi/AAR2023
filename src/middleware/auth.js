@@ -17,9 +17,10 @@ exports.auth = (req, res, next) => {
 }
 
 exports.restrict = (req, res, next) => {
-    if (!req.body.curr_email) {
-        res.redirect('login');
+    if (req.body.curr_role < 10) {
+        return res.redirect('index');
     }
+    next();
 }
 
 exports.jwtSecret = jwtSecret;
