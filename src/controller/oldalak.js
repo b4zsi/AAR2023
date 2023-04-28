@@ -40,6 +40,12 @@ module.exports = function(app) {
             , table
         });
     });
+    app.get("/fiok", restrict, async(req, res) => {
+        const rendelesek = 0
+        return res.render('rendeleseim.ejs', {
+            rendelesek
+        })
+    });
     app.get("/kosar", async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
@@ -191,11 +197,15 @@ module.exports = function(app) {
     });
 
     app.get('/rendel', async (req,res)=>{
-        //res.cookies.set('isbn',{maxAge:0});
-        console.log(res)
-        //res.redirect('index');
-        //res.end()
-        //add to rendelesek
+        const jsonStr = req.cookies.isbn;
+        const array = JSON.parse(jsonStr);
+        let user = await db.getFiokByEmail(req.body.curr_email);
+        for(let i of array) {
+            let konyv = await db.getKonyByISBN(i.isbn);
+            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3]);
+        }
+        res.cookie('isbn', {expires: Date.now()});
+        res.redirect('index');
         
     });
 
