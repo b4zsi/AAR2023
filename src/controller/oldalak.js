@@ -109,7 +109,7 @@ module.exports = function(app) {
     });
 
 
-    app.get(["/upload", "/uploadKonyv"], oldalak, async (req, res) => {
+    app.get(["/upload", "/uploadKonyv"],restrict, oldalak, async (req, res) => {
         const kiado = await db.getKiado();
         const kategoria = await db.getKategoria();
                                       

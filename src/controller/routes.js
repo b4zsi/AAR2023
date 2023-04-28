@@ -28,7 +28,8 @@ module.exports = function(app) {
             "fiok",
         ];
         res.locals.admin_only = [
-            //"fiok", "nyitvatartas"
+            "upload",
+            "fiok",
         ];
 
         res.locals.oldal = req.path.replace('/', '')
