@@ -18,7 +18,7 @@ exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
 exports.getKonyv = async () => {
-    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar",KONYV.ISBN as "isbn" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
 }
 
 /////////////
@@ -37,7 +37,10 @@ exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
 exports.getKonyv = async () => {
-    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar",KONYV.ISBN as "isbn", KONYV.KEP as "kep" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+}
+exports.getKonyByISBN = async (isbn) => {
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar", KONYV.ISBN FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID AND KONYV.ISBN = :isbn`, [isbn])
 }
 exports.getNyitvatartas = async () => {
     return await query(`SELECT * from nyitvatartas`);
@@ -45,8 +48,14 @@ exports.getNyitvatartas = async () => {
 exports.getBolt = async () => {
     return await query(`SELECT * from bolt`);
 }
-exports.getKep = async () => {
-    return await query(`SELECT * from kep`);
+exports.getRendelesek = async () => {
+    return await query(`SELECT * FROM RENDELESEK`);
+}
+exports.setRendeles = async (isbn, fiokid, osszeg) => {
+    return await query(`INSERT INTO RENDELESEK(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+}
+exports.getKepByISBN = async (isbn) => {
+    return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
 }
 exports.uploadKonyv = async (isbn, kiado_id, kategoria_id, oldalszam, ar,mikor, nev) => {
     return await query(`INSERT INTO konyv(isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev) 
