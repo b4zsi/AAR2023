@@ -5,7 +5,7 @@
              <% for(let i in locals.header){ %>
 
                 <% if( !locals.curr_email  && (locals.user_only.includes(i) || locals.admin_only.includes(i)) ) continue %>
-                <% if( locals.curr_role === 0  && (locals.admin_only.includes(i) || locals.guest_only.includes(i))) continue %>
+                <% if(( locals.curr_role === 0  && locals.admin_only.includes(i)) || (locals.curr_email && locals.guest_only.includes(i))) continue %>
                 <li class="nav-item">
                     <a class="nav-link <%- oldal.includes(i) ?"active":"" %>" href="<%- i %>"><%- locals.header[i] %></a>
                 </li>
