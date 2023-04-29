@@ -21,9 +21,11 @@ module.exports = function(app) {
             "regist",
         ];
         res.locals.user_only = [
-            "logout",
             "fiok",
             "kosar"
+        ];
+        res.locals.user_and_admin_only = [
+            "logout",
         ];
         res.locals.admin_only = [
             "upload",
