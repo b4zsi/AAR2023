@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('includes/head') %>
+</head>
+<header><%- include('includes/header', {oldal: oldal}) %></header>
+
+<body>
+
+    <%- include('includes/uploads') %>
+
+        <form class="form text-center" action="/uploadKonyv" method="post">
+            <label>
+                Név: <input class="form-control" type="text" placeholder="név" name="nev" />
+            </label><br>
+            <label>
+                ISBN szám: <input class="form-control" type="text" placeholder="isbn" name="isbn" />
+            </label><br>
+            <label>
+                Kiadó: 
+                <select class="form-control" name="kiado" id="kiado">
+                    <% for(i in kiado['rows']){ %>
+                    <option value="<%- kiado['rows'][i][0] %>" <% if(kiado['rows'][i][0] == kiado['rows'][0][0]){ %> selected<% } %>><%- kiado['rows'][i][1] %></option>
+                    <% } %>
+                </select>
+            </label><br>
+            <label>
+                Kategoria:
+                <select class="form-control" name="kategoria" id="kategoria">
+                    <% for(i in kategoria['rows']){ %>
+                    <option value="<%- kategoria['rows'][i][0] %>" <% if(kategoria['rows'][i][0] == kategoria['rows'][0][0]){ %> selected<% } %>><%- kategoria['rows'][i][1] %></option>
+                    <% } %>
+                </select>
+            </label><br>
+            <label>
+                Oldalszám: <input class="form-control" type="number" placeholder="oldalszám" name="oldalszam" />
+            </label><br>
+            <label>
+                Kiadás dátuma:
+                <input class="form-control" type="date" placeholder="kiadas datum" name="mikor" />
+            </label><br>
+            <label>
+                Ar: <input class="form-control" type="number" placeholder="ar" name="ar" />
+            </label><br>
+
+            <button class="gomb mt-2" type="submit">Hozzáadás</button>
+        </form>
+</body>
+
+</html>

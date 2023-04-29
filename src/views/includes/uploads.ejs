@@ -1,0 +1,7 @@
+<ul class="list-unstyled">
+    <% for(let i in locals.oldalak){ %>
+        <li>
+            <a class="link" href="/upload<%- i.charAt(0).toUpperCase().concat(i.slice(1)) %>"><%- oldalak[i] %></a>
+        </li>
+    <% } %>
+</ul>

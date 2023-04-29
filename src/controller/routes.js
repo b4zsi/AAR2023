@@ -12,6 +12,7 @@ module.exports = function(app) {
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
+            "upload": "Feltöltés",
             "login": "Bejelentkezés",
             "regist": "Regisztráció",
             "logout": "Kilépés",
@@ -27,12 +28,14 @@ module.exports = function(app) {
             "kosar"
         ];
         res.locals.admin_only = [
-            //"fiok", "nyitvatartas"
+            "upload",
+            "fiok",
         ];
 
         res.locals.oldal = req.path.replace('/', '')
         res.locals.curr_email = req.body.curr_email;
         res.locals.curr_role = req.body.curr_role;
+        res.locals.szerkeszt = req.query.szerkeszt;
         next()
     });
 
