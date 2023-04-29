@@ -1,53 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
     <%- include('includes/head') %>
-  </head>
-  <header><%- include('includes/header', {oldal: oldal}) %></header>
-  <body>
-    <p>
-    <h1 class="mb-3 text-center">További adatok megadása</h1>
-    </p>
-    <% if(locals.konyvek) { %>
-      <table class="table align-middle w-75 mx-auto">
+    <%- include('includes/header', {oldal: oldal}) %>
+    <body>
+        <h1 class="mb-3 text-center">További adatok megadása</h1>
+        <% if(locals.konyvek) { %>
+            <table class="table align-middle w-75 mx-auto">
 
-        <tr>
-          <th>Név</th>
-          <th>Oldalszám</th>
-          <th>Kiadó</th>
-          <th>Ár</th>
-        </tr>
-      <% for(let i = 0; i < locals.konyvek.length; i++){ %> 
-        <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
-          <tr>
-            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
-            <td>
-          <%= locals.konyvek[i]['rows'][j][k] %>
-          </td>
-          <% } %>
-          <td>
-            <%= locals.darabszam[i] %> darab
-          </td>
-          </tr>
-        <% } %> 
-      <% } %> 
-      </table>
-    <% } %>
-     <form action="/rendelesLeadas">
-      <div class="form-group" style="width: 300px; margin: auto;">
-      <input type="text" name="varos" required placeholder="Város" class="form-control text-center">
-      <input type="text" name="irszam" required placeholder="Irányítószám" class="form-control text-center">
-      <input type="text" name="utca" required placeholder="Utca" class="form-control text-center">
-      <input type="text" name="hazszam" required placeholder="Házszám" class="form-control text-center">
-      <label> Fizetési lehetőségek: </label>
-      <select name="fizetes" id="fizetes" class="form-select mb-3">
-        <option value="Paypal">PayPal</option>
-        <option value="Utanvét">Utánvétel</option>
-        <option value="Bankkártya" selected>Bankkártya</option>
-      </select>
-      </div>
-      <a class="btn btn-secondary"
-       href="/rendel">Megrendel</a>
-     </form>
-  </body>
+                <tr>
+                    <th>Név</th>
+                    <th>Oldalszám</th>
+                    <th>Kiadó</th>
+                    <th>Ár</th>
+                </tr>
+                <% for(let i = 0; i < locals.konyvek.length; i++){ %>
+                    <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
+                        <tr>
+                            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
+                                <td>
+                                    <%= locals.konyvek[i]['rows'][j][k] %>
+                                </td>
+                            <% } %>
+                            <td>
+                                <%= locals.darabszam[i] %> darab
+                            </td>
+                        </tr>
+                    <% } %>
+                <% } %>
+            </table>
+        <% } %>
+        <form action="/rendelesLeadas">
+            <div class="form-group" style="width: 300px; margin: auto;">
+                <input type="text" name="varos" required placeholder="Város" class="form-control text-center">
+                <input type="text" name="irszam" required placeholder="Irányítószám" class="form-control text-center">
+                <input type="text" name="utca" required placeholder="Utca" class="form-control text-center">
+                <input type="text" name="hazszam" required placeholder="Házszám" class="form-control text-center">
+                <label> Fizetési lehetőségek: </label>
+                <select name="fizetes" id="fizetes" class="form-select mb-3">
+                    <option value="Paypal">PayPal</option>
+                    <option value="Utanvét">Utánvétel</option>
+                    <option value="Bankkártya" selected>Bankkártya</option>
+                </select>
+            </div>
+            <a class="btn btn-secondary" href="/rendel">Megrendel</a>
+        </form>
+    </body>
 </html>

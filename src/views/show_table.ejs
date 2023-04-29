@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('includes/head') %>
-    </head>
-    <header>
-        <%- include('includes/header', {oldal: locals.oldal}) %>
-    </header>
+    <%- include('includes/head') %>
+    <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
         <div >
             <div>
                 <p style="font-size:5vw; text-align: center;"><%- locals.cim %></p>
-
                 <%- include('includes/table') %>
-
-
             </div>
         </div>
-
     </body>
     <%#- include('includes/footer') %>
 </html>

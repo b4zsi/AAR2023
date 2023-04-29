@@ -142,35 +142,38 @@ module.exports = function(app) {
             console.log("missing data");
         }
     })
+
     app.post("/addToKosar", async (req, res)=>{
         let {isbn} = req.body;
-            if(!req.cookies.isbn) {
+
+        if(!req.cookies.isbn) {
             const obj = [{isbn: isbn, darab:1}]
             const jsonStr = JSON.stringify(obj);
             res.cookie('isbn', jsonStr, {maxAge:86400000})
-            }
-            else {
-                let van = false
-                const jsonStr = req.cookies.isbn;
-                const array = JSON.parse(jsonStr);
+        } else {
+            let van = false
+            const jsonStr = req.cookies.isbn;
+            const array = JSON.parse(jsonStr);
 
-                for(let i = 0;i < array.length;i++){
-                    if(isbn === array[i].isbn) {
-                        array[i].darab += 1*1;
-                        van = true;
-                    }
+            for(let i = 0;i < array.length;i++){
+                if(isbn === array[i].isbn) {
+                    array[i].darab += 1;
+                    van = true;
+                    break;
                 }
-                if(van){
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }else {
-                    const obj = {isbn: isbn, darab:1}
-                    array.push(obj)
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }
-                
             }
+
+            const updatedJsonStr = JSON.stringify(array);
+            res.cookie('isbn', updatedJsonStr);
+
+            if (!van) {
+                const obj = { isbn, darab: 1 };
+                array.push(obj);
+                const updatedJsonStr = JSON.stringify(array);
+                res.cookie('isbn', updatedJsonStr);
+            }
+        }
+
         return res.redirect('index');
     })
 

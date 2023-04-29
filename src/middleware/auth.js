@@ -16,7 +16,7 @@ exports.auth = (req, res, next) => {
     next()
 }
 
-exports.restrict = (req, res, next) => {
+exports.restrict = (req, res) => {
     if (!req.body.curr_email) {
         res.redirect('login');
     }

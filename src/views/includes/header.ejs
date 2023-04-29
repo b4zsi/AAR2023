@@ -1,15 +1,16 @@
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-   <div class="container">
-      <div class="navbar-collapse collapse">
-         <ul class="navbar-nav">
-             <% for(let i in locals.header){ %>
-
-                <% if( !locals.curr_email  && locals.user_only.includes(i) ) continue %>
-                <% if( locals.curr_email  && locals.guest_only.includes(i) ) continue %>
-                <li class="nav-item">
-                    <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- i %>"><%- locals.header[i] %></a>
-                </li>
-            <% }%>
-      </div>
-   </div>
-</nav>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav">
+                    <% for(let i in locals.header){ %>
+                    <% if( !locals.curr_email  && locals.user_only.includes(i) ) continue %>
+                    <% if( locals.curr_email  && locals.guest_only.includes(i) ) continue %>
+                    <li class="nav-item">
+                        <a class="nav-link <%- oldal === i ?"active":"" %>" href="<%- i %>"><%- locals.header[i] %></a>
+                    </li>
+                <% }%>
+          </div>
+       </div>
+    </nav>
+</header>

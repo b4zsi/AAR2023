@@ -30,6 +30,3 @@ async function init() {
 }
 
 init();
-
-
-

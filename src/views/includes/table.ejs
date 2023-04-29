@@ -1,22 +1,22 @@
 <% if(locals.table){ %>
-<table class="table align-middle w-75 mx-auto">
-    <thead>
-        <tr>
-            <% for(let i = 0; i < locals.table['metaData'].length; i++){ %>
-            <th><%= locals.table['metaData'][i]['name'] %></th>
+    <table class="table align-middle w-75 mx-auto">
+        <thead>
+            <tr>
+                <% for(let i = 0; i < locals.table['metaData'].length; i++){ %>
+                <th><%= locals.table['metaData'][i]['name'] %></th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+            <tr>
+                <% for(let j = 0; j < locals.table['metaData'].length; j++){ %>
+                <td><%= locals.table['rows'][i][j] %>
+                    <% if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
+                </td>
+                <% } %>
+            </tr>
             <% } %>
-        </tr>
-    </thead>
-    <tbody>
-        <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
-        <tr>
-            <% for(let j = 0; j < locals.table['metaData'].length; j++){ %>
-            <td><%= locals.table['rows'][i][j] %>
-                <% if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft <% } %>
-            </td>
-            <% } %>
-        </tr>
-        <% } %>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 <% } %>

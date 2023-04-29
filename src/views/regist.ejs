@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
     <%- include('includes/head') %>
-  </head>
-
-  <header>
-      <%- include('includes/header', {oldal: locals.oldal}) %>
-  </header>
-
-  <body>
-    <h1 class="text-center">Regisztrálás</h1>
-
-    <%- include('includes/hiba') %>
-
-    <div class="center">
-      <form class="form text-center" action="/regist" method="post">
-        <label
-          >E-mail:
-          <input type="text" class="form-control" name="email_cim" /> </label
-        ><br />
-        <label
-          >Keresztnév:
-          <input type="text" class="form-control" name="knev" /> </label
-        ><br />
-        <label
-          >Vezetéknév:
-          <input type="text" class="form-control" name="vnev" /> </label
-        ><br />
-        <label
-          >Jelszó:
-          <input type="password" class="form-control" name="jelszo" /> </label
-        ><br />
-        <label
-          >Jelszó megint:
-          <input type="password" class="form-control" name="jelszo2" /> </label
-        ><br />
-        <input class="gomb mt-3" type="SUBMIT" value="Felvesz" />
-      </form>
-    </div>
-  </body>
-  <%- include('includes/footer') %>
+    <%- include('includes/header', {oldal: locals.oldal}) %>
+    <body>
+        <%- include('includes/hiba') %>
+        <h1 class="text-center">Regisztrálás</h1>
+        <div class="center">
+            <form class="form text-center" action="/regist" method="post">
+                <label
+                >E-mail:
+                    <input type="text" class="form-control" name="email_cim"/> </label
+                ><br/>
+                <label
+                >Keresztnév:
+                    <input type="text" class="form-control" name="knev"/> </label
+                ><br/>
+                <label
+                >Vezetéknév:
+                    <input type="text" class="form-control" name="vnev"/> </label
+                ><br/>
+                <label
+                >Jelszó:
+                    <input type="password" class="form-control" name="jelszo"/> </label
+                ><br/>
+                <label
+                >Jelszó megint:
+                    <input type="password" class="form-control" name="jelszo2"/> </label
+                ><br/>
+                <input class="gomb mt-3" type="SUBMIT" value="Felvesz"/>
+            </form>
+        </div>
+    </body>
+    <%- include('includes/footer') %>
 </html>

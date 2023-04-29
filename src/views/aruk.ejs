@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('includes/head') %>
-    </head>
-    <header>
-        <%- include('includes/header', {oldal: "aruk"}) %>
-    </header>
+    <%- include('includes/head') %>
+    <%- include('includes/header', {oldal: "aruk"}) %>
     <body>
-
         <% if(locals.szerkeszt){ %>
             <a class="gomb m-2 float-end" href="/aruk">Mégse</a>
         <% }else{ %>
@@ -15,33 +10,33 @@
         <% } %>
         <table class="table align-middle w-75 mx-auto">
             <thead>
-                <tr>
-                    <th>Név</th>
-                    <th>Térfogat</th>
-                    <th>Súly</th>
-                    <th class="text-center">Ár</th>
-                    <% if(locals.szerkeszt){ %>
-                        <th class="text-center">Opciók</th>
-                    <% } %>
-                </tr>
+            <tr>
+                <th>Név</th>
+                <th>Térfogat</th>
+                <th>Súly</th>
+                <th class="text-center">Ár</th>
+                <% if(locals.szerkeszt){ %>
+                    <th class="text-center">Opciók</th>
+                <% } %>
+            </tr>
             </thead>
             <tbody>
-                <% for(let i = 0; i < aruk.length; i++){ %>
+            <% for(let i = 0; i < aruk.length; i++){ %>
                 <tr>
                     <% if(locals.id != aruk[i].aru_id){ %>
                         <td><%= aruk[i].nev %></td>
                         <td><%= aruk[i].terfogat %> m<sup>3</sup></td>
                         <td><%= aruk[i].suly %> Kg</td>
                         <td class="text-center"><%= aruk[i].ar %> Ft</td>
-                    <% if(locals.szerkeszt){ %>
-                        <td class="text-center">
-                            <a class="gomb" href="/aruk?szerkeszt=1&id=<%- aruk[i].aru_id %>">Módosít</a>
-                            <form class="inline" action="/deleteAru" method="post">
-                                <input type="hidden" name="aru_id" value="<%- aruk[i].aru_id %>" >
-                                <input class="torol" type="SUBMIT" value="Töröl" >
-                            </form>
-                        </td>
-                    <% } %>
+                        <% if(locals.szerkeszt){ %>
+                            <td class="text-center">
+                                <a class="gomb" href="/aruk?szerkeszt=1&id=<%- aruk[i].aru_id %>">Módosít</a>
+                                <form class="inline" action="/deleteAru" method="post">
+                                    <input type="hidden" name="aru_id" value="<%- aruk[i].aru_id %>">
+                                    <input class="torol" type="SUBMIT" value="Töröl">
+                                </form>
+                            </td>
+                        <% } %>
                     <% }else{ %>
                         <form class="inline" action="/editAru" method="post">
                             <input name="aru_id" type="hidden" value="<%= aruk[i].aru_id %>">
@@ -51,30 +46,29 @@
                             <td><input name="ar" type="number" value="<%= aruk[i].ar %>"> Ft</td>
                             <td>
                                 <a href="/arukok?szerkeszt=1" class="gomb">Mégse</a>
-                                <input class="gomb" type="SUBMIT" value="Változtat" >
+                                <input class="gomb" type="SUBMIT" value="Változtat">
                             </td>
                         </form>
                     <% } %>
-                    </tr>
-                <% } %>
+                </tr>
+            <% } %>
             </tbody>
         </table>
         <form class="form" action="/addAru" method="post">
             <label>Név:
-                <input type="text" class="form-control" name="nev" ></input>
+                <input type="text" class="form-control" name="nev">
             </label>
             <label>Térfogat:
-                <input type="text" class="form-control" name="terfogat" ></input>
+                <input type="text" class="form-control" name="terfogat">
             </label>
             <label>Súly:
-                <input type="text" class="form-control" name="suly" ></input>
+                <input type="text" class="form-control" name="suly">
             </label>
             <label>Ár:
-                <input type="number" class="form-control" name="ar" </input>
+                <input type="number" class="form-control" name="ar">
             </label>
             <input class="gomb" type="submit" value="Felvesz">
         </form>
-
     </body>
     <%- include('includes/footer') %>
 </html>
