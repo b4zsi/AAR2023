@@ -16,10 +16,11 @@ exports.auth = (req, res, next) => {
     next()
 }
 
-exports.restrict = (req, res) => {
-    if (!req.body.curr_email) {
-        res.redirect('login');
+exports.restrict = (req, res, next) => {
+    if (req.body.curr_role !== 1) {
+        return res.redirect('index');
     }
+    next();
 }
 
 exports.jwtSecret = jwtSecret;

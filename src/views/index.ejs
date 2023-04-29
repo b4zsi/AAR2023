@@ -3,62 +3,54 @@
     <%- include('includes/head') %>
     <%- include('includes/header', {oldal: oldal}) %>
     <body>
-    <div class="container">
-        <div class="row">
-            <% if(locals.siker){ %>
-                <p class="fade-out siker">Sikeres bejelentkezés!</p>
-            <% } %>
-            <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
-            <div class="card-container">
-                <% if(locals.table){ %> <% for(let i = 0; i <
-                locals.table['rows'].length; i++){ %>
-                    <div class="card">
-                        <img src="<%- locals.table['rows'][i][5] %>" alt="kep" style="height: 300px; width: 90px;"
-                             class="card-img-top">
-                        <% for(let j = 0; j < locals.table['metaData'].length; j++){ %>
-                            <div style="text-align: center; font-size: 20px;">
-                                <% if(locals.table['metaData'][j]['name'] != 'isbn' &&
-                                        locals.table['metaData'][j]['name'] != 'kep') { %>
-                                    <label name="{{ locals.table['metaData'][j]['name'] }}">
-                                        <span class="card-text"><%= locals.table['rows'][i][j] %></span>
-                                        <% if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft
-                                        <% } %>
-                                        <% if(locals.table['metaData'][j]['name'] == "Oldal"){ %> oldal
-                                        <% } %>
-                                    </label>
-                                <% } %>
-                            </div>
-                        <% } %>
-                        <% if(locals.curr_role === 1){ %>
-                            <form action="/upload" method="get">
-                                <button type="submit" value="modifiy" class="btn btn-secondary">szerkesztés</button>
-                            </form>
-                            <form action="/deleteKonyv" method="post">
-                                <button type="submit" value="delete" class="btn btn-secondary">törlés</button>
-                            </form>
-                        <% } else { %>
-                            <form action="/addToKosar" method="post">
-                                <button
-                                        type="submit"
-                                        value="<%= locals.table['rows'][i][4] %>"
-                                        name="isbn"
-                                        class="btn btn-secondary"
-                                        style="margin-left: 72px; width: 100px;"
-                                >
-                                    Kosárba
-                                </button>
-                            </form>
-                        <% } %>
-                    </div>
-                <% } %> <% if(locals.curr_role === 1){ %>
-                    <form action="/upload" method="get">
-                        <button type="submit" value="upload">hozzáadás</button>
-                    </form>
+        <div class="container">
+            <div class="row">
+                <% if(locals.siker){ %>
+                    <p class="fade-out siker">Sikeres bejelentkezés!</p>
                 <% } %>
-                <% } %>
+                <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
+                <div class="card-container">
+                    <% if(locals.table){ %> <% for(let i = 0; i <
+                    locals.table['rows'].length; i++){ %>
+                        <div class="card">
+                            <img src="<%- locals.table['rows'][i][5] %>" alt="kep" style="height: 300px; width: 90px;"
+                                 class="card-img-top">
+                            <% for(let j = 0; j < locals.table['metaData'].length; j++){ %>
+                                <div style="text-align: center; font-size: 20px;">
+                                    <% if(locals.table['metaData'][j]['name'] != 'isbn' &&
+                                            locals.table['metaData'][j]['name'] != 'kep') { %>
+                                        <label name="{{ locals.table['metaData'][j]['name'] }}">
+                                            <span class="card-text"><%= locals.table['rows'][i][j] %></span>
+                                            <% if(locals.table['metaData'][j]['name'] == "Ar"){ %> Ft
+                                            <% } %>
+                                            <% if(locals.table['metaData'][j]['name'] == "Oldal"){ %> oldal
+                                            <% } %>
+                                        </label>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                            <% if(locals.curr_role === 1){ %>
+                                <form action="/upload" method="get">
+                                    <button type="submit" value="modifiy" class="btn btn-secondary">szerkesztés</button>
+                                </form>
+                                <form action="/deleteKonyv" method="post">
+                                    <button type="submit" value="delete" class="btn btn-secondary">törlés</button>
+                                </form>
+                            <% } else { %>
+                                <form action="/addToKosar" method="post">
+                                    <button type="submit" value="<%= locals.table['rows'][i][4] %>" name="isbn" class="btn btn-secondary" style="margin-left: 72px; width: 100px;">Kosárba</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    <% } %> <% if(locals.curr_role === 1){ %>
+                        <form action="/upload" method="get">
+                            <button type="submit" value="upload">hozzáadás</button>
+                        </form>
+                    <% } %>
+                    <% } %>
+                </div>
             </div>
         </div>
-    </div>
     </body>
 <%#- include('includes/footer') %>
 </html>
