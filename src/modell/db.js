@@ -2,16 +2,15 @@ const db = require("oracledb");
 const dbConfig = require("../config/database");
 db.autoCommit = true;
 
-/////////////
-// USER
-////////////
-exports.getSzerzo = async () => {
+exports.getSzerzok = async () => {
     return await query(`SELECT * from SZERZO order by id`);
 }
 exports.getKategoria = async () => {
     return await query(`SELECT * from kategoria`);
 }
-
+exports.getKiadok = async () => {
+    return await query(`SELECT * from KIADO`);
+}
 exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
@@ -28,7 +27,7 @@ exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
 exports.setRendeles = async (isbn, fiokid, osszeg) => {
-    return await query(`INSERT INTO RENDELESEK(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
 }
 exports.getKepByISBN = async (isbn) => {
     return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
@@ -118,4 +117,3 @@ async function query(query, list = []) {
     return result;
 
 }
-

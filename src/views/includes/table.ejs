@@ -1,29 +1,28 @@
 <% if(locals.table){ %>
-
-<table class="table align-middle w-75 mx-auto">
-    <thead>
-        <tr>
-            <% for(let i = 0; i < locals.table['metaData'].length; i++){ if(table['metaData'][i]['name'] === 'ID'){ continue; } %>
-            <th><%= locals.table['metaData'][i]['name'] %></th>
-            <% } %>
-        </tr>
-    </thead>
-    <tbody>
-        <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
-        <tr>
-            <% for(let j = 0; j < locals.table['metaData'].length; j++){ if(table['metaData'][j]['name'] === 'ID'){ continue; } %>
-                <% if(locals.curr_role === 1){ %>
-                    <td>
-                        <%= locals.table['rows'][i][j] %>
-                    </td>
-                <% }else{ %>
-                    <td>
-                        <%= locals.table['rows'][i][j] %>
-                    </td>
+    <table class="table align-middle w-75 mx-auto">
+        <thead>
+            <tr>
+                <% for(let i = 0; i < locals.table['metaData'].length; i++){ if(table['metaData'][i]['name'] === 'ID'){ continue; } %>
+                <th><%= locals.table['metaData'][i]['name'] %></th>
                 <% } %>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+            <tr>
+                <% for(let j = 0; j < locals.table['metaData'].length; j++){ if(table['metaData'][j]['name'] === 'ID'){ continue; } %>
+                    <% if(locals.curr_role === 1){ %>
+                        <td>
+                            <%= locals.table['rows'][i][j] %>
+                        </td>
+                    <% }else{ %>
+                        <td>
+                            <%= locals.table['rows'][i][j] %>
+                        </td>
+                    <% } %>
+                <% } %>
+            </tr>
             <% } %>
-        </tr>
-        <% } %>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 <% } %>

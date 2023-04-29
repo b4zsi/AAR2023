@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
     <%- include('includes/head') %>
-  </head>
-  <header><%- include('includes/header', {oldal: locals.oldal}) %></header>
-  <body>
-
+    <%- include('includes/header', {oldal: locals.oldal}) %>
+    <body>
     <%- include('includes/hiba') %>
-
-    <div class="center p-4">
-      <form class="form text-center" action="/login" method="post">
-        <label
-          >E-mail:
-          <input type="text" class="form-control" name="email_cim" /> </label
-        ><br />
-        <label
-          >Jelszó:
-          <input type="password" class="form-control" name="jelszo" /> </label
-        ><br />
-        <input class="gomb mt-2" type="submit" value="Bejelentkezés" />
-      </form>
-    </div>
-  </body>
+        <div class="center p-4">
+            <form class="form text-center" action="/login" method="post">
+                <label
+                >E-mail:
+                    <input type="text" class="form-control" name="email_cim"/> </label
+                ><br/>
+                <label
+                >Jelszó:
+                    <input type="password" class="form-control" name="jelszo"/> </label
+                ><br/>
+                <input class="gomb mt-2" type="submit" value="Bejelentkezés"/>
+            </form>
+        </div>
+    </body>
 </html>

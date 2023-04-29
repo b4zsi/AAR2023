@@ -37,7 +37,8 @@ module.exports = function(app) {
         await bcrypt.hash(jelszo, 10).then(function(hash) {
             db.addUser(email_cim, hash, knev, vnev);
         });
-        next('login');
+
+        return res.redirect('login');
     });
 
     app.get("/login", async (req, res) => {
