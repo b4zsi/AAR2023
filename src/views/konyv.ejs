@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('includes/head') %>
+    </head>
+    <header>
+        <%- include('includes/header', {oldal: locals.oldal}) %>
+    </header>
+    <body>
+        <% if(locals.table){ %>
+        <h1>Könyvek</h1>
+        <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
+            <form class="form text-center" action="/editKonyv" method="post">
+                <td><label>
+                    Név: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="nev" />
+                </label></td>
+                <td><label>
+                    ISBN szám: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn_uj" />
+                </label></td>
+                    <input type="hidden" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn" />
+                <td><label>
+                    Kiadó: 
+                    <select class="form-control" name="kiado" id="kiado">
+                        <% for(i in kiado['rows']){ %>
+                        <option value="<%- kiado['rows'][i][0] %>" <% if(kiado['rows'][i][0] == kiado['rows'][0][0]){ %> selected<% } %>><%- kiado['rows'][i][1] %></option>
+                        <% } %>
+                    </select>
+                </label></td>
+                <td><label>
+                    Kategoria:
+                    <select class="form-control" name="kategoria" id="kategoria">
+                        <% for(i in kategoria['rows']){ %>
+                        <option value="<%- kategoria['rows'][i][0] %>" <% if(kategoria['rows'][i][0] == kategoria['rows'][0][0]){ %> selected<% } %>><%- kategoria['rows'][i][1] %></option>
+                        <% } %>
+                    </select>
+                </label></td>
+                <td><label>
+                    Oldalszám: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][2] %>" name="oldalszam" />
+                    </label></td>
+                <td><label>
+                    Kiadás dátuma:
+                    <input class="form-control" type="date" value="2023-01-01" name="mikor" />
+                </label></td>
+                <td><label>
+                    Ar: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][4] %>" name="ar" />
+                </label></td>
+
+                <button class="gomb" type="submit">Hozzáadás</button>
+            </form>
+
+        <% } %>
+
+        <table class="table align-middle w-75 mx-auto">
+            <thead>
+                <tr>
+                    <% for(let i = 0; i < locals.table['metaData'].length; i++){ if(table['metaData'][i]['name'] === 'ID'){ continue; } %>
+                    <th><%= locals.table['metaData'][i]['name'] %></th>
+                    <% } %>
+                    <% if(locals.curr_role === 1){ %>
+                    <th></th><th></th>
+                    <% } %>
+
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+                <tr>
+                        <% if(locals.curr_role === 1){ %>
+                                <td>
+                                    <%= locals.table['rows'][i][0] %>
+                                </td>
+                                <td>
+                                    <%= locals.table['rows'][i][1] %>
+                                </td>
+                                <td>
+                                    <%= locals.table['rows'][i][2] %>
+                                </td>
+                                <td>
+                                    <%= locals.table['rows'][i][3] %>
+                                </td>
+                                <td>
+                                    <%= locals.table['rows'][i][4] %>
+                                </td>
+                                <td>
+                                    <%= locals.table['rows'][i][5] %> Ft
+                                </td>
+                            <% if(locals.id !== locals.table['rows'][i][0]){ %>
+                                <td>
+                                    <a class="gomb" href="/<%- oldal %>?id=<%= locals.table['rows'][i][0] %>">Szerkeszt</a>
+                                </td>
+                                <td>
+                                    <a class="torol" href="/deleteKonyv?id=<%= locals.table['rows'][i][0] %>">Törlés</a>
+                                </td>
+                            <% }else{ %>
+                                <td colspan="2">
+                                    <a class="gomb text-end" href="/konyv">Mégse</a>
+                                </td>
+                            <% } %>
+                        <% }else{ %>
+                        <% for(let j = 0; j < locals.table['metaData'].length; j++){ if(table['metaData'][j]['name'] === 'ID'){ continue; } %>
+                            <td>
+                                <%= locals.table['rows'][i][j] %>
+                            </td>
+                        <% } %>
+                    <% } %>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <% } %>
+
+    </body>
+    <%#- include('includes/footer') %>
+</html>

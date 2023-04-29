@@ -1,4 +1,5 @@
 const restrict = require('../middleware/auth').restrict;
+const oldalak = require('../middleware/oldalak').oldalak;
 const db = require('../modell/db');
 const jwt = require('jsonwebtoken')
 
@@ -16,15 +17,16 @@ module.exports = function(app) {
     });
 
     app.get("/szerzo", async (req, res) => {
-        const table = await db.getSzerzok();
+        const table = await db.getSzerzo();
 
         return res.render('show_table.ejs', {
             cim: "Szerzők:"
             , table
         });
     });
+
     app.get("/kiado", async (req, res) => {
-        const table = await db.getKiadok();
+        const table = await db.getKiado();
 
         return res.render('show_table.ejs', {
             cim: "Kiadók"
@@ -40,6 +42,7 @@ module.exports = function(app) {
             , table
         });
     });
+
     app.get("/kosar", async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
@@ -75,6 +78,7 @@ module.exports = function(app) {
         })
 
     });
+
     app.get("/kategoria", async (req, res) => {
         const table = await db.getKategoria();
 
@@ -86,11 +90,42 @@ module.exports = function(app) {
 
     app.get("/konyv", async (req, res) => {
         const table = await db.getKonyv();
+        let { id }= req.query
+        let kiado, kategoria;
+        let szerkesztendo;
 
-        return res.render('show_table.ejs', {
-            cim: "Konyv:"
-            , table
+        if(req.body.curr_role === 1){
+            if(id){
+                szerkesztendo = await db.getKonyvById(id);
+            }
+            kiado = await db.getKiado();
+            kategoria = await db.getKategoria();
+        }
+
+
+        return res.render('konyv.ejs', {
+            kiado,
+            szerkesztendo,
+            kategoria,
+            table,
+            id,
         });
+    });
+
+    app.post("/editKonyv", async (req, res) => {
+        let {nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar} = req.body;
+
+        await db.editKonyv(nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar);
+
+        return res.redirect('/konyv?id=' + isbn);
+    });
+
+    app.get("/deleteKonyv", async (req, res) => {
+        let { id }= req.query
+
+        await db.deleteKonyv(id);
+
+        return res.redirect('/konyv');
     });
 
     app.get("/nyitvatartas", async (req, res) => {
@@ -111,16 +146,37 @@ module.exports = function(app) {
         });
     });
 
-    app.get("/upload", async (req, res) => {
-        let { nev } = req.body
-        return res.render("upload", {
-            nev
+    app.get(["/upload", "/uploadKonyv"],restrict, oldalak, async (req, res) => {
+        const kiado = await db.getKiado();
+        const kategoria = await db.getKategoria();
+                                      
+        return res.render("uploadKonyv",{
+            kiado,
+            kategoria,
         });
-    })
-    app.get("/deleteKonyv", async (req, res) => {
-        let {id} = req.body
-        //return await db.deleteKonyv()
-    })
+    });
+
+    app.post("/uploadKonyv", async (req, res) => {
+        let {nev, isbn, kiado, kategoria, oldalszam, mikor, ar} = req.body;
+
+        await db.uploadKonyv(nev, isbn, kiado, kategoria, oldalszam, mikor, ar);
+                                      
+        return res.redirect("upload");
+    });
+
+    app.get("/uploadSzerzo", oldalak, async (req, res) => {
+                                      
+        return res.render("uploadSzerzo");
+    });
+
+    app.post("/uploadSzerzo", async (req, res) => {
+        let {vezetek, kereszt} = req.body;
+
+        await db.uploadSzerzo(vezetek, kereszt);
+                                      
+        return res.redirect("uploadSzerzo");
+    });
+
 
     app.post("/uploadImg", async (req, res) => {
         const { name, data } = req.files.pic
@@ -141,7 +197,8 @@ module.exports = function(app) {
         } else {
             console.log("missing data");
         }
-    })
+    });
+
     app.post("/addToKosar", async (req, res)=>{
         let {isbn} = req.body;
             if(!req.cookies.isbn) {
@@ -172,7 +229,7 @@ module.exports = function(app) {
                 
             }
         return res.redirect('index');
-    })
+    });
 
     app.get("/item", async (req, res)=>{
         let { mennyi, isbn } = req.query;
