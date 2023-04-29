@@ -239,8 +239,6 @@ module.exports = function(app) {
                     const updatedJsonStr = JSON.stringify(array);
                     res.cookie('isbn', updatedJsonStr);
                 }
-            }
-            }
             if (van) {
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
@@ -250,6 +248,7 @@ module.exports = function(app) {
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
             }
+        }
 
         }
         return res.redirect('index');
