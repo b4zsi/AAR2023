@@ -28,7 +28,7 @@ exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
 exports.setRendeles = async (isbn, fiokid, osszeg) => {
-    return await query(`INSERT INTO RENDELESEK(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
 }
 exports.getKepByISBN = async (isbn) => {
     return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);

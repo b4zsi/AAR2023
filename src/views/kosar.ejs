@@ -32,9 +32,11 @@
         <% } %> 
       <% } %> 
       </table>
-    <% } %>
-    <form action="/rendeles" method="get" style ="margin: auto;">
-      <button type="submit" class="btn btn-secondary">Tovabb</button>
-    </form>
+      <form action="/rendeles" method="get" style ="margin: auto;">
+        <button type="submit" class="btn btn-secondary">Tovabb</button>
+      </form>
+    <% } else {%>
+        A kosarad üres.
+      <% } %>
   </body>
 </html>

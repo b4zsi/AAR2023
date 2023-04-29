@@ -42,22 +42,28 @@ module.exports = function(app) {
             , table
         });
     });
-
+    
     app.get("/kosar", async (req, res) => {
-        const jsonStr = req.cookies.isbn;
-        const array = JSON.parse(jsonStr);
-        const konyvek = []
-        const dbs = []
-
-        for (let i = 0; i < array.length; i++) {
-            const konyv = await db.getKonyByISBN(array[i].isbn)
-            dbs.push(array[i].darab)
-            konyvek.push(konyv)
+        if(req.cookies.isbn) {
+            const jsonStr = req.cookies.isbn;
+            if(jsonStr['expires'] > 0){
+                return res.render('kosar.ejs');
+            }
+            const array = JSON.parse(jsonStr);
+                var konyvek = []
+                const dbs = []
+            
+            for(let i = 0;i < array.length;i++) {
+                const konyv = await db.getKonyByISBN(array[i].isbn)
+                dbs.push(array[i].darab)
+                konyvek.push(konyv)
+            }
+            return res.render('kosar.ejs',{
+                konyvek,
+                darabszam:dbs
+            });
         }
-        return res.render('kosar.ejs', {
-            konyvek,
-            darabszam: dbs
-        });
+        return res.render('kosar.ejs');
     });
 
     app.get("/rendeles", async (req, res) => {
@@ -204,18 +210,36 @@ module.exports = function(app) {
         if (!req.cookies.isbn) {
             const obj = [{ isbn: isbn, darab: 1 }]
             const jsonStr = JSON.stringify(obj);
-            res.cookie('isbn', jsonStr, { maxAge: 86400000 })
-        }
-        else {
-            let van = false
-            const jsonStr = req.cookies.isbn;
-            const array = JSON.parse(jsonStr);
-
-            for (let i = 0; i < array.length; i++) {
-                if (isbn === array[i].isbn) {
-                    array[i].darab += 1 * 1;
-                    van = true;
+            res.cookie('isbn', jsonStr, {maxAge:86400000})
+            }
+            else {
+                let van = false
+                const jsonStr = req.cookies.isbn;
+                if(jsonStr['expires'] > 0) {
+                    const array = []
+                    const obj = {isbn: isbn, darab:1}
+                    array.push(obj)
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }else {
+                    console.log("van")
+                    const array = JSON.parse(jsonStr);
+                    for(let i = 0;i < array.length;i++){
+                        if(isbn === array[i].isbn) {
+                            array[i].darab += 1*1;
+                            van = true;
+                        }
+                    }
+                if(van){
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }else{
+                    const obj = {isbn: isbn, darab:1}
+                    array.push(obj)
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
                 }
+            }
             }
             if (van) {
                 const updatedJsonStr = JSON.stringify(array);
@@ -246,14 +270,16 @@ module.exports = function(app) {
 
         return res.redirect('/kosar');
     });
-
-    app.get('/rendel', async (req, res) => {
-        //res.cookies.set('isbn',{maxAge:0});
-        console.log(res)
-        //res.redirect('index');
-        //res.end()
-        //add to rendelesek
-
+    app.get('/rendel', async (req,res)=>{
+        const jsonStr = req.cookies.isbn;
+        const array = JSON.parse(jsonStr);
+        let user = await db.getFiokByEmail(req.body.curr_email);
+        for(let i of array) {
+            let konyv = await db.getKonyByISBN(i.isbn);
+            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3]);
+        }
+        res.cookie('isbn', {expires: Date.now()});
+        res.redirect('index');
     });
 
 }
