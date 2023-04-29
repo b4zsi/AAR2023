@@ -17,7 +17,7 @@ module.exports = function(app) {
     });
 
     app.get("/szerzo", async (req, res) => {
-        const table = await db.getSzerzo();
+        const table = await db.getSzerzok();
 
         return res.render('show_table.ejs', {
             cim: "Szerzők:"
@@ -212,27 +212,35 @@ module.exports = function(app) {
             const obj = [{isbn: isbn, darab:1}]
             const jsonStr = JSON.stringify(obj);
             res.cookie('isbn', jsonStr, {maxAge:86400000})
-        } else {
-            let van = false
+        }else {
             const jsonStr = req.cookies.isbn;
-            const array = JSON.parse(jsonStr);
 
-            for(let i = 0;i < array.length;i++){
-                if(isbn === array[i].isbn) {
-                    array[i].darab += 1;
-                    van = true;
-                    break;
-                }
-            }
-
-            const updatedJsonStr = JSON.stringify(array);
-            res.cookie('isbn', updatedJsonStr);
-
-            if (!van) {
-                const obj = { isbn, darab: 1 };
-                array.push(obj);
+            if(jsonStr['expires'] > 0) {
+                const array = []
+                const obj = {isbn: isbn, darab:1}
+                array.push(obj)
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
+            }else {
+                let van = false
+                const array = JSON.parse(jsonStr);
+
+                for (let i = 0; i < array.length; i++) {
+                    if (isbn === array[i].isbn) {
+                        array[i].darab += 1 * 1;
+                        van = true;
+                    }
+                }
+
+                const updatedJsonStr = JSON.stringify(array);
+                res.cookie('isbn', updatedJsonStr);
+
+                if (!van) {
+                    const obj = { isbn, darab: 1 };
+                    array.push(obj);
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }
             }
         }
 
