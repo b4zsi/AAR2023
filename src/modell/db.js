@@ -21,7 +21,7 @@ exports.getKonyByISBN = async (isbn) => {
     return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar", KONYV.ISBN FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID AND KONYV.ISBN = :isbn`, [isbn])
 }
 exports.getNyitvatartas = async () => {
-    return await query(`SELECT * from nyitvatartas`);
+    return await query(`SELECT concat(concat(bolt.telepules, concat(' ' , bolt.utca)), ' utca') as Bolt, nyitvatartas.nap as Nap, nyitvatartas.nyitas, nyitvatartas.zaras from nyitvatartas, bolt where nyitvatartas.bolt_id = bolt.id`);
 }
 exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);

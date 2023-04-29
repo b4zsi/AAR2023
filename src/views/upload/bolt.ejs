@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../includes/head') %>
+</head>
+<header><%- include('../includes/header', {oldal: oldal}) %></header>
+
+<body>
+
+    <%- include('../includes/uploads') %>
+
+        <form class="form text-center" method="post">
+            <label>
+                Vezetéknév: <input class="form-control" type="text" placeholder="név" name="vezetek" />
+            </label><br>
+            <label>
+                Keresztnév: <input class="form-control" type="text" placeholder="név" name="kereszt" />
+            </label><br>
+            <button class="gomb mt-2" type="submit">Hozzáadás</button>
+        </form>
+</body>
+
+</html>
+

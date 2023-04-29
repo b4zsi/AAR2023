@@ -1,5 +1,4 @@
 const restrict = require('../middleware/auth').restrict;
-const oldalak = require('../middleware/oldalak').oldalak;
 const db = require('../modell/db');
 const jwt = require('jsonwebtoken')
 
@@ -152,36 +151,6 @@ module.exports = function(app) {
         });
     });
 
-    app.get(["/upload", "/uploadKonyv"], restrict, oldalak, async (req, res) => {
-        const kiado = await db.getKiado();
-        const kategoria = await db.getKategoria();
-
-        return res.render("uploadKonyv", {
-            kiado,
-            kategoria,
-        });
-    });
-
-    app.post("/uploadKonyv", async (req, res) => {
-        let { nev, isbn, kiado, kategoria, oldalszam, mikor, ar } = req.body;
-
-        await db.uploadKonyv(nev, isbn, kiado, kategoria, oldalszam, mikor, ar);
-
-        return res.redirect("upload");
-    });
-
-    app.get("/uploadSzerzo", oldalak, async (req, res) => {
-
-        return res.render("uploadSzerzo");
-    });
-
-    app.post("/uploadSzerzo", async (req, res) => {
-        let { vezetek, kereszt } = req.body;
-
-        await db.uploadSzerzo(vezetek, kereszt);
-
-        return res.redirect("uploadSzerzo");
-    });
 
 
     app.post("/uploadImg", async (req, res) => {
@@ -194,16 +163,6 @@ module.exports = function(app) {
         }
 
     });
-
-    app.post("/uploadKonyv", async (req, res) => {
-        let { isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev } = req.body
-        if (isbn && kiado_id && kategoria_id && oldalszam && ar && nev) {
-            await db.uploadKonyv(isbn, kiado_id, kategoria_id, oldalszam, ar, mikor, nev)
-            return res.redirect('index');
-        } else {
-            console.log("missing data");
-        }
-    })
 
     app.post("/addToKosar", async (req, res)=> {
         let {isbn} = req.body;

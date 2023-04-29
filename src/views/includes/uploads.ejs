@@ -1,7 +1,5 @@
-<ul class="list-unstyled">
+<div class="container-fluid w-75 text-center">
     <% for(let i in locals.oldalak){ %>
-        <li>
-            <a class="link" href="/upload<%- i.charAt(0).toUpperCase().concat(i.slice(1)) %>"><%- oldalak[i] %></a>
-        </li>
+            <a class="btn btn-info m-1 p-1" href="/upload<%- i.charAt(0).toUpperCase().concat(i.slice(1)) %>"><%- oldalak[i] %></a>
     <% } %>
-</ul>
+</div>
