@@ -211,8 +211,7 @@ module.exports = function(app) {
             const obj = [{ isbn: isbn, darab: 1 }]
             const jsonStr = JSON.stringify(obj);
             res.cookie('isbn', jsonStr, {maxAge:86400000})
-            }
-            else {
+        }else {
                 let van = false
                 const jsonStr = req.cookies.isbn;
                 if(jsonStr['expires'] > 0) {
@@ -222,7 +221,6 @@ module.exports = function(app) {
                     const updatedJsonStr = JSON.stringify(array);
                     res.cookie('isbn', updatedJsonStr);
                 }else {
-                    console.log("van")
                     const array = JSON.parse(jsonStr);
                     for(let i = 0;i < array.length;i++){
                         if(isbn === array[i].isbn) {
@@ -230,15 +228,6 @@ module.exports = function(app) {
                             van = true;
                         }
                     }
-                if(van){
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }else{
-                    const obj = {isbn: isbn, darab:1}
-                    array.push(obj)
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }
             if (van) {
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
@@ -248,8 +237,7 @@ module.exports = function(app) {
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
             }
-        }
-
+            }
         }
         return res.redirect('index');
     });
