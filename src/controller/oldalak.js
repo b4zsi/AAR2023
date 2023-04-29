@@ -47,20 +47,27 @@ module.exports = function(app) {
         })
     });
     app.get("/kosar", async (req, res) => {
-        const jsonStr = req.cookies.isbn;
-        const array = JSON.parse(jsonStr);
-        const konyvek = []
-        const dbs = []
-
-        for(let i = 0;i < array.length;i++) {
-            const konyv = await db.getKonyByISBN(array[i].isbn)
-            dbs.push(array[i].darab)
-            konyvek.push(konyv)
+        if(req.cookies.isbn) {
+            const jsonStr = req.cookies.isbn;
+            if(jsonStr['expires'] > 0){
+                return res.render('kosar.ejs');
+            }
+            const array = JSON.parse(jsonStr);
+                var konyvek = []
+                const dbs = []
+            
+            for(let i = 0;i < array.length;i++) {
+                const konyv = await db.getKonyByISBN(array[i].isbn)
+                dbs.push(array[i].darab)
+                konyvek.push(konyv)
+            }
+            return res.render('kosar.ejs',{
+                konyvek,
+                darabszam:dbs
+            });
         }
-        return res.render('kosar.ejs',{
-            konyvek,
-            darabszam:dbs
-        });
+        return res.render('kosar.ejs');
+        
     });
 
     app.get("/rendeles", async(req,res) =>{
@@ -158,24 +165,31 @@ module.exports = function(app) {
             else {
                 let van = false
                 const jsonStr = req.cookies.isbn;
-                const array = JSON.parse(jsonStr);
-
-                for(let i = 0;i < array.length;i++){
-                    if(isbn === array[i].isbn) {
-                        array[i].darab += 1*1;
-                        van = true;
-                    }
-                }
-                if(van){
+                if(jsonStr['expires'] > 0) {
+                    const array = []
+                    const obj = {isbn: isbn, darab:1}
+                    array.push(obj)
                     const updatedJsonStr = JSON.stringify(array);
                     res.cookie('isbn', updatedJsonStr);
                 }else {
+                    console.log("van")
+                    const array = JSON.parse(jsonStr);
+                    for(let i = 0;i < array.length;i++){
+                        if(isbn === array[i].isbn) {
+                            array[i].darab += 1*1;
+                            van = true;
+                        }
+                    }
+                if(van){
+                    const updatedJsonStr = JSON.stringify(array);
+                    res.cookie('isbn', updatedJsonStr);
+                }else{
                     const obj = {isbn: isbn, darab:1}
                     array.push(obj)
                     const updatedJsonStr = JSON.stringify(array);
                     res.cookie('isbn', updatedJsonStr);
                 }
-                
+            }
             }
         return res.redirect('index');
     })

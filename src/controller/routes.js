@@ -6,8 +6,6 @@ module.exports = function(app) {
     app.use(auth.auth, (req, res, next) => {
         res.locals.header = {
             "index": "Főoldal",
-            "konyv": "Könyv",
-            "fiok": "Fiók",
             "kosar":"Kosár",
             "szerzo": "Szerzők",
             "kiado": "Kiadók",
