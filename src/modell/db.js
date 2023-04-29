@@ -5,15 +5,13 @@ db.autoCommit = true;
 /////////////
 // USER
 ////////////
-exports.getSzerzok = async () => {
+exports.getSzerzo = async () => {
     return await query(`SELECT * from SZERZO order by id`);
 }
 exports.getKategoria = async () => {
     return await query(`SELECT * from kategoria`);
 }
-exports.getKiadok = async () => {
-    return await query(`SELECT * from KIADO`);
-}
+
 exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }

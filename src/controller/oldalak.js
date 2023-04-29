@@ -49,32 +49,32 @@ module.exports = function(app) {
         const konyvek = []
         const dbs = []
 
-        for(let i = 0;i < array.length;i++) {
+        for (let i = 0; i < array.length; i++) {
             const konyv = await db.getKonyByISBN(array[i].isbn)
             dbs.push(array[i].darab)
             konyvek.push(konyv)
         }
-        return res.render('kosar.ejs',{
+        return res.render('kosar.ejs', {
             konyvek,
-            darabszam:dbs
+            darabszam: dbs
         });
     });
 
-    app.get("/rendeles", async(req,res) =>{
+    app.get("/rendeles", async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
         const konyvek = []
         const dbs = []
 
-        for(let i = 0;i < array.length;i++) {
+        for (let i = 0; i < array.length; i++) {
             const konyv = await db.getKonyByISBN(array[i].isbn)
             dbs.push(array[i].darab)
             konyvek.push(konyv)
         }
 
-        return res.render('rendeles.ejs',{
+        return res.render('rendeles.ejs', {
             konyvek,
-            darabszam:dbs
+            darabszam: dbs
         })
 
     });
@@ -90,12 +90,12 @@ module.exports = function(app) {
 
     app.get("/konyv", async (req, res) => {
         const table = await db.getKonyv();
-        let { id }= req.query
+        let { id } = req.query
         let kiado, kategoria;
         let szerkesztendo;
 
-        if(req.body.curr_role === 1){
-            if(id){
+        if (req.body.curr_role === 1) {
+            if (id) {
                 szerkesztendo = await db.getKonyvById(id);
             }
             kiado = await db.getKiado();
@@ -113,7 +113,7 @@ module.exports = function(app) {
     });
 
     app.post("/editKonyv", async (req, res) => {
-        let {nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar} = req.body;
+        let { nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar } = req.body;
 
         await db.editKonyv(nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar);
 
@@ -121,7 +121,7 @@ module.exports = function(app) {
     });
 
     app.get("/deleteKonyv", async (req, res) => {
-        let { id }= req.query
+        let { id } = req.query
 
         await db.deleteKonyv(id);
 
@@ -146,34 +146,34 @@ module.exports = function(app) {
         });
     });
 
-    app.get(["/upload", "/uploadKonyv"],restrict, oldalak, async (req, res) => {
+    app.get(["/upload", "/uploadKonyv"], restrict, oldalak, async (req, res) => {
         const kiado = await db.getKiado();
         const kategoria = await db.getKategoria();
-                                      
-        return res.render("uploadKonyv",{
+
+        return res.render("uploadKonyv", {
             kiado,
             kategoria,
         });
     });
 
     app.post("/uploadKonyv", async (req, res) => {
-        let {nev, isbn, kiado, kategoria, oldalszam, mikor, ar} = req.body;
+        let { nev, isbn, kiado, kategoria, oldalszam, mikor, ar } = req.body;
 
         await db.uploadKonyv(nev, isbn, kiado, kategoria, oldalszam, mikor, ar);
-                                      
+
         return res.redirect("upload");
     });
 
     app.get("/uploadSzerzo", oldalak, async (req, res) => {
-                                      
+
         return res.render("uploadSzerzo");
     });
 
     app.post("/uploadSzerzo", async (req, res) => {
-        let {vezetek, kereszt} = req.body;
+        let { vezetek, kereszt } = req.body;
 
         await db.uploadSzerzo(vezetek, kereszt);
-                                      
+
         return res.redirect("uploadSzerzo");
     });
 
@@ -199,46 +199,46 @@ module.exports = function(app) {
         }
     });
 
-    app.post("/addToKosar", async (req, res)=>{
-        let {isbn} = req.body;
-            if(!req.cookies.isbn) {
-            const obj = [{isbn: isbn, darab:1}]
+    app.post("/addToKosar", async (req, res) => {
+        let { isbn } = req.body;
+        if (!req.cookies.isbn) {
+            const obj = [{ isbn: isbn, darab: 1 }]
             const jsonStr = JSON.stringify(obj);
-            res.cookie('isbn', jsonStr, {maxAge:86400000})
-            }
-            else {
-                let van = false
-                const jsonStr = req.cookies.isbn;
-                const array = JSON.parse(jsonStr);
+            res.cookie('isbn', jsonStr, { maxAge: 86400000 })
+        }
+        else {
+            let van = false
+            const jsonStr = req.cookies.isbn;
+            const array = JSON.parse(jsonStr);
 
-                for(let i = 0;i < array.length;i++){
-                    if(isbn === array[i].isbn) {
-                        array[i].darab += 1*1;
-                        van = true;
-                    }
+            for (let i = 0; i < array.length; i++) {
+                if (isbn === array[i].isbn) {
+                    array[i].darab += 1 * 1;
+                    van = true;
                 }
-                if(van){
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }else {
-                    const obj = {isbn: isbn, darab:1}
-                    array.push(obj)
-                    const updatedJsonStr = JSON.stringify(array);
-                    res.cookie('isbn', updatedJsonStr);
-                }
-                
             }
+            if (van) {
+                const updatedJsonStr = JSON.stringify(array);
+                res.cookie('isbn', updatedJsonStr);
+            } else {
+                const obj = { isbn: isbn, darab: 1 }
+                array.push(obj)
+                const updatedJsonStr = JSON.stringify(array);
+                res.cookie('isbn', updatedJsonStr);
+            }
+
+        }
         return res.redirect('index');
     });
 
-    app.get("/item", async (req, res)=>{
+    app.get("/item", async (req, res) => {
         let { mennyi, isbn } = req.query;
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
-        
-        for(let i = 0;i < array.length;i++){
-            if(isbn === array[i].isbn) {
-                array[i].darab += mennyi*1;
+
+        for (let i = 0; i < array.length; i++) {
+            if (isbn === array[i].isbn) {
+                array[i].darab += mennyi * 1;
             }
         }
         const updatedJsonStr = JSON.stringify(array);
@@ -247,13 +247,13 @@ module.exports = function(app) {
         return res.redirect('/kosar');
     });
 
-    app.get('/rendel', async (req,res)=>{
+    app.get('/rendel', async (req, res) => {
         //res.cookies.set('isbn',{maxAge:0});
         console.log(res)
         //res.redirect('index');
         //res.end()
         //add to rendelesek
-        
+
     });
 
 }
