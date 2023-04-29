@@ -5,23 +5,35 @@ db.autoCommit = true;
 /////////////
 // USER
 ////////////
-exports.getSzerzo = async () => {
+exports.getSzerzok = async () => {
     return await query(`SELECT * from SZERZO order by id`);
 }
 exports.getKategoria = async () => {
-    return await query(`SELECT * from kategoria order by nev`);
+    return await query(`SELECT * from kategoria`);
 }
-exports.getKiado = async () => {
+exports.getKiadok = async () => {
     return await query(`SELECT * from KIADO`);
 }
 exports.getFiok = async () => {
-    return await query(`SELECT ID as id, EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
+    return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
 }
-
-
-
+exports.getKonyv = async () => {
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar",KONYV.ISBN as "isbn", KONYV.KEP as "kep" FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID`);
+}
+exports.getKonyByISBN = async (isbn) => {
+    return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar", KONYV.ISBN FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID AND KONYV.ISBN = :isbn`, [isbn])
+}
 exports.getNyitvatartas = async () => {
     return await query(`SELECT * from nyitvatartas`);
+}
+exports.getRendelesek = async () => {
+    return await query(`SELECT * FROM RENDELESEK`);
+}
+exports.setRendeles = async (isbn, fiokid, osszeg) => {
+    return await query(`INSERT INTO RENDELESEK(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+}
+exports.getKepByISBN = async (isbn) => {
+    return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
 }
 
 exports.getFiokByEmail = async (email) => {
@@ -32,9 +44,6 @@ exports.getKep = async () => {
     return await query(`SELECT * from kep`);
 }
 
-exports.getKonyv = async () => {
-    return await query(`SELECT KONYV.ISBN as ISBN, KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", kategoria.nev as "Kategória", KONYV.AR as "Ár" FROM KONYV, KIADO, KATEGORIA WHERE KONYV.KATEGORIA_ID = KATEGORIA.ID AND KONYV.KIADO_ID = KIADO.ID order by KONYV.NEV`);
-}
 exports.getKonyvById = async (id) => {
     return await query(`SELECT KONYV.ISBN as id, KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ár" FROM KONYV, KIADO WHERE KONYV.ISBN = :id`, [id]);
 }
@@ -46,10 +55,8 @@ exports.uploadKonyv = async (nev, isbn, kiado, kategoria, oldalszam, mikor, ar) 
 }
 
 exports.editKonyv = async (nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar) => {
-    //console.log(`update  konyv set nev = ${nev}, isbn = ${isbn}, kiado_id = ${kiado}, kategoria_id = ${kategoria}, oldalszam = ${oldalszam}, mikor = to_date(${mikor}, 'YYYY-MM-DD'), ar = ${ar} where isbn = ${isbn}`);
     await query(`update  konyv set nev = :nev, isbn = :isbn_uj, kiado_id = :kiado_id, kategoria_id = :kategoria_id, oldalszam = :oldalszam, mikor = to_date(:mikor, 'YYYY-MM-DD'), ar = :ar where isbn = :isbn`,
         [nev, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, isbn])
-    //await query(`update  konyv set nev = :nev isbn = :isbn where isbn = :isbn`, [nev, isbn]);
 }
 
 exports.deleteKonyv = async (id) => {

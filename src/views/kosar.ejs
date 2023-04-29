@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('includes/head') %>
+    <script src="../controller/oldalak.js" type="application/json"></script>
+  </head>
+  <header><%- include('includes/header', {oldal: locals.oldal}) %></header>
+  <body>
+    <% if(locals.konyvek) { %>
+      <table class="table align-middle w-75 mx-auto">
+
+        <tr>
+          <th>Név</th>
+          <th>Oldalszám</th>
+          <th>Kiadó</th>
+          <th>Ár</th>
+        </tr>
+      <% for(let i = 0; i < locals.konyvek.length; i++){ %> 
+        <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
+          <tr>
+            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
+            <td>
+          <%= locals.konyvek[i]['rows'][j][k] %>
+          </td>
+          <% } %>
+          <td>
+            <a class="btn" href="/item?mennyi=1&isbn=<%- locals.konyvek[i]['rows'][j][4] %>">+</a>
+            <%= locals.darabszam[i] %>
+            <a class="btn" href="/item?mennyi=-1&isbn=<%- locals.konyvek[i]['rows'][j][4] %>">-</a>
+          </td>
+          </tr>
+        <% } %> 
+      <% } %> 
+      </table>
+    <% } %>
+    <form action="/rendeles" method="get" style ="margin: auto;">
+      <button type="submit" class="btn btn-secondary">Tovabb</button>
+    </form>
+  </body>
+</html>
