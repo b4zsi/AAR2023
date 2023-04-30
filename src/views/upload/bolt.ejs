@@ -28,9 +28,9 @@
                             <h4 class="d-inline"><%- t[i] %></h4>
                         </div>
                         <div class="col-md-6">
-                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="8" value="<%- locals.nyitvatartas[counter] %>" name="<%- i %>1" />
+                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="8" value="<% if(locals.nyitvatartas){ %><%- locals.nyitvatartas[counter] %><% } %>" name="<%- i %>1" />
                             -
-                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="16" value="<%- locals.nyitvatartas[counter + 1] %>" name="<%- i %>2" />
+                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="16" value="<% if(locals.nyitvatartas){ %><%- locals.nyitvatartas[counter + 1] %><% } %>" name="<%- i %>2" />
                         </div>
                     </div>
                 </div>

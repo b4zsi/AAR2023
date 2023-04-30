@@ -4,18 +4,19 @@
     <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
         <% if(locals.table){ %>
+        <% console.log(locals.szerkesztendo) %>
         <h1>Könyvek</h1>
         <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
             <form class="form text-center" action="/editKonyv" method="post">
                 <td><label>
-                    Név: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="nev" />
+                    <%- szerkesztendo['metaData'][0]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="nev" />
                 </label></td>
                 <td><label>
-                    ISBN szám: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn_uj" />
+                    <%- szerkesztendo['metaData'][1]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="isbn_uj" />
                 </label></td>
                     <input type="hidden" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn" />
                 <td><label>
-                    Kiadó: 
+                    <%- szerkesztendo['metaData'][2]['name'] %>: 
                     <select class="form-control" name="kiado" id="kiado">
                         <% for(i in kiado['rows']){ %>
                         <option value="<%- kiado['rows'][i][0] %>" <% if(kiado['rows'][i][0] == kiado['rows'][0][0]){ %> selected<% } %>><%- kiado['rows'][i][1] %></option>
@@ -23,7 +24,7 @@
                     </select>
                 </label></td>
                 <td><label>
-                    Kategoria:
+                    <%- szerkesztendo['metaData'][3]['name'] %>:
                     <select class="form-control" name="kategoria" id="kategoria">
                         <% for(i in kategoria['rows']){ %>
                         <option value="<%- kategoria['rows'][i][0] %>" <% if(kategoria['rows'][i][0] == kategoria['rows'][0][0]){ %> selected<% } %>><%- kategoria['rows'][i][1] %></option>
@@ -31,7 +32,7 @@
                     </select>
                 </label></td>
                 <td><label>
-                    Oldalszám: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][2] %>" name="oldalszam" />
+                    <%- szerkesztendo['metaData'][4]['name'] %>: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][2] %>" name="oldalszam" />
                     </label></td>
                 <td><label>
                     Kiadás dátuma:

@@ -1,13 +1,14 @@
 const restrict = require('../middleware/auth').restrict;
 const db = require('../modell/db');
+const common = require('../modell/common');
 const upload = require('../modell/upload');
 const jwt = require('jsonwebtoken')
 
 module.exports = function(app) {
 
     app.get(["/upload", "/uploadKonyv"], restrict, async (req, res) => {
-        const kiado = await db.getKiado();
-        const kategoria = await db.getKategoria();
+        const kiado = await common.getAllKiado();
+        const kategoria = await common.getAllKategoria();
 
         return res.render("upload/konyv", {
             kiado,
