@@ -5,9 +5,7 @@
         "format": "npx prettier --write ."
     },
     "dependencies": {
-        "@flaticon/flaticon-uicons": "^2.1.0",
         "bcryptjs": "^2.4.3",
-        "bootstrap": "^5.2.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dateformat": "^5.0.3",

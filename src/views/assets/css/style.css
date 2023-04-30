@@ -28,14 +28,12 @@ footer {
 
 .w-5 {
     width: 5%;
-
 }
 .active {
     font-weight: bold;
     color: black;
     background-color: rgb(123, 98, 223, 0.6);
     border-radius: 6px;
-
 }
 
 .center{

@@ -7,17 +7,13 @@ module.exports = function(app) {
     app.use(auth.auth, (req, res, next) => {
         res.locals.header = {
             "index": "Főoldal",
-            "kosar": "Kosár",
             "konyv": "Könyvek",
             "szerzo": "Szerzők",
             "kiado": "Kiadók",
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
-            "uploadKonyv": "Feltöltés",
-            "login": "Bejelentkezés",
-            "regist": "Regisztráció",
-            "logout": "Kilépés",
+            "uploadKonyv": "Feltöltés"
         };
 
         res.locals.guest_only = [
