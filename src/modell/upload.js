@@ -25,12 +25,19 @@ exports.uploadKategoria = async (nev) => {
 }
 
 exports.uploadBolt = async (iranyitoszam, telepules, utca, telefonszam, nyitvatartas) => {
-    console.log(iranyitoszam, telepules, utca, telefonszam, nyitvatartas);
     await query(`insert into bolt(telefonszam, utca, telepules, iranyitoszam) values(:telefonszam, :utca, :telepules, :irsz)`,
     [telefonszam, utca, telepules, iranyitoszam])
+
     let id = await query(`select id from bolt order by id desc fetch first 1 rows only`)
     id = id['rows'][0][0]
+
+    let t = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'];
+    let counter = 0; 
+
+    for(i of t){
+        await query(`insert into nyitvatartas(bolt_id, nap, nyitas, zaras) values(:id, :nap, :nyitas, :zaras)`,
+        [id, i, nyitvatartas[counter], nyitvatartas[counter + 1]])
+        counter += 2;
+    }
+
 }
-/*exports.uploadImage = async (kep) => {
-    return await query(`insert into kep(kep) values (:kep)`, [kep]);
-}*/

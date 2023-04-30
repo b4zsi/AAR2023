@@ -1,7 +1,35 @@
 const db = require("oracledb");
 const dbConfig = require("../config/database");
 
-exports.query = async (query, list = []) => {
+exports.getAllKonyv = async () => {
+    return await query(`SELECT * from konyv`);
+}
+
+exports.getKonyvByISBN = async (id) => {
+    return await query(`SELECT * FROM KONYV, KIADO WHERE KONYV.ISBN = :id`, [id]);
+}
+
+exports.getAllSzerzo = async () => {
+    return await query(`SELECT * from SZERZO`);
+}
+
+exports.getAllKategoria = async () => {
+    return await query(`SELECT * from kategoria`);
+}
+
+exports.getAllKiado = async () => {
+    return await query(`SELECT * from KIADO order by nev`);
+}
+
+exports.getAllRendelesek = async () => {
+    return await query(`SELECT * FROM RENDELESEK`);
+}
+
+exports.getAllBolt = async () => {
+    return await query(`SELECT * from bolt`);
+}
+
+async function query (query, list = []) {
     let result;
     let conn;
     try {
@@ -22,3 +50,5 @@ exports.query = async (query, list = []) => {
 
     return result;
 }
+
+exports.query = query;

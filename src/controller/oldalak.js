@@ -1,5 +1,7 @@
 const restrict = require('../middleware/auth').restrict;
 const db = require('../modell/db');
+const common = require('../modell/common');
+const konyv_db = require('../modell/konyv');
 const jwt = require('jsonwebtoken')
 
 module.exports = function(app) {
@@ -16,7 +18,7 @@ module.exports = function(app) {
     });
 
     app.get("/szerzo", async (req, res) => {
-        const table = await db.getSzerzok();
+        const table = await common.getAllSzerzo();
 
         return res.render('show_table.ejs', {
             cim: "Szerzők:"
@@ -25,7 +27,7 @@ module.exports = function(app) {
     });
 
     app.get("/kiado", async (req, res) => {
-        const table = await db.getKiado();
+        const table = await common.getAllKiado();
 
         return res.render('show_table.ejs', {
             cim: "Kiadók"
@@ -53,7 +55,7 @@ module.exports = function(app) {
                 const dbs = []
             
             for(let i = 0;i < array.length;i++) {
-                const konyv = await db.getKonyByISBN(array[i].isbn)
+                const konyv = await db.getKonyvByISBN(array[i].isbn)
                 dbs.push(array[i].darab)
                 konyvek.push(konyv)
             }
@@ -72,7 +74,7 @@ module.exports = function(app) {
         const dbs = []
 
         for (let i = 0; i < array.length; i++) {
-            const konyv = await db.getKonyByISBN(array[i].isbn)
+            const konyv = await db.getKonyvByISBN(array[i].isbn)
             dbs.push(array[i].darab)
             konyvek.push(konyv)
         }
@@ -85,7 +87,7 @@ module.exports = function(app) {
     });
 
     app.get("/kategoria", async (req, res) => {
-        const table = await db.getKategoria();
+        const table = await common.getAllKategoria();
 
         return res.render('show_table.ejs', {
             cim: "Kategóriák:"
@@ -94,17 +96,22 @@ module.exports = function(app) {
     });
 
     app.get("/konyv", async (req, res) => {
-        const table = await db.getKonyv();
+        const table = await konyv_db.getKonyv();
         let { id } = req.query
         let kiado, kategoria;
         let szerkesztendo;
 
+        let h = [];
+        table['metaData'].forEach((i) => h.push(i['name']))
+        //console.log(h);
+
+
         if (req.body.curr_role === 1) {
             if (id) {
-                szerkesztendo = await db.getKonyvById(id);
+                szerkesztendo = await konyv_db.getKonyvByISBN(id);
             }
-            kiado = await db.getKiado();
-            kategoria = await db.getKategoria();
+            kiado = await common.getAllKiado();
+            kategoria = await common.getAllKategoria();
         }
 
 
@@ -127,6 +134,7 @@ module.exports = function(app) {
 
     app.get("/deleteKonyv", async (req, res) => {
         let { id } = req.query
+        console.log(id);
 
         await db.deleteKonyv(id);
 
@@ -143,7 +151,7 @@ module.exports = function(app) {
     });
 
     app.get("/bolt", async (req, res) => {
-        const table = await db.getBolt();
+        const table = await common.getAllBolt();
 
         return res.render('show_table.ejs', {
             cim: "Bolt:"
@@ -226,7 +234,7 @@ module.exports = function(app) {
         const array = JSON.parse(jsonStr);
         let user = await db.getFiokByEmail(req.body.curr_email);
         for(let i of array) {
-            let konyv = await db.getKonyByISBN(i.isbn);
+            let konyv = await db.getKonyvByISBN(i.isbn);
             await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3]);
         }
         res.cookie('isbn', {expires: Date.now()});
