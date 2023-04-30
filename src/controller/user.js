@@ -2,16 +2,17 @@ const db = require('../modell/db');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const secret = require('../middleware/auth').jwtSecret
-const verifier = require('../config/verify')
+const verifier = require('../config/verify');
+const { restrict_user } = require('../middleware/auth');
 
 module.exports = function(app) {
-    app.get("/regist", async (req, res) => {
+    app.get("/regist", restrict_user, async (req, res) => {
         return res.render('regist.ejs', {
             cim: "Regisztracio:"
         });
     });
 
-    app.post("/regist", async (req, res) => {
+    app.post("/regist", restrict_user, async (req, res) => {
         const {email, knev, vnev, jelszo, jelszo2} = req.body;
         let hiba = [];
 
@@ -55,11 +56,11 @@ module.exports = function(app) {
         }
     });
 
-    app.get("/login", async (req, res) => {
+    app.get("/login", restrict_user, async (req, res) => {
         return res.render('login.ejs');
     });
 
-    app.post("/login", async (req, res) => {
+    app.post("/login", restrict_user, async (req, res) => {
         let { email, jelszo } = req.body;
         if (!email || !jelszo) {
             return res.render('login', {

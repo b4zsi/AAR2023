@@ -13,12 +13,24 @@ exports.getAllSzerzo = async () => {
     return await query(`SELECT * from SZERZO`);
 }
 
+exports.getSzerzoById = async (id) => {
+    return await query(`SELECT * from SZERZO where id = :id`, [id]);
+}
+
 exports.getAllKategoria = async () => {
     return await query(`SELECT * from kategoria`);
 }
 
+exports.getKategoriaById = async (id) => {
+    return await query(`SELECT * from kategoria where id = :id`, [id]);
+}
+
 exports.getAllKiado = async () => {
     return await query(`SELECT * from KIADO order by nev`);
+}
+
+exports.getKiadoById = async (id) => {
+    return await query(`SELECT * from kiado where id = :id`, [id]);
 }
 
 exports.getAllRendelesek = async () => {
@@ -27,6 +39,10 @@ exports.getAllRendelesek = async () => {
 
 exports.getAllBolt = async () => {
     return await query(`SELECT * from bolt`);
+}
+
+exports.getBoltById = async (id) => {
+    return await query(`SELECT * from bolt where id = :id`, [id]);
 }
 
 async function query (query, list = []) {

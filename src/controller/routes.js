@@ -1,15 +1,16 @@
-const auth = require("../middleware/auth.js")
+const auth = require("../middleware/auth.js").auth;
 const fs = require('fs');
 const path = require('path');
 
 
 module.exports = function(app) {
-    app.use(auth.auth, (req, res, next) => {
+    app.use(auth, (req, res, next) => {
         res.locals.header = {
             "index": "Főoldal",
             "konyv": "Könyvek",
             "szerzo": "Szerzők",
             "kiado": "Kiadók",
+            "statisztika": "Statisztika",
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
@@ -33,11 +34,13 @@ module.exports = function(app) {
             "konyv",
             "upload",
             "fiok",
+            "statisztika"
         ];
 
         res.locals.oldalak = {
             "konyv": "Könyv",
             "szerzo": "Szerző",
+            "statisztika": "Statisztika",
             "kiado": "Kiadó",
             "kategoria": "Kategória",
             "bolt": "Bolt",

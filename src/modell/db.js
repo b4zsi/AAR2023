@@ -17,6 +17,11 @@ exports.getNyitvatartas = async () => {
 exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
+
+exports.getSzerzo = async () => {
+    return await query(`SELECT id, concat(concat(vezeteknev, ' '), keresztnev) as Név FROM szerzo`);
+}
+
 exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
     return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
 }
@@ -58,5 +63,49 @@ exports.ujjanon_konyvek = async(nap) => {
 
 exports.nepszeru_konyvek = async(darab) => {
     return await query(`SELECT nepszeru_konyvek(:darab) FROM DUAL`,[darab]);
+}
+
+//lekerdezesek
+exports.bestSzerzo = async() => {
+    return await query(`SELECT VEZETEKNEV, KERESZTNEV FROM IRTA, SZERZO WHERE IRTA.ISBN = 
+    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    AND IRTA.SZERZO_ID = SZERZO.ID`);
+}
+
+exports.bestKategoria = async() => {
+    return await query(`SELECT KATEGORIA.NEV FROM KATEGORIA, KONYV WHERE KONYV.ISBN = 
+    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    AND KATEGORIA.ID = KONYV.KATEGORIA_ID`);
+}
+
+exports.bestKiado = async() => {
+    return await query(`SELECT KIADO.NEV FROM KIADO, KONYV WHERE KONYV.ISBN = 
+    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    AND KIADO.ID = KONYV.KIADO_ID`);
+}
+
+exports.bestUserek = async() => {
+    return await query(`SELECT VEZETEKNEV, KERESZTNEV FROM FIOK WHERE FIOK.ID IN 
+    (SELECT FIOK_ID FROM RENDELES GROUP BY FIOK_ID ORDER BY SUM(DARAB) DESC 
+    FETCH FIRST 2 ROWS ONLY)`);
+}
+
+exports.utoloDarabok = async() => {
+    return await query(`SELECT KONYV.NEV, SZAM FROM KONYV INNER JOIN 
+    (SELECT ISBN AS BELSO_ISBN, SUM(DARABSZAM) AS SZAM FROM ARUL GROUP BY ISBN HAVING SUM(DARABSZAM) > 0 ORDER BY 
+    SUM(DARABSZAM) ASC FETCH FIRST 5 ROWS ONLY) ON KONYV.ISBN = BELSO_ISBN`);
+}
+
+exports.elfogyott = async() => {
+    return await query(`SELECT KONYV.NEV, KIADO.NEV FROM KIADO, KONYV INNER JOIN (SELECT ISBN AS BELSO_ISBN, 
+        SUM(DARABSZAM) AS SZAM FROM ARUL GROUP BY ISBN 
+        ORDER BY SUM(DARABSZAM) ASC) ON KONYV.ISBN = BELSO_ISBN WHERE SZAM = 0 AND KONYV.KIADO_ID = KIADO.ID`);
+}
+
+exports.bestKategoriabestSeller = async() => {
+    return await query(`SELECT KONYV.NEV, KIADO.NEV FROM KIADO, KONYV WHERE KONYV.KATEGORIA_ID = 
+    (SELECT KATEGORIA.ID FROM KATEGORIA, KONYV WHERE KONYV.ISBN = 
+    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    AND KATEGORIA.ID = KONYV.KATEGORIA_ID) AND KONYV.KIADO_ID = KIADO.ID FETCH FIRST 3 ROWS ONLY`);
 }
 
