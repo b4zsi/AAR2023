@@ -2,43 +2,57 @@ const db = require('../modell/db');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const secret = require('../middleware/auth').jwtSecret
+const verifier = require('../config/verify')
 
 module.exports = function(app) {
     app.get("/regist", async (req, res) => {
-
         return res.render('regist.ejs', {
             cim: "Regisztracio:"
         });
     });
 
     app.post("/regist", async (req, res) => {
-        let { email_cim, knev, vnev, jelszo, jelszo2 } = req.body;
-        if (!email_cim || !knev || !vnev || !jelszo || !jelszo2) {
+        const {email, knev, vnev, jelszo, jelszo2} = req.body;
+        let hiba = [];
+
+        if (!email || !knev || !vnev || !jelszo || !jelszo2) {
+            hiba.push("Hiányzó adatok!");
             return res.render('regist', {
-                hiba: "Hiányzó adatok!"
+                hiba: hiba
             });
         }
 
-        const user = await db.getFiokByEmail(email_cim);
-        if (user && user['rows'].length) {
-            return res.render('regist', {
-                email_cim,
-                hiba: "Iilyen email-cím már szerepel az adatbázisban!"
-            });
+        const user = await db.getFiokByEmail(email);
+
+        if(user.rows.length !== 0){
+            hiba.push("Ez az email cím már foglalt!");
+        }
+
+        if(!verifier.isEmail(email)){
+            hiba.push("Helytelen email cím. Az email címnek ilyen formát kell követnie: valami@valami.valami");
+        }
+
+        if(!verifier.PasswordVerify(jelszo)){
+            hiba.push("A jelszónak legalább 8 karakter hosszúnak kell lennie és tartalmazni kell egy számot, illetve kis- és nagybetűt");
+        }
+
+        if(!verifier.isName(knev) || !verifier.isName(vnev)){
+            hiba.push("A név mezőkben minimum 2 karakter hossz és maximum 30 karakter hossz fogadunk el, speciális karaktereket ne tartalmazzon!")
         }
 
         if (jelszo !== jelszo2) {
-            return res.render('regist', {
-                email_cim: email_cim,
-                hiba: "A két jelszó nem egyezik!"
-            });
+            hiba.push("A két jelszó nem egyezik");
         }
 
-        await bcrypt.hash(jelszo, 10).then(function(hash) {
-            db.addUser(email_cim, hash, knev, vnev);
-        });
+        if (!hiba.length) {
+            await bcrypt.hash(jelszo, 10).then(function (hash) {
+                db.addUser(email, hash, knev, vnev);
+            });
 
-        return res.redirect('login');
+            return res.redirect('login');
+        } else {
+            return res.render('regist', { hiba: hiba });
+        }
     });
 
     app.get("/login", async (req, res) => {
@@ -46,17 +60,17 @@ module.exports = function(app) {
     });
 
     app.post("/login", async (req, res) => {
-        let { email_cim, jelszo } = req.body;
-        if (!email_cim || !jelszo) {
+        let { email, jelszo } = req.body;
+        if (!email || !jelszo) {
             return res.render('login', {
-                email_cim,
+                email,
                 hiba: ["Kérem mindem mezőt töltsön ki!"]
             });
         }
-        const user = await db.getFiokByEmail(email_cim);
+        const user = await db.getFiokByEmail(email);
         if (!user || !user['rows'].length) {
             return res.render('login', {
-                email_cim,
+                email,
                 hiba: ["Hibás felhasználónév vagy jelszó!"]
             });
         }
@@ -75,7 +89,7 @@ module.exports = function(app) {
             });
         } else {
             return res.render('login', {
-                email: email_cim,
+                email: email,
                 hiba: ["Hibás felhasználónév vagy jelszó!"]
             });
         }
