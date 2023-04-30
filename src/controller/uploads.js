@@ -1,14 +1,19 @@
 const restrict = require('../middleware/auth').restrict;
 const db = require('../modell/db');
-const common = require('../modell/common');
-const upload = require('../modell/upload');
+
+const common_db = require('../modell/common');
+const upload_db = require('../modell/upload');
 const jwt = require('jsonwebtoken')
+const path = require("path");
+const fs = require("fs");
+
+const upload = require('../config/multer').multer;
 
 module.exports = function(app) {
 
-    app.get(["/upload", "/uploadKonyv"], restrict, async (req, res) => {
-        const kiado = await common.getAllKiado();
-        const kategoria = await common.getAllKategoria();
+    app.get("/uploadKonyv", restrict, async (req, res) => {
+        const kiado = await common_db.getAllKiado();
+        const kategoria = await common_db.getAllKategoria();
 
         return res.render("upload/konyv", {
             kiado,
@@ -16,12 +21,32 @@ module.exports = function(app) {
         });
     });
 
-    app.post("/uploadKonyv", async (req, res) => {
+    app.post("/uploadKonyv", upload.single("kep"), async (req, res) => {
         let { nev, isbn, kiado, kategoria, oldalszam, mikor, ar } = req.body;
+        const uccso = await upload_db.getLastKepIndex();
 
-        await upload.uploadKonyv(nev, isbn, kiado, kategoria, oldalszam, mikor, ar);
+        if(req.file){
+            const tempPath = req.file.path;
+            const ext = path.extname(req.file.originalname).toLowerCase();
+            const targetPath = path.join(__dirname, "../public/img/" + (uccso+1) + ext);
 
-        return res.redirect("upload");
+            if (ext === ".png" || ext === ".jpg" || ext === ".jpeg") {
+              fs.rename(tempPath, targetPath, err => {
+                if (err) return res.render('/upload/konyv',{});
+              });
+            } else {
+              fs.unlink(tempPath);
+            }
+            
+            await upload_db.uploadKonyv(nev, isbn, kiado, kategoria, oldalszam, mikor, ((uccso+1)+ext), ar);
+            return res.redirect('/uploadKonyv');
+        }else{
+
+        }
+
+
+
+        return res.redirect("uploadKonyv");
     });
 
     app.get("/uploadSzerzo", async (req, res) => {
@@ -32,7 +57,7 @@ module.exports = function(app) {
     app.post("/uploadSzerzo", async (req, res) => {
         let { vezetek, kereszt } = req.body;
 
-        await upload.uploadSzerzo(vezetek, kereszt);
+        await upload_db.uploadSzerzo(vezetek, kereszt);
 
         return res.redirect("uploadSzerzo");
     });
@@ -42,7 +67,7 @@ module.exports = function(app) {
     });
 
     app.post("/uploadKiado", async (req, res) => {
-        await upload.uploadKiado(req.body.nev)
+        await upload_db.uploadKiado(req.body.nev)
 
         return res.redirect('uploadKiado');
     });
@@ -52,7 +77,7 @@ module.exports = function(app) {
     });
 
     app.post("/uploadKategoria", async (req, res) => {
-        await upload.uploadKategoria(req.body.nev)
+        await upload_db.uploadKategoria(req.body.nev)
         return res.redirect('uploadKategoria');
     });
 
@@ -82,7 +107,7 @@ module.exports = function(app) {
             });
         }
 
-        await upload.uploadBolt(iranyitoszam, telepules, utca, telefonszam, nyitvatartas);
+        await upload_db.uploadBolt(iranyitoszam, telepules, utca, telefonszam, nyitvatartas);
         return res.render('upload/bolt', {
             iranyitoszam,
             telepules,

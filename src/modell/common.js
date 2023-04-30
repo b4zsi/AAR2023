@@ -6,7 +6,7 @@ exports.getAllKonyv = async () => {
 }
 
 exports.getKonyvByISBN = async (id) => {
-    return await query(`SELECT * FROM KONYV, KIADO WHERE KONYV.ISBN = :id`, [id]);
+    return await query(`SELECT * FROM KONYV WHERE KONYV.ISBN = :id`, [id]);
 }
 
 exports.getAllSzerzo = async () => {

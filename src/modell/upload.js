@@ -1,9 +1,16 @@
 const query = require("./common").query;
 
-exports.uploadKonyv = async (nev, isbn, kiado, kategoria, oldalszam, mikor, ar) => {
-    return await query(`INSERT INTO konyv(nev, isbn, kiado_id, kategoria_id, oldalszam, mikor, ar) 
-    values(:nev, :isbn, :kiado_id, :kategoria_id, :oldalszam, to_date(:mikor, 'YYYY-MM-DD'), :ar)`,
-        [nev, isbn, kiado, kategoria, oldalszam, mikor, ar])
+exports.getLastKepIndex = async () => {
+    let res = await query(`select count(*) from konyv`)
+    res = res['rows'][0][0]
+
+    return res;
+}
+
+exports.uploadKonyv = async (nev, isbn, kiado, kategoria, oldalszam, mikor, kep, ar) => {
+    return await query(`INSERT INTO konyv(nev, isbn, kiado_id, kategoria_id, oldalszam, mikor, kep, ar) 
+    values(:nev, :isbn, :kiado_id, :kategoria_id, :oldalszam, to_date(:mikor, 'YYYY-MM-DD'), :kep, :ar)`,
+        [nev, isbn, kiado, kategoria, oldalszam, mikor, kep, ar])
 }
 
 exports.uploadSzerzo = async (vezetek, kereszt) => {

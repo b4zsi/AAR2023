@@ -15,7 +15,7 @@ module.exports = function(app) {
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
-            "upload": "Feltöltés",
+            "uploadKonyv": "Feltöltés",
             "login": "Bejelentkezés",
             "regist": "Regisztráció",
             "logout": "Kilépés",
@@ -27,13 +27,12 @@ module.exports = function(app) {
         ];
         res.locals.user_only = [
             "fiok",
+            "kosar",
         ];
         res.locals.guest_and_user_only = [
-            "index",
         ];
         res.locals.user_and_admin_only = [
             "logout",
-            "kosar"
         ];
         res.locals.admin_only = [
             "konyv",

@@ -4,45 +4,56 @@
     <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
         <% if(locals.table){ %>
-        <% console.log(locals.szerkesztendo) %>
         <h1>Könyvek</h1>
         <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
-            <form class="form text-center" action="/editKonyv" method="post">
-                <td><label>
-                    <%- szerkesztendo['metaData'][0]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="nev" />
-                </label></td>
-                <td><label>
-                    <%- szerkesztendo['metaData'][1]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="isbn_uj" />
-                </label></td>
-                    <input type="hidden" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn" />
-                <td><label>
+
+            <form class="form text-center" action="/editKonyv" method="post" enctype="multipart/form-data">
+
+                <label>
+                    <%- szerkesztendo['metaData'][0]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn_uj" />
+                </label>
+
+                <label>
+                    <%- szerkesztendo['metaData'][1]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="nev" />
+                </label>
+
+                <label>
                     <%- szerkesztendo['metaData'][2]['name'] %>: 
                     <select class="form-control" name="kiado" id="kiado">
                         <% for(i in kiado['rows']){ %>
-                        <option value="<%- kiado['rows'][i][0] %>" <% if(kiado['rows'][i][0] == kiado['rows'][0][0]){ %> selected<% } %>><%- kiado['rows'][i][1] %></option>
+                        <option value="<%- kiado['rows'][i][0] %>" <% if(  kiado['rows'][i][1] == locals.szerkesztendo['rows'][0][2]  ){ %> selected="selected"<% } %>><%- kiado['rows'][i][1] %></option>
                         <% } %>
                     </select>
-                </label></td>
-                <td><label>
+                </label>
+
+                <label>
                     <%- szerkesztendo['metaData'][3]['name'] %>:
                     <select class="form-control" name="kategoria" id="kategoria">
                         <% for(i in kategoria['rows']){ %>
-                        <option value="<%- kategoria['rows'][i][0] %>" <% if(kategoria['rows'][i][0] == kategoria['rows'][0][0]){ %> selected<% } %>><%- kategoria['rows'][i][1] %></option>
+                        <option value="<%- kategoria['rows'][i][0] %>" <% if(kategoria['rows'][i][1] == locals.szerkesztendo['rows'][0][3]){ %> selected="selected"<% } %>><%- kategoria['rows'][i][1] %></option>
                         <% } %>
                     </select>
-                </label></td>
-                <td><label>
-                    <%- szerkesztendo['metaData'][4]['name'] %>: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][2] %>" name="oldalszam" />
-                    </label></td>
-                <td><label>
-                    Kiadás dátuma:
-                    <input class="form-control" type="date" value="2023-01-01" name="mikor" />
-                </label></td>
-                <td><label>
-                    Ar: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][4] %>" name="ar" />
-                </label></td>
+                </label>
 
+                <label>
+                    <%- szerkesztendo['metaData'][4]['name'] %>: <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][4] %>" name="oldalszam" />
+                </label>
+
+                <label>
+                    <%- szerkesztendo['metaData'][5]['name'] %> <input class="form-control" type="number" value="<%- locals.szerkesztendo['rows'][0][5] %>" name="ar" />
+                </label>
+
+                <label>
+                    <%- szerkesztendo['metaData'][6]['name'] %><input class="form-control" type="date" value="<%- locals.szerkesztendo['rows'][0][6] %>" name="mikor">
+                </label>
+
+                <label>
+                    Kep: <input class="form-control" type="file" name="kep" />
+                </label><br>
+
+                <input type="hidden" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn" />
                 <button class="gomb" type="submit">Hozzáadás</button>
+
             </form>
 
         <% } %>
