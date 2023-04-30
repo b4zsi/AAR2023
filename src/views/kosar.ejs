@@ -28,9 +28,17 @@
                     <% } %>
                 <% } %>
             </table>
-        <% } %>
-        <form action="/rendeles" method="get" style="margin: auto;">
-            <button type="submit" class="btn btn-secondary">Tovabb</button>
-        </form>
+            <form action="/rendeles" method="get" style="margin: auto;">
+                <button type="submit" class="btn btn-secondary" style="margin-left: 47.5%;">Tovább</button>
+            </form>
+        <% } else {  %>
+            <p style="font-size: 50px;margin: auto; text-align: center;">
+                A kosarad üres.
+                <br />
+                <a href="index" class="btn btn-secondary"> Áruház</a>
+
+            </p>
+            
+            <% } %>
     </body>
 </html>
