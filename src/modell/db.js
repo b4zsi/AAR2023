@@ -1,6 +1,4 @@
-const db = require("oracledb");
-const dbConfig = require("../config/database");
-db.autoCommit = true;
+const query = require("./common").query;
 
 exports.getSzerzok = async () => {
     return await query(`SELECT * from SZERZO order by id`);
@@ -45,11 +43,6 @@ exports.getKonyvById = async (id) => {
     return await query(`SELECT KONYV.ISBN as id, KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ár" FROM KONYV, KIADO WHERE KONYV.ISBN = :id`, [id]);
 }
 
-exports.uploadKonyv = async (nev, isbn, kiado, kategoria, oldalszam, mikor, ar) => {
-    return await query(`INSERT INTO konyv(nev, isbn, kiado_id, kategoria_id, oldalszam, mikor, ar) 
-    values(:nev, :isbn, :kiado_id, :kategoria_id, :oldalszam, to_date(:mikor, 'YYYY-MM-DD'), :ar)`,
-        [nev, isbn, kiado, kategoria, oldalszam, mikor, ar])
-}
 
 exports.editKonyv = async (nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar) => {
     await query(`update  konyv set nev = :nev, isbn = :isbn_uj, kiado_id = :kiado_id, kategoria_id = :kategoria_id, oldalszam = :oldalszam, mikor = to_date(:mikor, 'YYYY-MM-DD'), ar = :ar where isbn = :isbn`,
@@ -61,11 +54,6 @@ exports.deleteKonyv = async (id) => {
         [id])
 }
 
-exports.uploadSzerzo = async (vezetek, kereszt) => {
-    return await query(`INSERT INTO szerzo(vezeteknev, keresztnev) 
-    values(:vez, :ker)`,
-        [vezetek, kereszt])
-}
 
 exports.getKiado = async () => {
     return await query(`SELECT * from KIADO order by nev`);
@@ -90,30 +78,5 @@ exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
         [email, jelszo, keresztnev, vezeteknev]);
 }
 
-exports.uploadImage = async (kep) => {
-    return await query(`insert into kep(kep) values (:kep)`, [kep]);
-}
 
 
-async function query(query, list = []) {
-    let result;
-    let conn;
-    try {
-        conn = await db.getConnection(dbConfig);
-        result = await conn.execute(query, list);
-
-    } catch (err) {
-        console.log(err);
-    } finally {
-        if (conn) {
-            try {
-                await conn.close();
-            } catch (err) {
-                console.error(err.message);
-            }
-        }
-    }
-
-    return result;
-
-}

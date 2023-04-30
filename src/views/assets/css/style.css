@@ -26,6 +26,10 @@ footer {
     line-height: 60px;
 }
 
+.w-5 {
+    width: 5%;
+
+}
 .active {
     font-weight: bold;
     color: black;

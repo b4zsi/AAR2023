@@ -8,6 +8,7 @@ module.exports = function(app) {
         res.locals.header = {
             "index": "Főoldal",
             "kosar": "Kosár",
+            "konyv": "Könyvek",
             "szerzo": "Szerzők",
             "kiado": "Kiadók",
             "kategoria": "Kategoriák",
@@ -27,10 +28,14 @@ module.exports = function(app) {
             "fiok",
             "kosar"
         ];
+        res.locals.guest_and_user_only = [
+            "index",
+        ];
         res.locals.user_and_admin_only = [
             "logout",
         ];
         res.locals.admin_only = [
+            "konyv",
             "upload",
             "fiok",
         ];

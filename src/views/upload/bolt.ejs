@@ -12,13 +12,43 @@
 
         <form class="form text-center" method="post">
             <label>
-                Vezetéknév: <input class="form-control" type="text" placeholder="név" name="vezetek" />
+                Irányítószát <input class="form-control" type="number" placeholder="1234" value="<%- locals.iranyitoszam %>" name="iranyitoszam" />
             </label><br>
             <label>
-                Keresztnév: <input class="form-control" type="text" placeholder="név" name="kereszt" />
+                Település <input class="form-control" type="text" placeholder="Szeged" value="<%- locals.telepules %>" name="telepules" />
             </label><br>
+            <label>
+                Utca, házszám <input class="form-control" type="text" placeholder="Példa utca 16." value="<%- locals.utca %>" name="utca" />
+            </label><br>
+            <label>
+                Telefonszám <input class="form-control" type="number" placeholder="1234" value="<%- locals.telefonszam %>" name="telefonszam" />
+            </label><br>
+            <div class="container w-25">
+            <h2>Nyitvatartás</h2> <br>
+                <% let counter = 0; t = {'he':'Hétfő', 'ke':'Kedd', 'sze':'Szerda', 'csu':'Csütörtök', 'pe':'Péntek', 'szo':'Szombat', 'va':'Vasárnap',}; for(i in t){ %>
+                <div>
+
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <h4 class="d-inline"><%- t[i] %></h4>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="8" value="<%- locals.nyitvatartas[counter] %>" name="<%- i %>1" />
+                            -
+                            <input class="d-inline form-control w-25 text-center" type="text" placeholder="16" value="<%- locals.nyitvatartas[counter + 1] %>" name="<%- i %>2" />
+                        </div>
+                    </div>
+                </div>
+            <% counter += 2; } %>
+            </div>
             <button class="gomb mt-2" type="submit">Hozzáadás</button>
         </form>
+        <% if(locals.hibak) for(i of locals.hibak){ %>
+            <div class="hiba mt-3 text-center w-50 m-auto">
+                <%- i %>
+            </div>
+        <% } %>
+
 </body>
 
 </html>
