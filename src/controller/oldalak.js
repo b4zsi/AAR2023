@@ -3,6 +3,10 @@ const db = require('../modell/db');
 const common = require('../modell/common');
 const konyv_db = require('../modell/konyv');
 const jwt = require('jsonwebtoken')
+const path = require("path");
+const fs = require("fs");
+
+const upload = require('../config/multer').multer;
 
 module.exports = function(app) {
 
@@ -18,7 +22,7 @@ module.exports = function(app) {
         const konyvek = await db.nepszeru_konyvek(2);
         const table = await db.getKonyv();
 
-        for(let i of konyvek.rows){
+        for (let i of konyvek.rows) {
             console.log(i);
         }
         return res.render('index', {
@@ -52,25 +56,25 @@ module.exports = function(app) {
             , table
         });
     });
-    
+
     app.get("/kosar", async (req, res) => {
-        if(req.cookies.isbn) {
+        if (req.cookies.isbn) {
             const jsonStr = req.cookies.isbn;
-            if(jsonStr['expires'] > 0){
+            if (jsonStr['expires'] > 0) {
                 return res.render('kosar.ejs');
             }
             const array = JSON.parse(jsonStr);
-                var konyvek = []
-                const dbs = []
-            
-            for(let i = 0;i < array.length;i++) {
+            var konyvek = []
+            const dbs = []
+
+            for (let i = 0; i < array.length; i++) {
                 const konyv = await db.getKonyvByISBN(array[i].isbn)
                 dbs.push(array[i].darab)
                 konyvek.push(konyv)
             }
-            return res.render('kosar.ejs',{
+            return res.render('kosar.ejs', {
                 konyvek,
-                darabszam:dbs
+                darabszam: dbs
             });
         }
         return res.render('kosar.ejs');
@@ -107,13 +111,9 @@ module.exports = function(app) {
     app.get("/konyv", async (req, res) => {
         const table = await konyv_db.getKonyv();
         let { id } = req.query
+
         let kiado, kategoria;
         let szerkesztendo;
-
-        let h = [];
-        table['metaData'].forEach((i) => h.push(i['name']))
-        //console.log(h);
-
 
         if (req.body.curr_role === 1) {
             if (id) {
@@ -122,7 +122,6 @@ module.exports = function(app) {
             kiado = await common.getAllKiado();
             kategoria = await common.getAllKategoria();
         }
-
 
         return res.render('konyv.ejs', {
             kiado,
@@ -133,17 +132,35 @@ module.exports = function(app) {
         });
     });
 
-    app.post("/editKonyv", async (req, res) => {
-        let { nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar } = req.body;
+    app.post("/editKonyv", upload.single("kep"), async (req, res) => {
+        let { nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, kep } = req.body;
 
-        await db.editKonyv(nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar);
+
+        let old = await common.getKonyvByISBN(isbn);
+        old = old['rows'][0][old['metaData'].map(x => x['name']).indexOf('KEP')];
+
+        console.log(old);
+
+        if (req.file) {
+            const tempPath = req.file.path;
+            const targetPath = path.join(__dirname, "../public/img/" + old);
+
+            const ext = path.extname(req.file.originalname).toLowerCase();
+            if (ext === ".png" || ext === ".jpg" || ext === ".jpeg") {
+                //fs.unlink('../public/img/' + old);
+                fs.rename(tempPath, targetPath, err => {
+                    if (err) return res.render('/upload/konyv', {});
+                });
+            }
+        }
+
+        await db.editKonyv(nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, kep);
 
         return res.redirect('/konyv?id=' + isbn);
     });
 
     app.get("/deleteKonyv", async (req, res) => {
         let { id } = req.query
-        console.log(id);
 
         await db.deleteKonyv(id);
 
@@ -181,23 +198,23 @@ module.exports = function(app) {
 
     });
 
-    app.post("/addToKosar", async (req, res)=> {
-        let {isbn} = req.body;
+    app.post("/addToKosar", async (req, res) => {
+        let { isbn } = req.body;
 
-        if(!req.cookies.isbn) {
-            const obj = [{isbn: isbn, darab:1}]
+        if (!req.cookies.isbn) {
+            const obj = [{ isbn: isbn, darab: 1 }]
             const jsonStr = JSON.stringify(obj);
-            res.cookie('isbn', jsonStr, {maxAge:86400000})
-        }else {
+            res.cookie('isbn', jsonStr, { maxAge: 86400000 })
+        } else {
             const jsonStr = req.cookies.isbn;
 
-            if(jsonStr['expires'] > 0) {
+            if (jsonStr['expires'] > 0) {
                 const array = []
-                const obj = {isbn: isbn, darab:1}
+                const obj = { isbn: isbn, darab: 1 }
                 array.push(obj)
                 const updatedJsonStr = JSON.stringify(array);
                 res.cookie('isbn', updatedJsonStr);
-            }else {
+            } else {
                 let van = false
                 const array = JSON.parse(jsonStr);
 
@@ -238,15 +255,15 @@ module.exports = function(app) {
 
         return res.redirect('/kosar');
     });
-    app.get('/rendel', async (req,res)=>{
+    app.get('/rendel', async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
         let user = await db.getFiokByEmail(req.body.curr_email);
-        for(let i of array) {
+        for (let i of array) {
             let konyv = await db.getKonyByISBN(i.isbn);
-            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3], i.darab);
+            await db.setRendeles(i.isbn, user['rows'][0][0], konyv['rows'][0][3], i.darab);
         }
-        res.cookie('isbn', {expires: Date.now()});
+        res.cookie('isbn', { expires: Date.now() });
         res.redirect('index');
     });
 

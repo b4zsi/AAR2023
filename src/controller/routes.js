@@ -14,7 +14,7 @@ module.exports = function(app) {
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
-            "upload": "Feltöltés",
+            "uploadKonyv": "Feltöltés",
             "login": "Bejelentkezés",
             "regist": "Regisztráció",
             "logout": "Kilépés",

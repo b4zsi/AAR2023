@@ -5,7 +5,7 @@
 <body>
     <%- include('../includes/uploads') %>
 
-        <form class="form text-center" method="post">
+        <form class="form text-center" method="post" enctype="multipart/form-data">
             <label>
                 Név: <input class="form-control" type="text" placeholder="név" name="nev" />
             </label><br>
@@ -37,6 +37,9 @@
             </label><br>
             <label>
                 Ar: <input class="form-control" type="number" placeholder="ar" name="ar" />
+            </label><br>
+            <label>
+                Kep: <input class="form-control" type="file" name="kep" />
             </label><br>
 
             <button class="gomb mt-2" type="submit">Hozzáadás</button>
