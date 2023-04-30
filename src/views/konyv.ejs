@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('includes/head') %>
-    </head>
-    <header>
-        <%- include('includes/header', {oldal: locals.oldal}) %>
-    </header>
+    <%- include('includes/head') %>
+    <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
         <% if(locals.table){ %>
         <h1>Könyvek</h1>

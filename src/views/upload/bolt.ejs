@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
     <%- include('../includes/head') %>
-</head>
-<header><%- include('../includes/header', {oldal: oldal}) %></header>
-
+    <%- include('../includes/header', {oldal: oldal}) %>
 <body>
-
     <%- include('../includes/uploads') %>
 
         <form class="form text-center" method="post">
@@ -25,7 +20,7 @@
             </label><br>
             <div class="container w-25">
             <h2>Nyitvatartás</h2> <br>
-                <% let counter = 0; t = {'he':'Hétfő', 'ke':'Kedd', 'sze':'Szerda', 'csu':'Csütörtök', 'pe':'Péntek', 'szo':'Szombat', 'va':'Vasárnap',}; for(i in t){ %>
+                <% let counter = 0; t = {'he':'Hétfő', 'ke':'Kedd', 'sze':'Szerda', 'csu':'Csütörtök', 'pe':'Péntek', 'szo':'Szombat', 'va':'Vasárnap'}; for(i in t){ %>
                 <div>
 
                     <div class="row">
