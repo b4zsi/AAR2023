@@ -15,10 +15,10 @@ module.exports = function(app) {
 
     app.get("/index", async (req, res) => {
         //const konyvek = await db.konyvszam_szerzo_szerint('King', 'Stephen');
-        const bevetel = await db.szerzo_bevetel('King', 'Stephen');
-        const datum = await db.szallitasi_datum();
+        //const bevetel = await db.szerzo_bevetel('King', 'Stephen');
+        //const datum = await db.szallitasi_datum();
         //const konyvek = await db.ujjanon_konyvek(1000);
-        const konyvek = await db.nepszeru_konyvek(2);
+        //const konyvek = await db.nepszeru_konyvek(2);
         const table = await db.getKonyv();
 
         return res.render('index', {
@@ -69,6 +69,27 @@ module.exports = function(app) {
         });
     });
 
+    app.get("/statisztika", restrict, async (req, res) => {
+        const bestSzerzo = await db.bestSzerzo();
+        const bestKategoria = await db.bestKategoria();
+        const bestKiado = await db.bestKiado();
+        const bestUserek = await db.bestUserek();
+        const utoloDarabok = await db.utoloDarabok();
+        const elfogyott = await db.elfogyott();
+        const bestKategoriabestSeller = await db.bestKategoriabestSeller();
+
+        return res.render('stats.ejs', {
+            cim: "Statisztika:",
+            bestSzerzo,
+            bestKategoria,
+            bestKiado,
+            bestUserek,
+            utoloDarabok,
+            elfogyott,
+            bestKategoriabestSeller
+        });
+    });
+    
     app.get("/kosar", async (req, res) => {
         if (req.cookies.isbn) {
             const jsonStr = req.cookies.isbn;
@@ -97,16 +118,20 @@ module.exports = function(app) {
         const array = JSON.parse(jsonStr);
         const konyvek = []
         const dbs = []
+        let vegosszeg = 0
 
         for (let i = 0; i < array.length; i++) {
             const konyv = await db.getKonyvByISBN(array[i].isbn)
             dbs.push(array[i].darab)
             konyvek.push(konyv)
+            console.log(konyv['rows'][0][3])
+            vegosszeg += array[i].darab * konyv['rows'][0][3]
         }
 
         return res.render('rendeles.ejs', {
             konyvek,
-            darabszam: dbs
+            darabszam: dbs,
+            vegosszeg
         })
 
     });
@@ -223,7 +248,10 @@ module.exports = function(app) {
         const array = JSON.parse(jsonStr);
 
         for (let i = 0; i < array.length; i++) {
-            if (isbn === array[i].isbn) {
+            if (isbn === array[i].isbn && array[i].darab >= 1) {
+                if(mennyi==-1 && array[i].darab == 1){
+                    continue;
+                }
                 array[i].darab += mennyi * 1;
             }
         }
@@ -236,9 +264,10 @@ module.exports = function(app) {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
         let user = await db.getFiokByEmail(req.body.curr_email);
-        for (let i of array) {
-            let konyv = await db.getKonyByISBN(i.isbn);
-            await db.setRendeles(i.isbn, user['rows'][0][0], konyv['rows'][0][3], i.darab);
+        for(let i of array) {
+            let konyv = await db.getKonyvByISBN(i.isbn);
+            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3], i.darab);
+
         }
         res.cookie('isbn', { expires: Date.now() });
         res.redirect('index');

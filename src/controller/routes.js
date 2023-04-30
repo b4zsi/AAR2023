@@ -11,6 +11,7 @@ module.exports = function(app) {
             "konyv": "Könyvek",
             "szerzo": "Szerzők",
             "kiado": "Kiadók",
+            "statisztika": "Statisztika",
             "kategoria": "Kategoriák",
             "nyitvatartas": "Nyitvatartás",
             "bolt": "Bolt",
@@ -37,11 +38,13 @@ module.exports = function(app) {
             "konyv",
             "upload",
             "fiok",
+            "statisztika"
         ];
 
         res.locals.oldalak = {
             "konyv": "Könyv",
             "szerzo": "Szerző",
+            "statisztika": "Statisztika",
             "kiado": "Kiadó",
             "kategoria": "Kategória",
             "bolt": "Bolt",
