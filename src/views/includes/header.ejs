@@ -11,7 +11,7 @@
 
                 <% if( locals.curr_role === 0  && // user van bejelentkezve
                         ( locals.admin_only.includes(i) ||
-                          locals.guest__only.includes(i) )) continue %>
+                          locals.guest_only.includes(i) )) continue %>
 
                 <% if( locals.curr_role === 1 &&  
                 ( locals.guest_only.includes(i) ||
