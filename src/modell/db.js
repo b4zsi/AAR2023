@@ -1,6 +1,4 @@
-const db = require("oracledb");
-const dbConfig = require("../config/database");
-db.autoCommit = true;
+const query = require("./common").query;
 
 exports.getSzerzok = async () => {
     return await query(`SELECT * from SZERZO order by id`);
@@ -21,13 +19,13 @@ exports.getKonyByISBN = async (isbn) => {
     return await query(`SELECT KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ar", KONYV.ISBN FROM KONYV, KIADO WHERE KONYV.KIADO_ID = KIADO.ID AND KONYV.ISBN = :isbn`, [isbn])
 }
 exports.getNyitvatartas = async () => {
-    return await query(`SELECT * from nyitvatartas`);
+    return await query(`SELECT concat(concat(bolt.telepules, concat(' ' , bolt.utca)), ' utca') as Bolt, nyitvatartas.nap as Nap, nyitvatartas.nyitas, nyitvatartas.zaras from nyitvatartas, bolt where nyitvatartas.bolt_id = bolt.id`);
 }
 exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
-exports.setRendeles = async (isbn, fiokid, osszeg) => {
-    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
+    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
 }
 exports.getKepByISBN = async (isbn) => {
     return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
@@ -45,11 +43,6 @@ exports.getKonyvById = async (id) => {
     return await query(`SELECT KONYV.ISBN as id, KONYV.NEV as "Név", KONYV.OLDALSZAM as "Oldal", KIADO.NEV as "Kiado", KONYV.AR as "Ár" FROM KONYV, KIADO WHERE KONYV.ISBN = :id`, [id]);
 }
 
-exports.uploadKonyv = async (nev, isbn, kiado, kategoria, oldalszam, mikor, ar) => {
-    return await query(`INSERT INTO konyv(nev, isbn, kiado_id, kategoria_id, oldalszam, mikor, ar) 
-    values(:nev, :isbn, :kiado_id, :kategoria_id, :oldalszam, to_date(:mikor, 'YYYY-MM-DD'), :ar)`,
-        [nev, isbn, kiado, kategoria, oldalszam, mikor, ar])
-}
 
 exports.editKonyv = async (nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar) => {
     await query(`update  konyv set nev = :nev, isbn = :isbn_uj, kiado_id = :kiado_id, kategoria_id = :kategoria_id, oldalszam = :oldalszam, mikor = to_date(:mikor, 'YYYY-MM-DD'), ar = :ar where isbn = :isbn`,
@@ -61,11 +54,6 @@ exports.deleteKonyv = async (id) => {
         [id])
 }
 
-exports.uploadSzerzo = async (vezetek, kereszt) => {
-    return await query(`INSERT INTO szerzo(vezeteknev, keresztnev) 
-    values(:vez, :ker)`,
-        [vezetek, kereszt])
-}
 
 exports.getKiado = async () => {
     return await query(`SELECT * from KIADO order by nev`);
@@ -90,30 +78,24 @@ exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
         [email, jelszo, keresztnev, vezeteknev]);
 }
 
-exports.uploadImage = async (kep) => {
-    return await query(`insert into kep(kep) values (:kep)`, [kep]);
+
+exports.konyvszam_szerzo_szerint = async(vnev, knev) => {
+    return await query(`SELECT konyvszam_szerzo_szerint(:vnev,:knev) from DUAL`,[vnev, knev]);
 }
 
-
-async function query(query, list = []) {
-    let result;
-    let conn;
-    try {
-        conn = await db.getConnection(dbConfig);
-        result = await conn.execute(query, list);
-
-    } catch (err) {
-        console.log(err);
-    } finally {
-        if (conn) {
-            try {
-                await conn.close();
-            } catch (err) {
-                console.error(err.message);
-            }
-        }
-    }
-
-    return result;
-
+exports.szerzo_bevetel = async(vnev,knev) => {
+    return await query(`SELECT szerzo_bevetel(:vnev,:knev) from DUAL`, [vnev, knev]);
 }
+
+exports.szallitasi_datum = async() => {
+    return await query(`SELECT SZALLITASI_IDO() FROM DUAL`);
+}
+
+exports.ujjanon_konyvek = async(nap) => {
+    return await query(`SELECT ujjanon_konyvek(:nap) FROM DUAL`,[nap])
+}
+
+exports.nepszeru_konyvek = async(darab) => {
+    return await query(`SELECT nepszeru_konyvek(:darab) FROM DUAL`,[darab]);
+}
+
