@@ -59,7 +59,7 @@
                                 </div>
                             </a>
                         <% } %>
-                        <% if(locals.curr_email) { %>
+                        <% if(locals.curr_email && locals.curr_role === 0) { %>
                             <a class="pr-md-3" href="kosar">
                                 <div class="d-flex align-items-center text-dark font-size-2 text-lh-sm position-relative">
                                     <i class="flaticon-icon-126515 font-size-5"></i>
@@ -68,6 +68,8 @@
                                     </div>
                                 </div>
                             </a>
+                        <% } %>
+                        <% if(locals.curr_email) { %>
                             <a href="logout">
                                 <div class="d-flex align-items-center text-dark font-size-2 text-lh-sm">
                                     <i>

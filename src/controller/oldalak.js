@@ -1,5 +1,4 @@
-const restrict_user = require('../middleware/auth').restrict_user;
-const restrict_guest = require('../middleware/auth').restrict_guest;
+const { restrict_only_guest, restrict_only_logged_in, restrict_only_admin, restrict_only_user} = require('../middleware/auth');
 const db = require('../modell/db');
 const common = require('../modell/common');
 const konyv_db = require('../modell/konyv');
@@ -61,7 +60,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get("/fiok", restrict_user, async (req, res) => {
+    app.get("/fiok", restrict_only_admin, async (req, res) => {
         const table = await db.getFiok();
 
         return res.render('show_table.ejs', {
@@ -70,7 +69,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get("/statisztika", restrict_user, async (req, res) => {
+    app.get("/statisztika", restrict_only_admin, async (req, res) => {
         const bestSzerzo = await db.bestSzerzo();
         const bestKategoria = await db.bestKategoria();
         const bestKiado = await db.bestKiado();
@@ -91,7 +90,7 @@ module.exports = function(app) {
         });
     });
     
-    app.get("/kosar", async (req, res) => {
+    app.get("/kosar", restrict_only_user, async (req, res) => {
         if (req.cookies.isbn) {
             const jsonStr = req.cookies.isbn;
             if (jsonStr['expires'] > 0) {
@@ -114,7 +113,7 @@ module.exports = function(app) {
         return res.render('kosar.ejs');
     });
 
-    app.get("/rendeles", async (req, res) => {
+    app.get("/rendeles", restrict_only_user, async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
         const konyvek = []
@@ -155,7 +154,7 @@ module.exports = function(app) {
 
     });
 
-    app.get("/konyv", restrict_user, async (req, res) => {
+    app.get("/konyv", restrict_only_admin, async (req, res) => {
         const table = await konyv_db.getKonyv();
         let { id } = req.query
 
@@ -200,7 +199,7 @@ module.exports = function(app) {
     });
 
 
-    app.post("/addToKosar", async (req, res) => {
+    app.post("/addToKosar", restrict_only_user, async (req, res) => {
         let { isbn } = req.body;
 
         if (!req.cookies.isbn) {
@@ -260,7 +259,7 @@ module.exports = function(app) {
 
         return res.redirect('/kosar');
     });
-    app.get('/rendel', async (req, res) => {
+    app.get('/rendel', restrict_only_user, async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
         let user = await db.getFiokByEmail(req.body.curr_email);

@@ -3,16 +3,16 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const secret = require('../middleware/auth').jwtSecret
 const verifier = require('../config/verify');
-const { restrict_user } = require('../middleware/auth');
+const { restrict_only_guest, restrict_only_logged_in } = require('../middleware/auth');
 
 module.exports = function(app) {
-    app.get("/regist", restrict_user, async (req, res) => {
+    app.get("/regist", restrict_only_guest, async (req, res) => {
         return res.render('regist.ejs', {
             cim: "Regisztracio:"
         });
     });
 
-    app.post("/regist", restrict_user, async (req, res) => {
+    app.post("/regist", restrict_only_guest, async (req, res) => {
         const {email, knev, vnev, jelszo, jelszo2} = req.body;
         let hiba = [];
 
@@ -56,11 +56,11 @@ module.exports = function(app) {
         }
     });
 
-    app.get("/login", restrict_user, async (req, res) => {
+    app.get("/login", restrict_only_guest, async (req, res) => {
         return res.render('login.ejs');
     });
 
-    app.post("/login", restrict_user, async (req, res) => {
+    app.post("/login", restrict_only_guest, async (req, res) => {
         let { email, jelszo } = req.body;
         if (!email || !jelszo) {
             return res.render('login', {
@@ -97,7 +97,7 @@ module.exports = function(app) {
         return res.redirect('index');
     });
 
-    app.get("/logout", (req, res) => {
+    app.get("/logout", restrict_only_logged_in, (req, res) => {
         res.cookie("jwt", "", {
             maxAge: "1"
         })

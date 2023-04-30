@@ -34,7 +34,8 @@ module.exports = function(app) {
             "konyv",
             "upload",
             "fiok",
-            "statisztika"
+            "statisztika",
+            "uploadKonyv"
         ];
 
         res.locals.oldalak = {

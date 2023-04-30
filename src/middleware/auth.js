@@ -16,14 +16,28 @@ exports.auth = (req, res, next) => {
     next()
 }
 
-exports.restrict_user = (req, res, next) => {
-    if (!req.body.curr_role || req.body.curr_role !== 1) {
+exports.restrict_only_admin = (req, res, next) => {
+    if (!req.body.curr_email || req.body.curr_role !== 1) {
         return res.redirect('/index');
     }
     next();
 }
 
-exports.restrict_guest = (req, res, next) => {
+exports.restrict_only_user = (req, res, next) => {
+    if (!req.body.curr_email || req.body.curr_role !== 0) {
+        return res.redirect('/index');
+    }
+    next();
+}
+
+exports.restrict_only_guest = (req, res, next) => {
+    if (req.body.curr_email) {
+        return res.redirect('/index');
+    }
+    next();
+}
+
+exports.restrict_only_logged_in = (req, res, next) => {
     if (!req.body.curr_email) {
         return res.redirect('/index');
     }

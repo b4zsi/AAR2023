@@ -1,5 +1,4 @@
-const restrict_user = require('../middleware/auth').restrict_user;
-const restrict_guest = require('../middleware/auth').restrict_guest;
+const { restrict_only_admin } = require('../middleware/auth');
 const edit_db = require('../modell/edit');
 const common_db = require('../modell/common');
 const upload = require('../config/multer').multer;
@@ -8,7 +7,7 @@ const path = require("path");
 
 module.exports = function(app) {
 
-    app.post("/editKonyv", restrict_user, upload.single("kep"), async (req, res) => {
+    app.post("/editKonyv", restrict_only_admin, upload.single("kep"), async (req, res) => {
         let { nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, kep } = req.body;
 
 
@@ -33,7 +32,7 @@ module.exports = function(app) {
         return res.redirect('/konyv?id=' + isbn);
     });
 
-    app.get("/deleteKonyv", restrict_user, async  (req, res) => {
+    app.get("/deleteKonyv", restrict_only_admin, async  (req, res) => {
         let { id } = req.query
 
         let old = await common_db.getKonyvByISBN(id);
@@ -52,7 +51,7 @@ module.exports = function(app) {
         return res.redirect('/konyv');
     });
 
-    app.post("/editSzerzo", restrict_user, async  (req, res) => {
+    app.post("/editSzerzo", restrict_only_admin, async  (req, res) => {
         let {id, vez, ker} = req.body;
 
         await edit_db.editSzerzo(id, vez, ker);
@@ -61,7 +60,7 @@ module.exports = function(app) {
         
     });
 
-    app.get("/deleteSzerzo", restrict_user, async  (req, res) => {
+    app.get("/deleteSzerzo", restrict_only_admin, async  (req, res) => {
 
         await edit_db.deleteSzerzo(req.query.id);
 
@@ -70,7 +69,7 @@ module.exports = function(app) {
 
     });
 
-    app.post("/editKiado", restrict_user, async  (req, res) => {
+    app.post("/editKiado", restrict_only_admin, async  (req, res) => {
         let {id, nev} = req.body;
 
         await edit_db.editKiado(id, nev);
@@ -79,7 +78,7 @@ module.exports = function(app) {
         
     });
 
-    app.get("/deleteKiado", restrict_user, async (req, res) => {
+    app.get("/deleteKiado", restrict_only_admin, async (req, res) => {
 
         await edit_db.deleteKiado(req.query.id);
 
@@ -88,7 +87,7 @@ module.exports = function(app) {
 
     });
 
-    app.post("/editKategoria", restrict_user, async  (req, res) => {
+    app.post("/editKategoria", restrict_only_admin, async  (req, res) => {
         let {id, nev} = req.body;
 
         await edit_db.editKategoria(id, nev);
@@ -97,7 +96,7 @@ module.exports = function(app) {
         
     });
 
-    app.get("/deleteKategoria", restrict_user, async  (req, res) => {
+    app.get("/deleteKategoria", restrict_only_admin, async  (req, res) => {
 
         await edit_db.deleteKategoria(req.query.id);
 

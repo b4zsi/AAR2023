@@ -1,5 +1,4 @@
-const restrict_user = require('../middleware/auth').restrict_user;
-const restrict_guest = require('../middleware/auth').restrict_guest;
+const { restrict_only_admin } = require('../middleware/auth');
 const db = require('../modell/db');
 const common_db = require('../modell/common');
 const upload_db = require('../modell/upload');
@@ -11,7 +10,7 @@ const upload = require('../config/multer').multer;
 
 module.exports = function(app) {
 
-    app.get("/uploadKonyv", restrict_user, async (req, res) => {
+    app.get("/uploadKonyv", restrict_only_admin, async (req, res) => {
         const kiado = await common_db.getAllKiado();
         const kategoria = await common_db.getAllKategoria();
 
@@ -21,7 +20,7 @@ module.exports = function(app) {
         });
     });
 
-    app.post("/uploadKonyv", upload.single("kep"), async (req, res) => {
+    app.post("/uploadKonyv", restrict_only_admin, upload.single("kep"), async (req, res) => {
         let { nev, isbn, kiado, kategoria, oldalszam, mikor, ar } = req.body;
         const uccso = await upload_db.getLastKepIndex();
 
@@ -49,12 +48,12 @@ module.exports = function(app) {
         return res.redirect("uploadKonyv");
     });
 
-    app.get("/uploadSzerzo", async (req, res) => {
+    app.get("/uploadSzerzo", restrict_only_admin, async (req, res) => {
 
         return res.render("upload/szerzo");
     });
 
-    app.post("/uploadSzerzo", async (req, res) => {
+    app.post("/uploadSzerzo", restrict_only_admin, async (req, res) => {
         let { vezetek, kereszt } = req.body;
 
         await upload_db.uploadSzerzo(vezetek, kereszt);
@@ -62,31 +61,31 @@ module.exports = function(app) {
         return res.redirect("uploadSzerzo");
     });
 
-    app.get("/uploadKiado", async (req, res) => {
+    app.get("/uploadKiado", restrict_only_admin, async (req, res) => {
         return res.render('upload/kiado');
     });
 
-    app.post("/uploadKiado", async (req, res) => {
+    app.post("/uploadKiado", restrict_only_admin, async (req, res) => {
         await upload_db.uploadKiado(req.body.nev)
 
         return res.redirect('uploadKiado');
     });
 
-    app.get("/uploadKategoria", async (req, res) => {
+    app.get("/uploadKategoria", restrict_only_admin, async (req, res) => {
         return res.render('upload/kategoria');
     });
 
-    app.post("/uploadKategoria", async (req, res) => {
+    app.post("/uploadKategoria", restrict_only_admin, async (req, res) => {
         await upload_db.uploadKategoria(req.body.nev)
         return res.redirect('uploadKategoria');
     });
 
 
-    app.get("/uploadBolt", async (req, res) => {
+    app.get("/uploadBolt", restrict_only_admin, async (req, res) => {
         return res.render('upload/bolt');
     });
 
-    app.post("/uploadBolt", async (req, res) => {
+    app.post("/uploadBolt", restrict_only_admin, async (req, res) => {
         let { iranyitoszam, telepules, utca, telefonszam } = req.body;
         let nyitvatartas = [];
 
