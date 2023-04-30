@@ -17,7 +17,7 @@ exports.auth = (req, res, next) => {
 }
 
 exports.restrict_user = (req, res, next) => {
-    if (!req.body.curr_role || req.body.curr_role !== 1) {
+    if (req.body.curr_role && req.body.curr_role !== 1) {
         return res.redirect('/index');
     }
     next();
