@@ -26,8 +26,8 @@ exports.getNyitvatartas = async () => {
 exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
-exports.setRendeles = async (isbn, fiokid, osszeg) => {
-    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
+    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
 }
 exports.getKepByISBN = async (isbn) => {
     return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
@@ -94,6 +94,25 @@ exports.uploadImage = async (kep) => {
     return await query(`insert into kep(kep) values (:kep)`, [kep]);
 }
 
+exports.konyvszam_szerzo_szerint = async(vnev, knev) => {
+    return await query(`SELECT konyvszam_szerzo_szerint(:vnev,:knev) from DUAL`,[vnev, knev]);
+}
+
+exports.szerzo_bevetel = async(vnev,knev) => {
+    return await query(`SELECT szerzo_bevetel(:vnev,:knev) from DUAL`, [vnev, knev]);
+}
+
+exports.szallitasi_datum = async() => {
+    return await query(`SELECT SZALLITASI_IDO() FROM DUAL`);
+}
+
+exports.ujjanon_konyvek = async(nap) => {
+    return await query(`SELECT ujjanon_konyvek(:nap) FROM DUAL`,[nap])
+}
+
+exports.nepszeru_konyvek = async(darab) => {
+    return await query(`SELECT nepszeru_konyvek(:darab) FROM DUAL`,[darab]);
+}
 
 async function query(query, list = []) {
     let result;

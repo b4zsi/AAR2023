@@ -22,10 +22,10 @@ module.exports = function(app) {
         ];
         res.locals.user_only = [
             "fiok",
-            "kosar"
         ];
         res.locals.user_and_admin_only = [
             "logout",
+            "kosar"
         ];
         res.locals.admin_only = [
             "upload",
