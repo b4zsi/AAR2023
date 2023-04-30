@@ -16,3 +16,34 @@ exports.deleteKonyv = async (id) => {
     return await query(`delete from konyv where isbn = :id`,
         [id])
 }
+
+exports.editSzerzo = async (id, vez, ker) => {
+    await query(`update szerzo set vezeteknev = :vez, keresztnev = :ker where id = :id`,[vez, ker, id]);
+
+}
+
+exports.deleteSzerzo = async (id) => {
+    return await query(`delete from szerzo where id = :id`,
+        [id])
+}
+
+
+exports.editKiado = async (id, nev) => {
+    await query(`update kiado set nev = :nev where id = :id`,[nev, id]);
+
+}
+
+exports.deleteKiado = async (id) => {
+    return await query(`delete from kiado where id = :id`,
+        [id])
+}
+
+exports.editKategoria = async (id, nev) => {
+    await query(`update kategoria set nev = :nev where id = :id`,[nev, id]);
+
+}
+
+exports.deleteKategoria = async (id) => {
+    return await query(`delete from kategoria where id = :id`,
+        [id])
+}

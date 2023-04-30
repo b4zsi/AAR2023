@@ -49,4 +49,58 @@ module.exports = function(app) {
 
         return res.redirect('/konyv');
     });
+
+    app.post("/editSzerzo", async (req, res) => {
+        let {id, vez, ker} = req.body;
+
+        await edit_db.editSzerzo(id, vez, ker);
+
+        res.redirect('/szerzo');
+        
+    });
+
+    app.get("/deleteSzerzo", async (req, res) => {
+
+        await edit_db.deleteSzerzo(req.query.id);
+
+        return res.redirect('/szerzo');
+            
+
+    });
+
+    app.post("/editKiado", async (req, res) => {
+        let {id, nev} = req.body;
+
+        await edit_db.editKiado(id, nev);
+
+        res.redirect('/kiado');
+        
+    });
+
+    app.get("/deleteKiado", async (req, res) => {
+
+        await edit_db.deleteKiado(req.query.id);
+
+        return res.redirect('/kiado');
+            
+
+    });
+
+    app.post("/editKategoria", async (req, res) => {
+        let {id, nev} = req.body;
+
+        await edit_db.editKategoria(id, nev);
+
+        res.redirect('/kategoria');
+        
+    });
+
+    app.get("/deleteKategoria", async (req, res) => {
+
+        await edit_db.deleteKategoria(req.query.id);
+
+        return res.redirect('/kategoria');
+            
+
+    });
 }

@@ -17,6 +17,11 @@ exports.getNyitvatartas = async () => {
 exports.getRendelesek = async () => {
     return await query(`SELECT * FROM RENDELESEK`);
 }
+
+exports.getSzerzo = async () => {
+    return await query(`SELECT id, concat(concat(vezeteknev, ' '), keresztnev) as Név FROM szerzo`);
+}
+
 exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
     return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
 }

@@ -27,20 +27,36 @@ module.exports = function(app) {
     });
 
     app.get("/szerzo", async (req, res) => {
-        const table = await common.getAllSzerzo();
+        const table = await db.getSzerzo();
+        let { id } = req.query
+        let szerkesztendo;
 
-        return res.render('show_table.ejs', {
-            cim: "Szerzők:"
-            , table
+        if(id){
+            szerkesztendo = await common.getSzerzoById(id);
+        }
+
+        return res.render('szerzo', {
+            table,
+            id,
+            szerkesztendo,
         });
     });
 
     app.get("/kiado", async (req, res) => {
         const table = await common.getAllKiado();
 
-        return res.render('show_table.ejs', {
-            cim: "Kiadók"
-            , table
+        let { id } = req.query
+        let szerkesztendo;
+
+        if(id){
+            szerkesztendo = await common.getKiadoById(id);
+        }
+
+
+        return res.render('kiado', {
+            table,
+            id,
+            szerkesztendo,
         });
     });
 
@@ -98,10 +114,20 @@ module.exports = function(app) {
     app.get("/kategoria", async (req, res) => {
         const table = await common.getAllKategoria();
 
-        return res.render('show_table.ejs', {
-            cim: "Kategóriák:"
-            , table
+        let { id } = req.query
+        let szerkesztendo;
+
+        if(id){
+            szerkesztendo = await common.getKategoriaById(id);
+        }
+
+
+        return res.render('kategoria', {
+            table,
+            id,
+            szerkesztendo,
         });
+
     });
 
     app.get("/konyv", async (req, res) => {
