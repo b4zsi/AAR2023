@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 const path = require("path");
 const fs = require("fs");
 
-const upload = require('../config/multer').multer;
 
 module.exports = function(app) {
 
@@ -22,9 +21,6 @@ module.exports = function(app) {
         const konyvek = await db.nepszeru_konyvek(2);
         const table = await db.getKonyv();
 
-        for (let i of konyvek.rows) {
-            console.log(i);
-        }
         return res.render('index', {
             table,
         });
@@ -132,40 +128,7 @@ module.exports = function(app) {
         });
     });
 
-    app.post("/editKonyv", upload.single("kep"), async (req, res) => {
-        let { nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, kep } = req.body;
 
-
-        let old = await common.getKonyvByISBN(isbn);
-        old = old['rows'][0][old['metaData'].map(x => x['name']).indexOf('KEP')];
-
-        console.log(old);
-
-        if (req.file) {
-            const tempPath = req.file.path;
-            const targetPath = path.join(__dirname, "../public/img/" + old);
-
-            const ext = path.extname(req.file.originalname).toLowerCase();
-            if (ext === ".png" || ext === ".jpg" || ext === ".jpeg") {
-                //fs.unlink('../public/img/' + old);
-                fs.rename(tempPath, targetPath, err => {
-                    if (err) return res.render('/upload/konyv', {});
-                });
-            }
-        }
-
-        await db.editKonyv(nev, isbn, isbn_uj, kiado, kategoria, oldalszam, mikor, ar, kep);
-
-        return res.redirect('/konyv?id=' + isbn);
-    });
-
-    app.get("/deleteKonyv", async (req, res) => {
-        let { id } = req.query
-
-        await db.deleteKonyv(id);
-
-        return res.redirect('/konyv');
-    });
 
     app.get("/nyitvatartas", async (req, res) => {
         const table = await db.getNyitvatartas();
@@ -185,18 +148,6 @@ module.exports = function(app) {
         });
     });
 
-
-
-    app.post("/uploadImg", async (req, res) => {
-        const { name, data } = req.files.pic
-        if (name && data) {
-            await db.uploadImage({ name: name, img: data });
-            res.sendStatus(200);
-        } else {
-            console.log("missing data!")
-        }
-
-    });
 
     app.post("/addToKosar", async (req, res) => {
         let { isbn } = req.body;

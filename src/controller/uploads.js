@@ -1,5 +1,6 @@
 const restrict = require('../middleware/auth').restrict;
 const db = require('../modell/db');
+
 const common_db = require('../modell/common');
 const upload_db = require('../modell/upload');
 const jwt = require('jsonwebtoken')
@@ -26,9 +27,9 @@ module.exports = function(app) {
 
         if(req.file){
             const tempPath = req.file.path;
-            const targetPath = path.join(__dirname, "../public/img/" + (uccso+1) + ".png");
-
             const ext = path.extname(req.file.originalname).toLowerCase();
+            const targetPath = path.join(__dirname, "../public/img/" + (uccso+1) + ext);
+
             if (ext === ".png" || ext === ".jpg" || ext === ".jpeg") {
               fs.rename(tempPath, targetPath, err => {
                 if (err) return res.render('/upload/konyv',{});

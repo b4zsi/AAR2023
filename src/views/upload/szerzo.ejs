@@ -3,7 +3,25 @@
     <%- include('../includes/head') %>
     <%- include('../includes/header', {oldal: oldal}) %>
 <body>
+
     <%- include('../includes/uploads') %>
+
+    <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
+
+        <form class="form text-center" action="/editKonyv" method="post" enctype="multipart/form-data">
+
+            <label>
+                <%- szerkesztendo['metaData'][0]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][0] %>" name="isbn_uj" />
+            </label>
+
+            <label>
+                <%- szerkesztendo['metaData'][1]['name'] %>: <input class="form-control" type="text" value="<%- locals.szerkesztendo['rows'][0][1] %>" name="nev" />
+            </label>
+
+            <button class="gomb" type="submit">Hozzáadás</button>
+
+        </form>
+    <% } %>
 
         <form class="form text-center" method="post">
             <label>
