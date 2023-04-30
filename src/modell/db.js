@@ -14,8 +14,11 @@ exports.getKonyvByISBN = async (isbn) => {
 exports.getNyitvatartas = async () => {
     return await query(`SELECT concat(concat(bolt.telepules, concat(' ' , bolt.utca)), ' utca') as Bolt, nyitvatartas.nap as Nap, nyitvatartas.nyitas, nyitvatartas.zaras from nyitvatartas, bolt where nyitvatartas.bolt_id = bolt.id`);
 }
-exports.setRendeles = async (isbn, fiokid, osszeg) => {
-    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG) VALUES(:isbn, :fiokid, :osszeg)`, [isbn, fiokid, osszeg]);
+exports.getRendelesek = async () => {
+    return await query(`SELECT * FROM RENDELESEK`);
+}
+exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
+    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
 }
 exports.getKepByISBN = async (isbn) => {
     return await query(`SELECT KEP from KONYV WHERE ISBN = :isbn`,[isbn]);
@@ -51,4 +54,23 @@ exports.addUser = async (email, jelszo, keresztnev, vezeteknev) => {
 }
 
 
+exports.konyvszam_szerzo_szerint = async(vnev, knev) => {
+    return await query(`SELECT konyvszam_szerzo_szerint(:vnev,:knev) from DUAL`,[vnev, knev]);
+}
+
+exports.szerzo_bevetel = async(vnev,knev) => {
+    return await query(`SELECT szerzo_bevetel(:vnev,:knev) from DUAL`, [vnev, knev]);
+}
+
+exports.szallitasi_datum = async() => {
+    return await query(`SELECT SZALLITASI_IDO() FROM DUAL`);
+}
+
+exports.ujjanon_konyvek = async(nap) => {
+    return await query(`SELECT ujjanon_konyvek(:nap) FROM DUAL`,[nap])
+}
+
+exports.nepszeru_konyvek = async(darab) => {
+    return await query(`SELECT nepszeru_konyvek(:darab) FROM DUAL`,[darab]);
+}
 

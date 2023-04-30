@@ -11,7 +11,16 @@ module.exports = function(app) {
     });
 
     app.get("/index", async (req, res) => {
+        //const konyvek = await db.konyvszam_szerzo_szerint('King', 'Stephen');
+        const bevetel = await db.szerzo_bevetel('King', 'Stephen');
+        const datum = await db.szallitasi_datum();
+        //const konyvek = await db.ujjanon_konyvek(1000);
+        const konyvek = await db.nepszeru_konyvek(2);
         const table = await db.getKonyv();
+
+        for(let i of konyvek.rows){
+            console.log(i);
+        }
         return res.render('index', {
             table,
         });
@@ -234,8 +243,8 @@ module.exports = function(app) {
         const array = JSON.parse(jsonStr);
         let user = await db.getFiokByEmail(req.body.curr_email);
         for(let i of array) {
-            let konyv = await db.getKonyvByISBN(i.isbn);
-            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3]);
+            let konyv = await db.getKonyByISBN(i.isbn);
+            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3], i.darab);
         }
         res.cookie('isbn', {expires: Date.now()});
         res.redirect('index');
