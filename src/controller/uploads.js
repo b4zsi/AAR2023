@@ -1,6 +1,6 @@
-const restrict = require('../middleware/auth').restrict;
+const restrict_user = require('../middleware/auth').restrict_user;
+const restrict_guest = require('../middleware/auth').restrict_guest;
 const db = require('../modell/db');
-
 const common_db = require('../modell/common');
 const upload_db = require('../modell/upload');
 const jwt = require('jsonwebtoken')
@@ -11,7 +11,7 @@ const upload = require('../config/multer').multer;
 
 module.exports = function(app) {
 
-    app.get("/uploadKonyv", restrict, async (req, res) => {
+    app.get("/uploadKonyv", restrict_user, async (req, res) => {
         const kiado = await common_db.getAllKiado();
         const kategoria = await common_db.getAllKategoria();
 

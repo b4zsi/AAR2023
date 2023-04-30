@@ -1,4 +1,5 @@
-const restrict = require('../middleware/auth').restrict;
+const restrict_user = require('../middleware/auth').restrict_user;
+const restrict_guest = require('../middleware/auth').restrict_guest;
 const db = require('../modell/db');
 const common = require('../modell/common');
 const konyv_db = require('../modell/konyv');
@@ -60,7 +61,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get("/fiok", restrict, async (req, res) => {
+    app.get("/fiok", restrict_user, async (req, res) => {
         const table = await db.getFiok();
 
         return res.render('show_table.ejs', {
@@ -69,7 +70,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get("/statisztika", restrict, async (req, res) => {
+    app.get("/statisztika", restrict_user, async (req, res) => {
         const bestSzerzo = await db.bestSzerzo();
         const bestKategoria = await db.bestKategoria();
         const bestKiado = await db.bestKiado();
@@ -124,7 +125,6 @@ module.exports = function(app) {
             const konyv = await db.getKonyvByISBN(array[i].isbn)
             dbs.push(array[i].darab)
             konyvek.push(konyv)
-            console.log(konyv['rows'][0][3])
             vegosszeg += array[i].darab * konyv['rows'][0][3]
         }
 
@@ -155,7 +155,7 @@ module.exports = function(app) {
 
     });
 
-    app.get("/konyv", async (req, res) => {
+    app.get("/konyv", restrict_user, async (req, res) => {
         const table = await konyv_db.getKonyv();
         let { id } = req.query
 

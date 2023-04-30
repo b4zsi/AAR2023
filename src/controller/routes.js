@@ -1,10 +1,10 @@
-const auth = require("../middleware/auth.js")
+const auth = require("../middleware/auth.js").auth;
 const fs = require('fs');
 const path = require('path');
 
 
 module.exports = function(app) {
-    app.use(auth.auth, (req, res, next) => {
+    app.use(auth, (req, res, next) => {
         res.locals.header = {
             "index": "Főoldal",
             "kosar": "Kosár",
