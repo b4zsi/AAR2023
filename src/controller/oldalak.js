@@ -19,10 +19,12 @@ module.exports = function(app) {
         //const datum = await db.szallitasi_datum();
         //const konyvek = await db.ujjanon_konyvek(1000);
         //const konyvek = await db.nepszeru_konyvek(2);
-        const table = await db.getKonyv();
+        const table = (await db.getKonyv()).rows;
+        const bestSeller10 = (await db.nepszeru_konyvek(10)).rows[0][0];
 
         return res.render('index', {
             table,
+            bestSeller10
         });
     });
 
@@ -97,14 +99,15 @@ module.exports = function(app) {
                 return res.render('kosar.ejs');
             }
             const array = JSON.parse(jsonStr);
-            var konyvek = []
+            let konyvek = []
             const dbs = []
 
             for (let i = 0; i < array.length; i++) {
-                const konyv = await db.getKonyvByISBN(array[i].isbn)
+                const konyv = (await db.getKonyvByISBN(array[i].isbn)).rows[0]
                 dbs.push(array[i].darab)
                 konyvek.push(konyv)
             }
+
             return res.render('kosar.ejs', {
                 konyvek,
                 darabszam: dbs
@@ -118,19 +121,19 @@ module.exports = function(app) {
         const array = JSON.parse(jsonStr);
         const konyvek = []
         const dbs = []
-        let vegosszeg = 0
+        let konyvosszeg = 0
 
         for (let i = 0; i < array.length; i++) {
-            const konyv = await db.getKonyvByISBN(array[i].isbn)
+            const konyv = (await db.getKonyvByISBN(array[i].isbn)).rows[0]
             dbs.push(array[i].darab)
             konyvek.push(konyv)
-            vegosszeg += array[i].darab * konyv['rows'][0][3]
+            konyvosszeg += array[i].darab * konyv[4]
         }
 
         return res.render('rendeles.ejs', {
             konyvek,
             darabszam: dbs,
-            vegosszeg
+            konyvosszeg
         })
 
     });
@@ -221,7 +224,7 @@ module.exports = function(app) {
 
                 for (let i = 0; i < array.length; i++) {
                     if (isbn === array[i].isbn) {
-                        array[i].darab += 1 * 1;
+                        array[i].darab += 1;
                         van = true;
                     }
                 }
@@ -241,17 +244,20 @@ module.exports = function(app) {
         return res.redirect('index');
     })
 
-    app.get("/item", async (req, res) => {
+    app.post("/item", async (req, res) => {
         let { mennyi, isbn } = req.query;
         const jsonStr = req.cookies.isbn;
-        const array = JSON.parse(jsonStr);
+        let array = JSON.parse(jsonStr);
 
         for (let i = 0; i < array.length; i++) {
-            if (isbn === array[i].isbn && array[i].darab >= 1) {
-                if(mennyi==-1 && array[i].darab == 1){
-                    continue;
-                }
+            if (isbn === array[i].isbn) {
                 array[i].darab += mennyi * 1;
+
+                if(array[i].darab === 0){
+                    array = array.filter(item => item !== array[i])
+                }
+
+                break;
             }
         }
         const updatedJsonStr = JSON.stringify(array);
@@ -259,15 +265,30 @@ module.exports = function(app) {
 
         return res.redirect('/kosar');
     });
-    app.get('/rendel', restrict_only_user, async (req, res) => {
+
+    app.post("/deleteItem", async (req, res) => {
+        let { isbn } = req.query;
+        const jsonStr = req.cookies.isbn;
+        let array = JSON.parse(jsonStr);
+
+        array = array.filter(item => item.isbn !== isbn)
+
+        const updatedJsonStr = JSON.stringify(array);
+        res.cookie('isbn', updatedJsonStr);
+
+        return res.redirect('/kosar');
+    });
+
+    app.post('/rendel', restrict_only_user, async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
-        let user = await db.getFiokByEmail(req.body.curr_email);
-        for(let i of array) {
-            let konyv = await db.getKonyvByISBN(i.isbn);
-            await db.setRendeles(i.isbn,user['rows'][0][0],konyv['rows'][0][3], i.darab);
+        let user = (await db.getFiokByEmail(req.body.curr_email)).rows[0];
 
+        for(let i of array) {
+            let konyv = (await db.getKonyvByISBN(i.isbn)).rows[0];
+            await db.setRendeles(i.isbn, user[0], konyv[4], i.darab);
         }
+
         res.cookie('isbn', { expires: Date.now() });
         res.redirect('index');
     });

@@ -3,23 +3,115 @@
     <%- include('includes/head') %>
     <%- include('includes/header', {oldal: oldal}) %>
     <body>
+        <section class="mt-7 space-bottom-lg-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="mb-5 mb-xl-0">
+                            <div class="bg-img-hero img-fluid height-500" style="background-image: url('/index1.jpg');">
+                                <div class="px-6 space-top-3 space-bottom-4 mb-4 mb-lg-0">
+                                    <div class="pt-lg-4 pb-lg-3">
+                                        <p class="text-uppercase text-gray-400 font-weight-bold">AZ OÁZIS SZERKEZTŐITŐL</p>
+                                        <h2 class="font-size-10 mb-4 pb-1">
+                                            <span class="font-weight-regular d-block mb-1">Lépj be velünk</span>
+                                            <span class="d-block font-weight-regular"> a könyvolvasás új <span class="font-weight-bold">Univerzumába</span></span>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="row row-cols-md-2">
+                            <div class="col">
+                                <div class="mb-4">
+                                    <div class="bg-img-hero img-fluid pt-4 space-bottom-3 px-5" style="background-image: url('/index2.jpg');">
+                                        <div class="mb-0">
+                                            <div class="mb-4">
+                                                <span class="font-weight-medium h6 text-gray-400">BESTSELLEREK</span>
+                                            </div>
+                                            <h6 class="font-size-4 pb-0 mb-0">Böngésszen a legfelkapotabb</h6>
+                                            <h6 class="font-size-4 pb-0 mb-0">írónk között</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-4">
+                                    <div class="bg-img-hero img-fluid bg-gradient-gray-780" style="background-image: url('/index3.jpg');">
+                                        <div class="p-3 mb-5 mb-md-0 position-relative">
+                                            <div class="m-1">
+                                                <div class="border__1 pb-3">
+                                                    <div class="p-3 px-lg-5 py-md-5">
+                                                        <div class="text-center my-lg-1">
+                                                            <h6 class="font-weight-bold text-white mb-0">KÖVETKEZŐ NYÁRON</h6>
+                                                            <span class="font-weight-bold font-size-12 text-gray-260">50%</span>
+                                                            <h6 class="font-size-2 text-white mb-0">LEÁRAZÁS</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-5 mb-lg-0">
+                                    <div class="bg-img-hero img-fluid pt-4 space-bottom-3 px-5" style="background-image: url('/index4.jpg');">
+                                        <div class="mb-3 mb-lg-6 mb-xl-3">
+                                            <div class="mb-1">
+                                                <span class="font-weight-medium h6 text-gray-400">LEGFRISSEBJEINK</span>
+                                            </div>
+                                            <h6 class="font-size-4 pb-0 mb-0">Böngésszen a</h6>
+                                            <h6 class="font-size-4 pb-0 mb-0">legújabb, friss</h6>
+                                            <h6 class="font-size-4 pb-0 mb-0">könyveink között</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="bg-primary p-3 mb-5 mb-md-0">
+                                    <div class="m-1">
+                                        <div class="position-relative">
+                                            <div class="border__1 pb-5">
+                                                <div class="py-md-5 py-xl-4 py-wd-5">
+                                                    <div class="text-center mb-lg-1">
+                                                        <h6 class="font-weight-bold text-white mb-3">INGYENES HÁZHOZSZÁLLÍTÁS</h6>
+                                                        <div class="text-lh-sm mb-3">
+                                                            <div class="font-size-4 text-white font-weight-bold">20000 Ft feletti</div>
+                                                            <span class="font-size-4 text-white font-weight-bold">rendelés esetén</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-none d-md-block position-absolute bottom-n14 left-20">
+                                                <i class="flaticon-delivery font-size-15 text-red-1"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div class="container">
             <% if(locals.siker){ %>
                 <p class="fade-out siker">Sikeres bejelentkezés!</p>
             <% } %>
-            <p style="font-size: 5vw; text-align: center">Üdv a weboldalon!</p>
             <div class="row row-cols-3 g-3 align-items-center justify-content-center">
                 <% if(locals.table){ %>
-                    <% for(let i = 0; i < locals.table['rows'].length; i++){ %>
+                    <% for(let i = 0; i < locals.table.length; i++){ %>
 
                         <div class="col d-flex justify-content-center">
                             <div class="card">
-                                <img src="/<%- locals.table['rows'][i][5] %>" alt="kep" style="background-size: contain;" class="card-img-top">
+                                <img src="/<%- locals.table[i][5] %>" alt="kep" width="500px" height="500px" style="background-size: contain;" class="card-img-top">
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= locals.table['rows'][i][0] %></h5>
-                                    <p><%= locals.table['rows'][i][1] %> oldal</p>
-                                    <p><%= locals.table['rows'][i][2] %></p>
-                                    <p><%= locals.table['rows'][i][3] %> Ft</p>
+                                    <h5 class="card-title"><%= locals.table[i][0] %></h5>
+                                    <p><%= locals.table[i][1] %> oldal</p>
+                                    <p><%= locals.table[i][2] %></p>
+                                    <p><%= locals.table[i][3] %> Ft</p>
                                 </div>
 
                                 <% if(locals.curr_role === 1){ %>
@@ -31,7 +123,7 @@
                                     </form>
                                 <% } else if(locals.curr_role === 0) { %>
                                     <form action="/addToKosar" method="post">
-                                        <button type="submit" value="<%= locals.table['rows'][i][4] %>" name="isbn" class="btn btn-secondary" style="margin-left: 72px; width: 100px;">Kosárba</button>
+                                        <button type="submit" value="<%= locals.table[i][4] %>" name="isbn" class="btn btn-secondary" style="margin-left: 72px; width: 100px;">Kosárba</button>
                                     </form>
                                 <% } %>
                             </div>
@@ -46,6 +138,53 @@
                 <% } %>
             </div>
         </div>
+        <section class="space-bottom-2 space-bottom-lg-3">
+            <div class="container">
+                <header class="d-md-flex align-items-md-center justify-content-md-between mb-5">
+                    <h2 class="font-size-7 mb-5 mb-md-0">Bestseller Könyvek</h2>
+                </header>
+                <ul class="js-slick-carousel products border-top border-left border-right list-unstyled my-0" data-pagi-classes="d-lg-none text-center u-slick__pagination mt-3  mb-0 position-absolute right-0 left-0" data-arrows-classes="d-none d-lg-block u-slick__arrow u-slick__arrow-centered--y" data-arrow-left-classes="fas flaticon-back u-slick__arrow-inner u-slick__arrow-inner--left ml-lg-n10" data-arrow-right-classes="fas flaticon-next u-slick__arrow-inner u-slick__arrow-inner--right mr-lg-n10" data-slides-show="5" data-responsive='[{
+                   "breakpoint": 1500,
+                   "settings": {
+                     "slidesToShow": 4
+                   }
+                }, {
+                   "breakpoint": 1199,
+                   "settings": {
+                     "slidesToShow": 3
+                   }
+                }, {
+                   "breakpoint": 554,
+                   "settings": {
+                     "slidesToShow": 2
+                   }
+                }]'>
+                <% if(locals.bestSeller10){ %>
+                    <% for(let i = 0; i < locals.bestSeller10.length; i++){ %>
+                        <li class="product bg-white">
+                            <div class="overflow-hidden p-3 p-md-4d875">
+                                <div class="d-block position-relative">
+                                    <div><img src="/<%= locals.bestSeller10[i][0] %>" width="150px" height="250px" class="d-block mx-auto" alt="kep"></div>
+                                    <div class="product__body pt-3 bg-white">
+                                        <div class="text-uppercase font-size-1 mb-1 text-truncate"><span><%= locals.bestSeller10[i][1] %></span></div>
+                                        <h2 class="h6 text-lh-md mb-1 text-height-1 crop-text-2 h-dark"><%= locals.bestSeller10[i][2] %></h2>
+                                        <div class="font-size-2 mb-1 text-truncate"><span class="text-gray-700"><%= locals.bestSeller10[i][3] %> <%= locals.bestSeller10[i][4] %></span></div>
+                                        <div class="d-flex align-items-center font-weight-medium font-size-3"><span><%= locals.bestSeller10[i][5] %> Ft</span></div>
+                                    </div>
+                                    <div class="product__hover d-flex align-items-center">
+                                        <a href="#" class="text-uppercase text-dark h-dark font-weight-medium mr-auto">
+                                            <span class="product__add-to-cart">KOSÁRBA</span>
+                                            <span class="product__add-to-cart-icon font-size-4"><i class="flaticon-icon-126515"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    <% } %>
+                <% } %>
+                </ul>
+            </div>
+        </section>
+        <%- include('includes/footer') %>
     </body>
-<%#- include('includes/footer') %>
 </html>

@@ -3,48 +3,454 @@
     <%- include('includes/head') %>
     <%- include('includes/header', {oldal: oldal}) %>
     <body>
-        <h1 class="mb-3 text-center">További adatok megadása</h1>
-        <% if(locals.konyvek) { %>
+        <div class="space-bottom-3">
+            <div class="container">
+                <main>
+                    <article>
+                        <header class="space-top-2 space-bottom-1 mb-2">
+                            <h4 class="font-size-7 text-center">Fizetés</h4>
+                        </header>
+                            <form method="post" class="row mt-4" action="/rendel">
+                                <div class="col2-set col-md-6 col-lg-7 col-xl-8 mb-6 mb-md-0" id="customer_details">
+                                    <div class="px-4 pt-5 bg-white border">
+                                        <div>
+                                            <h3 class="mb-4 font-size-3">Számlázási adatok</h3>
+                                            <div class="row">
+                                                <p class="col-lg-6 mb-4d75 form-row form-row-first validate-required">
+                                                    <label for="vezeteknev" class="form-label">Vezetéknév <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="text" class="input-text form-control" required name="vezeteknev" id="vezeteknev" autocomplete="given-name" autofocus="autofocus">
+                                                </p>
+                                                <p class="col-lg-6 mb-4d75 form-row form-row-last validate-required">
+                                                    <label for="keresztnev" class="form-label">Keresztnév <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="text" class="input-text form-control" required name="keresztnev" id="keresztnev" autocomplete="family-name">
+                                                </p>
+                                                <p class="col-12 mb-4d75 form-row form-row-wide address-field update_totals_on_change validate-required">
+                                                    <label for="orszag" class="form-label">Ország <abbr class="required" title="required">*</abbr></label>
+                                                    <select name="orszag" id="orszag" class="form-control select2-hidden-accessible" autocomplete="country" tabindex="-1" aria-hidden="true">
+                                                        <option value="AX">Åland Islands</option>
+                                                        <option value="AF">Afghanistan</option>
+                                                        <option value="AL">Albania</option>
+                                                        <option value="DZ">Algeria</option>
+                                                        <option value="AS">American Samoa</option>
+                                                        <option value="AD">Andorra</option>
+                                                        <option value="AO">Angola</option>
+                                                        <option value="AI">Anguilla</option>
+                                                        <option value="AQ">Antarctica</option>
+                                                        <option value="AG">Antigua and Barbuda</option>
+                                                        <option value="AR">Argentina</option>
+                                                        <option value="AM">Armenia</option>
+                                                        <option value="AW">Aruba</option>
+                                                        <option value="AU">Australia</option>
+                                                        <option value="AT">Austria</option>
+                                                        <option value="AZ">Azerbaijan</option>
+                                                        <option value="BS">Bahamas</option>
+                                                        <option value="BH">Bahrain</option>
+                                                        <option value="BD">Bangladesh</option>
+                                                        <option value="BB">Barbados</option>
+                                                        <option value="BY">Belarus</option>
+                                                        <option value="PW">Belau</option>
+                                                        <option value="BE">Belgium</option>
+                                                        <option value="BZ">Belize</option>
+                                                        <option value="BJ">Benin</option>
+                                                        <option value="BM">Bermuda</option>
+                                                        <option value="BT">Bhutan</option>
+                                                        <option value="BO">Bolivia</option>
+                                                        <option value="BQ">Bonaire, Saint Eustatius and Saba</option>
+                                                        <option value="BA">Bosnia and Herzegovina</option>
+                                                        <option value="BW">Botswana</option>
+                                                        <option value="BV">Bouvet Island</option>
+                                                        <option value="BR">Brazil</option>
+                                                        <option value="IO">British Indian Ocean Territory</option>
+                                                        <option value="VG">British Virgin Islands</option>
+                                                        <option value="BN">Brunei</option>
+                                                        <option value="BG">Bulgaria</option>
+                                                        <option value="BF">Burkina Faso</option>
+                                                        <option value="BI">Burundi</option>
+                                                        <option value="KH">Cambodia</option>
+                                                        <option value="CM">Cameroon</option>
+                                                        <option value="CA">Canada</option>
+                                                        <option value="CV">Cape Verde</option>
+                                                        <option value="KY">Cayman Islands</option>
+                                                        <option value="CF">Central African Republic</option>
+                                                        <option value="TD">Chad</option>
+                                                        <option value="CL">Chile</option>
+                                                        <option value="CN">China</option>
+                                                        <option value="CX">Christmas Island</option>
+                                                        <option value="CC">Cocos (Keeling) Islands</option>
+                                                        <option value="CO">Colombia</option>
+                                                        <option value="KM">Comoros</option>
+                                                        <option value="CG">Congo (Brazzaville)</option>
+                                                        <option value="CD">Congo (Kinshasa)</option>
+                                                        <option value="CK">Cook Islands</option>
+                                                        <option value="CR">Costa Rica</option>
+                                                        <option value="HR">Croatia</option>
+                                                        <option value="CU">Cuba</option>
+                                                        <option value="CW">Curaçao</option>
+                                                        <option value="CY">Cyprus</option>
+                                                        <option value="CZ">Czech Republic</option>
+                                                        <option value="DK">Denmark</option>
+                                                        <option value="DJ">Djibouti</option>
+                                                        <option value="DM">Dominica</option>
+                                                        <option value="DO">Dominican Republic</option>
+                                                        <option value="EC">Ecuador</option>
+                                                        <option value="EG">Egypt</option>
+                                                        <option value="SV">El Salvador</option>
+                                                        <option value="GQ">Equatorial Guinea</option>
+                                                        <option value="ER">Eritrea</option>
+                                                        <option value="EE">Estonia</option>
+                                                        <option value="ET">Ethiopia</option>
+                                                        <option value="FK">Falkland Islands</option>
+                                                        <option value="FO">Faroe Islands</option>
+                                                        <option value="FJ">Fiji</option>
+                                                        <option value="FI">Finland</option>
+                                                        <option value="FR">France</option>
+                                                        <option value="GF">French Guiana</option>
+                                                        <option value="PF">French Polynesia</option>
+                                                        <option value="TF">French Southern Territories</option>
+                                                        <option value="GA">Gabon</option>
+                                                        <option value="GM">Gambia</option>
+                                                        <option value="GE">Georgia</option>
+                                                        <option value="DE">Germany</option>
+                                                        <option value="GH">Ghana</option>
+                                                        <option value="GI">Gibraltar</option>
+                                                        <option value="GR">Greece</option>
+                                                        <option value="GL">Greenland</option>
+                                                        <option value="GD">Grenada</option>
+                                                        <option value="GP">Guadeloupe</option>
+                                                        <option value="GU">Guam</option>
+                                                        <option value="GT">Guatemala</option>
+                                                        <option value="GG">Guernsey</option>
+                                                        <option value="GN">Guinea</option>
+                                                        <option value="GW">Guinea-Bissau</option>
+                                                        <option value="GY">Guyana</option>
+                                                        <option value="HT">Haiti</option>
+                                                        <option value="HM">Heard Island and McDonald Islands</option>
+                                                        <option value="HN">Honduras</option>
+                                                        <option value="HK">Hong Kong</option>
+                                                        <option value="HU">Hungary</option>
+                                                        <option value="IS">Iceland</option>
+                                                        <option value="IN">India</option>
+                                                        <option value="ID">Indonesia</option>
+                                                        <option value="IR">Iran</option>
+                                                        <option value="IQ">Iraq</option>
+                                                        <option value="IE">Ireland</option>
+                                                        <option value="IM">Isle of Man</option>
+                                                        <option value="IL">Israel</option>
+                                                        <option value="IT">Italy</option>
+                                                        <option value="CI">Ivory Coast</option>
+                                                        <option value="JM">Jamaica</option>
+                                                        <option value="JP">Japan</option>
+                                                        <option value="JE">Jersey</option>
+                                                        <option value="JO">Jordan</option>
+                                                        <option value="KZ">Kazakhstan</option>
+                                                        <option value="KE">Kenya</option>
+                                                        <option value="KI">Kiribati</option>
+                                                        <option value="KW">Kuwait</option>
+                                                        <option value="KG">Kyrgyzstan</option>
+                                                        <option value="LA">Laos</option>
+                                                        <option value="LV">Latvia</option>
+                                                        <option value="LB">Lebanon</option>
+                                                        <option value="LS">Lesotho</option>
+                                                        <option value="LR">Liberia</option>
+                                                        <option value="LY">Libya</option>
+                                                        <option value="LI">Liechtenstein</option>
+                                                        <option value="LT">Lithuania</option>
+                                                        <option value="LU">Luxembourg</option>
+                                                        <option value="MO">Macao S.A.R., China</option>
+                                                        <option value="MK">Macedonia</option>
+                                                        <option value="MG">Madagascar</option>
+                                                        <option value="MW">Malawi</option>
+                                                        <option value="MY">Malaysia</option>
+                                                        <option value="MV">Maldives</option>
+                                                        <option value="ML">Mali</option>
+                                                        <option value="MT">Malta</option>
+                                                        <option value="MH">Marshall Islands</option>
+                                                        <option value="MQ">Martinique</option>
+                                                        <option value="MR">Mauritania</option>
+                                                        <option value="MU">Mauritius</option>
+                                                        <option value="YT">Mayotte</option>
+                                                        <option value="MX">Mexico</option>
+                                                        <option value="FM">Micronesia</option>
+                                                        <option value="MD">Moldova</option>
+                                                        <option value="MC">Monaco</option>
+                                                        <option value="MN">Mongolia</option>
+                                                        <option value="ME">Montenegro</option>
+                                                        <option value="MS">Montserrat</option>
+                                                        <option value="MA">Morocco</option>
+                                                        <option value="MZ">Mozambique</option>
+                                                        <option value="MM">Myanmar</option>
+                                                        <option value="NA">Namibia</option>
+                                                        <option value="NR">Nauru</option>
+                                                        <option value="NP">Nepal</option>
+                                                        <option value="NL">Netherlands</option>
+                                                        <option value="NC">New Caledonia</option>
+                                                        <option value="NZ">New Zealand</option>
+                                                        <option value="NI">Nicaragua</option>
+                                                        <option value="NE">Niger</option>
+                                                        <option value="NG">Nigeria</option>
+                                                        <option value="NU">Niue</option>
+                                                        <option value="NF">Norfolk Island</option>
+                                                        <option value="KP">North Korea</option>
+                                                        <option value="MP">Northern Mariana Islands</option>
+                                                        <option value="NO">Norway</option>
+                                                        <option value="OM">Oman</option>
+                                                        <option value="PK">Pakistan</option>
+                                                        <option value="PS">Palestinian Territory</option>
+                                                        <option value="PA">Panama</option>
+                                                        <option value="PG">Papua New Guinea</option>
+                                                        <option value="PY">Paraguay</option>
+                                                        <option value="PE">Peru</option>
+                                                        <option value="PH">Philippines</option>
+                                                        <option value="PN">Pitcairn</option>
+                                                        <option value="PL">Poland</option>
+                                                        <option value="PT">Portugal</option>
+                                                        <option value="PR">Puerto Rico</option>
+                                                        <option value="QA">Qatar</option>
+                                                        <option value="RE">Reunion</option>
+                                                        <option value="RO">Romania</option>
+                                                        <option value="RU">Russia</option>
+                                                        <option value="RW">Rwanda</option>
+                                                        <option value="ST">São Tomé and Príncipe</option>
+                                                        <option value="BL">Saint Barthélemy</option>
+                                                        <option value="SH">Saint Helena</option>
+                                                        <option value="KN">Saint Kitts and Nevis</option>
+                                                        <option value="LC">Saint Lucia</option>
+                                                        <option value="SX">Saint Martin (Dutch part)</option>
+                                                        <option value="MF">Saint Martin (French part)</option>
+                                                        <option value="PM">Saint Pierre and Miquelon</option>
+                                                        <option value="VC">Saint Vincent and the Grenadines</option>
+                                                        <option value="WS">Samoa</option>
+                                                        <option value="SM">San Marino</option>
+                                                        <option value="SA">Saudi Arabia</option>
+                                                        <option value="SN">Senegal</option>
+                                                        <option value="RS">Serbia</option>
+                                                        <option value="SC">Seychelles</option>
+                                                        <option value="SL">Sierra Leone</option>
+                                                        <option value="SG">Singapore</option>
+                                                        <option value="SK">Slovakia</option>
+                                                        <option value="SI">Slovenia</option>
+                                                        <option value="SB">Solomon Islands</option>
+                                                        <option value="SO">Somalia</option>
+                                                        <option value="ZA">South Africa</option>
+                                                        <option value="GS">South Georgia/Sandwich Islands</option>
+                                                        <option value="KR">South Korea</option>
+                                                        <option value="SS">South Sudan</option>
+                                                        <option value="ES">Spain</option>
+                                                        <option value="LK">Sri Lanka</option>
+                                                        <option value="SD">Sudan</option>
+                                                        <option value="SR">Suriname</option>
+                                                        <option value="SJ">Svalbard and Jan Mayen</option>
+                                                        <option value="SZ">Swaziland</option>
+                                                        <option value="SE">Sweden</option>
+                                                        <option value="CH">Switzerland</option>
+                                                        <option value="SY">Syria</option>
+                                                        <option value="TW">Taiwan</option>
+                                                        <option value="TJ">Tajikistan</option>
+                                                        <option value="TZ">Tanzania</option>
+                                                        <option value="TH">Thailand</option>
+                                                        <option value="TL">Timor-Leste</option>
+                                                        <option value="TG">Togo</option>
+                                                        <option value="TK">Tokelau</option>
+                                                        <option value="TO">Tonga</option>
+                                                        <option value="TT">Trinidad and Tobago</option>
+                                                        <option value="TN">Tunisia</option>
+                                                        <option value="TR">Turkey</option>
+                                                        <option value="TM">Turkmenistan</option>
+                                                        <option value="TC">Turks and Caicos Islands</option>
+                                                        <option value="TV">Tuvalu</option>
+                                                        <option value="UG">Uganda</option>
+                                                        <option value="UA">Ukraine</option>
+                                                        <option value="AE">United Arab Emirates</option>
+                                                        <option value="GB" selected="selected">United Kingdom</option>
+                                                        <option value="US">United States</option>
+                                                        <option value="UY">Uruguay</option>
+                                                        <option value="UZ">Uzbekistan</option>
+                                                        <option value="VU">Vanuatu</option>
+                                                        <option value="VA">Vatican</option>
+                                                        <option value="VE">Venezuela</option>
+                                                        <option value="VN">Vietnam</option>
+                                                        <option value="WF">Wallis and Futuna</option>
+                                                        <option value="EH">Western Sahara</option>
+                                                        <option value="YE">Yemen</option>
+                                                        <option value="ZM">Zambia</option>
+                                                        <option value="ZW">Zimbabwe</option>
+                                                    </select>
+                                                </p>
+                                                <p class="col-12 mb-3 form-row form-row-wide address-field validate-required">
+                                                    <label for="utca" class="form-label">Utca / Házszám <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="text" class="input-text form-control" required name="utca" id="utca" autocomplete="address-line1">
+                                                </p>
+                                                <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-required">
+                                                    <label for="varos" class="form-label">Város / Község / Falu<abbr class="required" title="required">*</abbr></label>
+                                                    <input type="text" class="input-text form-control" required name="varos" id="varos" autocomplete="address-level2">
+                                                </p>
+                                                <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-postcode validate-required">
+                                                    <label for="iranyitoszam" class="form-label">Irányítószám <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="text" class="input-text form-control" required name="iranyitoszam" id="iranyitoszam" autocomplete="postal-code">
+                                                </p>
+                                                <p class="col-12 mb-4d75 form-row form-row-first validate-required validate-phone">
+                                                    <label for="telefonszam" class="form-label">Telefonszám <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="tel" class="input-text form-control" required name="telefonszam" id="telefonszam" autocomplete="tel">
+                                                </p>
+                                                <p class="col-12 mb-4d75 form-row form-row-last validate-required validate-email">
+                                                    <label for="email" class="form-label">Email cím <abbr class="required" title="required">*</abbr></label>
+                                                    <input type="email" class="input-text form-control" required name="email" id="email" autocomplete="email">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="px-4 pt-5 bg-white border border-top-0 mt-n-one">
+                                        <div>
+                                            <h3 class="mb-4 font-size-3">További információ</h3>
+                                            <div>
+                                                <p class="col-12 mb-4d75 px-0 form-row notes">
+                                                    <label for="megjegyzes" class="form-label">Egyéb rendelési üzenet (opcionális)</label>
+                                                    <textarea name="megjegyzes" class="input-text form-control" id="megjegyzes" placeholder="Megjegyzések a rendeléssel kapcsolatban, pl. speciális szállítási kérés." rows="8" cols="5"></textarea>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="order_review" class="col-md-6 col-lg-5 col-xl-4 woocommerce-checkout-review-order">
+                                    <div id="checkoutAccordion" class="border border-gray-900 bg-white mb-5">
+                                        <div class="p-4d875 border">
+                                            <div id="checkoutHeadingOnee" class="checkout-head">
+                                                <a href="#" class="text-dark d-flex align-items-center justify-content-between collapsed" data-toggle="collapse" data-target="#checkoutCollapseOnee" aria-expanded="false" aria-controls="checkoutCollapseOnee">
+                                                    <h3 class="checkout-title mb-0 font-weight-medium font-size-3">Rendelésed</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z"></path>
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="checkoutCollapseOnee" class="mt-4 checkout-content collapse" aria-labelledby="checkoutHeadingOnee" data-parent="#checkoutAccordion" style="">
+                                                <table class="shop_table woocommerce-checkout-review-order-table">
+                                                    <tbody>
+                                                        <% for(let i = 0; i < locals.konyvek.length; i++){ %>
+                                                            <tr>
+                                                                <td><%= locals.konyvek[i][1] %>&nbsp; <strong>× <%= locals.darabszam[i] %></strong></td>
+                                                                <td><%= locals.konyvek[i][4] * locals.darabszam[i] %> Ft</td>
+                                                            </tr>
+                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="p-4d875 border">
+                                            <div id="checkoutHeadingOne" class="checkout-head">
+                                                <a href="#" class="text-dark d-flex align-items-center justify-content-between collapsed" data-toggle="collapse" data-target="#checkoutCollapseOne" aria-expanded="false" aria-controls="checkoutCollapseOne">
+                                                    <h3 class="checkout-title mb-0 font-weight-medium font-size-3">Összegzés</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z"></path>
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="checkoutCollapseOne" class="mt-4 checkout-content collapse" aria-labelledby="checkoutHeadingOne" data-parent="#checkoutAccordion" style="">
+                                                <table class="shop_table shop_table_responsive">
+                                                    <tbody>
+                                                    <tr class="checkout-subtotal">
+                                                        <th>Részösszeg</th>
+                                                        <td data-title="Subtotal"><%= locals.konyvosszeg %> Ft</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="p-4d875 border">
+                                            <div id="checkoutHeadingTwo" class="checkout-head">
+                                                <a href="#" class="text-dark d-flex align-items-center justify-content-between" data-toggle="collapse" data-target="#checkoutCollapseTwo" aria-expanded="true" aria-controls="checkoutCollapseTwo">
+                                                    <h3 class="checkout-title mb-0 font-weight-medium font-size-3">Szállítás</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z"></path>
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="checkoutCollapseTwo" class="mt-4 checkout-content collapse show" aria-labelledby="checkoutHeadingTwo" data-parent="#checkoutAccordion" style="">
 
-            <table class="table align-middle w-75 mx-auto">
-
-                <tr>
-                    <th>Név</th>
-                    <th>Oldalszám</th>
-                    <th>Kiadó</th>
-                    <th>Ár</th>
-                </tr>
-                <% for(let i = 0; i < locals.konyvek.length; i++){ %>
-                    <% for(let j = 0; j < locals.konyvek[i]['rows'].length; j++){ %>
-                        <tr>
-                            <% for(let k = 0;k < locals.konyvek[i]['rows'][j].length;k++) { %>
-                                <td>
-                                    <%= locals.konyvek[i]['rows'][j][k] %>
-                                </td>
-                            <% } %>
-                            <td>
-                                <%= locals.darabszam[i] %> darab
-                            </td>
-                        </tr>
-                    <% } %>
-                <% } %>
-            </table>
-        <% } %>
-        <p><%= locals.vegosszeg %></p>
-        <form action="/rendel">
-            <div class="form-group" style="width: 300px; margin: auto;">
-                <input type="text" name="varos" required placeholder="Város" class="form-control text-center" style="margin-bottom: 5px;">
-                <input type="text" name="irszam" required placeholder="Irányítószám" class="form-control text-center" style="margin-bottom: 5px;">
-                <input type="text" name="utca" required placeholder="Utca" class="form-control text-center"style=" margin-bottom: 5px;">
-                <input type="text" name="hazszam" required placeholder="Házszám" class="form-control text-center" style="margin-bottom: 5px;">
-                <label> Fizetési lehetőségek: </label>
-                <select name="fizetes" id="fizetes" class="form-select mb-3">
-                    <option value="Paypal">PayPal</option>
-                    <option value="Utanvét">Utánvétel</option>
-                    <option value="Bankkártya" selected>Bankkártya</option>
-                </select>
+                                                <ul id="shipping_method">
+                                                    <li>
+                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate1" value="flat_rate:1" class="shipping_method">
+                                                        <label for="shipping_method_0_flat_rate1">Átvétel a boltunkba: Ingyenes</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate2" value="flat_rate:2" class="shipping_method" checked="checked">
+                                                        <label for="shipping_method_0_flat_rate2">Átvevőhelyeken: <span class="woocommerce-Price-amount amount">1000 Ft</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate3" value="flat_rate:2" class="shipping_method" checked="checked">
+                                                        <label for="shipping_method_0_flat_rate3">Házhozszállítás: <span class="woocommerce-Price-amount amount">2000 Ft</span></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="p-4d875 border">
+                                            <div id="checkoutHeadingThreee" class="checkout-head">
+                                                <a href="#" class="text-dark d-flex align-items-center justify-content-between collapsed" data-toggle="collapse" data-target="#checkoutCollapseThreee" aria-expanded="false" aria-controls="checkoutCollapseThreee">
+                                                    <h3 class="checkout-title mb-0 font-weight-medium font-size-3">Fizetési lehetőségek</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z"></path>
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="checkoutCollapseThreee" class="mt-4 checkout-content collapse" aria-labelledby="checkoutHeadingThreee" data-parent="#checkoutAccordion" style="">
+                                                <div id="payment" class="woocommerce-checkout-payment">
+                                                    <ul class="wc_payment_methods payment_methods methods">
+                                                        <li class="wc_payment_method payment_method_bacs">
+                                                            <input id="payment_method_bacs" type="radio" class="input-radio" required name="payment_method" value="bacs" data-order_button_text="">
+                                                            <label for="payment_method_bacs">Banki átutalás </label>
+                                                            <div class="payment_box payment_method_bacs" style="display: block;">
+                                                                <p>Fizesse be közvetlenül a bankszámlánkra. Kérjük, hogy a fizetési megjegyzésbe írja bele a rendelési azonosítóját. Megrendelését nem szállítjuk ki, amíg az összeg meg nem érkezett számlánkra.</p>
+                                                            </div>
+                                                        </li>
+                                                        <li class="wc_payment_method payment_method_cheque">
+                                                            <input id="payment_method_cheque" type="radio" class="input-radio" required name="payment_method" value="cheque" data-order_button_text="">
+                                                            <label for="payment_method_cheque">Fizetési csekkel </label>
+                                                            <div class="payment_box payment_method_cheque" style="display: block;">
+                                                                <p>Kérjük, küldjön csekket egyik üzletünkhöz a megfelelően adatokkal. Tartalmazza a nevét, utcáját, városát, megyéjét és irányítószámát.</p>
+                                                            </div>
+                                                        </li>
+                                                        <li class="wc_payment_method payment_method_cod">
+                                                            <input id="payment_method_cod" type="radio" class="input-radio" required name="payment_method" value="cod" checked="checked" data-order_button_text="">
+                                                            <label for="payment_method_cod">Fizetés átvételnél </label>
+                                                            <div class="payment_box payment_method_cod" style="display: block;">
+                                                                <p>Fizetés utánvétnél készpénzzel.</p>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-4d875 border">
+                                            <table class="shop_table shop_table_responsive">
+                                                <tbody>
+                                                    <tr class="order-total">
+                                                        <th>Végösszeg</th>
+                                                        <td data-title="Total"><strong><span><%= locals.konyvosszeg %> Ft</span></strong> </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <button type="submit" class="button alt btn btn-dark btn-block rounded-0 py-4">Megrendelés</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </article>
+                </main>
             </div>
-            <button type="submit" class="btn btn-secondary" style="margin-left: 47.5%;">Megrendel</button>
-        </form>
+        </div>
+        <%- include('includes/footer') %>
     </body>
 </html>

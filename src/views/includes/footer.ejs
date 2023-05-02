@@ -1,27 +1,132 @@
-<footer>
-    <div class="container-fluid bg-light" style="width: 100%; height:auto; position: relative;">
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
-                <div class="mx-auto" style="width: 350px;">
-                    <h3 class="text-black">Elérhetőségeink:</h3>
-                    <ul>
-                        <li class="text-black">Szeged Pelda utca 8.</li>
-                        <li class="text-black">+36 123 4567</li>
-                        <li class="text-black">fullos@etterem.com</li>
-                    </ul>
+<div class="border-top space-1d625 mt-10">
+    <div class="container">
+        <ul class="list-unstyled my-0 d-flex align-items-center justify-content-xl-between overflow-auto overflow-xl-visible">
+            <li class="flex-shrink-0 flex-xl-shrink-1">
+                <div class="media">
+                    <div class="font-size-14 text-primary text-lh-xs">
+                        <i class="glyph-icon flaticon-delivery"></i>
+                    </div>
+                    <div class="media-body ml-4">
+                        <h4 class="font-size-3">Ingyenes Szállítás</h4>
+                        <p class="m-0">20000 Ft felett</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mx-auto" style="width: 350px;">
-                    <h3 class="text-black">Nyitva tartás:</h3>
-                    <ul>
-                        <li class="text-black">H-P: 8:00 - 17:00</li>
-                        <li class="text-black">SZ: 8:00 - 16:00</li>
-                        <li class="text-black">V: ZÁRVA</li>
-                    </ul>
+            </li>
+            <li class="flex-shrink-0 flex-xl-shrink-1 mx-4 mx-xl-0 border-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="flex-shrink-0 flex-xl-shrink-1">
+                <div class="media">
+                    <div class="font-size-14 text-primary text-lh-xs">
+                        <i class="glyph-icon flaticon-credit"></i>
+                    </div>
+                    <div class="media-body ml-4">
+                        <h4 class="font-size-3">Biztonságos Fizetés</h4>
+                        <p class="m-0">100%-ban megbízható</p>
+                    </div>
+                </div>
+            </li>
+            <li class="flex-shrink-0 flex-xl-shrink-1 mx-4 mx-xl-0 border-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="flex-shrink-0 flex-xl-shrink-1">
+                <div class="media">
+                    <div class="font-size-14 text-primary text-lh-xs">
+                        <i class="glyph-icon flaticon-warranty"></i>
+                    </div>
+                    <div class="media-body ml-4">
+                        <h4 class="font-size-3">Pénz Vissztérítés</h4>
+                        <p class="m-0">30 napon belül</p>
+                    </div>
+                </div>
+            </li>
+            <li class="flex-shrink-0 flex-xl-shrink-1 mx-4 mx-xl-0 border-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="flex-shrink-0 flex-xl-shrink-1">
+                <div class="media">
+                    <div class="font-size-14 text-primary text-lh-xs">
+                        <i class="glyph-icon flaticon-help"></i>
+                    </div>
+                    <div class="media-body ml-4">
+                        <h4 class="font-size-3">24/7 Ügyfélszolgálat</h4>
+                        <p class="m-0">1 Munkanapon belül</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<footer>
+    <div class="border-top">
+        <div class="py-5 bg-gray-200">
+            <div class="container">
+                <div class="d-lg-flex text-center text-lg-left justify-content-between align-items-center">
+                    <p class="mb-3 mb-lg-0 font-size-2">©2023 Oázis könyvesbolt. Minden jogot fenntartunk.</p>
+                    <div class="d-lg-flex justify-content-xl-end align-items-center">
+                        <div class="mb-4 mb-lg-0">
+                            <img class="img-fluid" src="/fizetes.png" alt="fizetes">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <p class="copyright">&copy; Minden jog fenntartva</p>
     </div>
 </footer>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap-select.min.js"></script>
+<script src="/js/jquery.zeynep.js"></script>
+<script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/js/slick.min.js"></script>
+
+<script src="/js/hs.core.js"></script>
+<script src="/js/hs.unfold.js"></script>
+<script src="/js/hs.malihu-scrollbar.js"></script>
+<script src="/js/hs.slick-carousel.js"></script>
+<script src="/js/hs.show-animation.js"></script>
+<script src="/js/hs.selectpicker.js"></script>
+
+<script>
+    $(document).on('ready', function () {
+        // initialization of unfold component
+        $.HSCore.components.HSUnfold.init($('[data-unfold-target]'));
+
+        // initialization of malihu scrollbar
+        $.HSCore.components.HSMalihuScrollBar.init($('.js-scrollbar'));
+
+        // initialization of slick carousel
+        $.HSCore.components.HSSlickCarousel.init('.js-slick-carousel');
+
+        // initialization of show animations
+        $.HSCore.components.HSShowAnimation.init('.js-animation-link');
+
+        // init zeynepjs
+        var zeynep = $('.zeynep').zeynep({
+            onClosed: function () {
+                // enable main wrapper element clicks on any its children element
+                $("body main").attr("style", "");
+
+                console.log('the side menu is closed.');
+            },
+            onOpened: function () {
+                // disable main wrapper element clicks on any its children element
+                $("body main").attr("style", "pointer-events: none;");
+
+                console.log('the side menu is opened.');
+            }
+        });
+
+        // handle zeynep overlay click
+        $(".zeynep-overlay").click(function () {
+            zeynep.close();
+        });
+
+        // open side menu if the button is clicked
+        $(".cat-menu").click(function () {
+            if ($("html").hasClass("zeynep-opened")) {
+                zeynep.close();
+            } else {
+                zeynep.open();
+            }
+        });
+    });
+</script>
