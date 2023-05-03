@@ -1,4 +1,5 @@
 const query = require("./common").query;
+const queryWithRollback = require("./common").queryWithRollback;
 
 exports.getFiok = async () => {
     return await query(`SELECT EMAIL as "e-mail", concat(concat(keresztnev, ' '), vezeteknev) as nev  FROM FIOK`);
@@ -24,8 +25,24 @@ exports.getSzerzo = async () => {
     return await query(`SELECT id, concat(concat(vezeteknev, ' '), keresztnev) as Név FROM szerzo`);
 }
 
-exports.setRendeles = async (isbn, fiokid, osszeg, darab) => {
-    return await query(`INSERT INTO RENDELES(ISBN, FIOK_ID, OSSZEG, DARAB) VALUES(:isbn, :fiokid, :osszeg, :darab)`, [isbn, fiokid, osszeg, darab]);
+exports.setRendeles = async (fiokid, osszeg) => {
+    return await query(`INSERT INTO RENDELES(FIOK_ID, OSSZEG) VALUES(:fiokid, :osszeg)`, [fiokid, osszeg]);
+}
+
+exports.deleteRendelesOnFail = async () => {
+    return await query(`DELETE FROM RENDELES WHERE ID = (SELECT MAX(ID) FROM RENDELES)`);
+}
+
+exports.queryForRendelesiTetelek = (rendeles_id, isbn, darab) => {
+    return `INSERT INTO RENDELESI_TETELEK(RENDELES_ID, ISBN, DARAB) VALUES(${rendeles_id}, ${isbn}, ${darab})`;
+}
+
+exports.getLegujabbRendeles = async () => {
+    return await query(`SELECT MAX(ID) FROM RENDELES`);
+}
+
+exports.setRendelesVeg = async (queries) => {
+    return await queryWithRollback(queries);
 }
 
 exports.getKepByISBN = async (isbn) => {
@@ -52,12 +69,12 @@ exports.konyvszam_szerzo_szerint = async(vnev, knev) => {
     return await query(`SELECT konyvszam_szerzo_szerint(:vnev,:knev) from DUAL`,[vnev, knev]);
 }
 
-exports.szerzo_bevetel = async(vnev,knev) => {
-    return await query(`SELECT szerzo_bevetel(:vnev,:knev) from DUAL`, [vnev, knev]);
+exports.legkelendobb_szerzo_konyvei = async(darab) => {
+    return await query(`SELECT szerzo_bevetel(:darab) from DUAL`, [darab]);
 }
 
-exports.szallitasi_datum = async() => {
-    return await query(`SELECT SZALLITASI_IDO() FROM DUAL`);
+exports.szallitasi_ido = async() => {
+    return await query(`SELECT szallitasi_ido() FROM DUAL`);
 }
 
 exports.ujjanon_konyvek = async(nap) => {
@@ -70,32 +87,31 @@ exports.nepszeru_konyvek = async(darab) => {
 
 //lekerdezesek
 exports.bestSzerzo = async() => {
-    return await query(`SELECT VEZETEKNEV, KERESZTNEV FROM IRTA, SZERZO WHERE IRTA.ISBN = 
-    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
-    AND IRTA.SZERZO_ID = SZERZO.ID`);
+    return await query(`SELECT VEZETEKNEV, KERESZTNEV FROM IRTA, SZERZO, KONYV WHERE KONYV.ISBN = 
+    (SELECT ISBN FROM RENDELESI_TETELEK GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    AND KONYV.ISBN = IRTA.ISBN AND IRTA.SZERZO_ID = SZERZO.ID`);
 }
 
 exports.bestKategoria = async() => {
     return await query(`SELECT KATEGORIA.NEV FROM KATEGORIA, KONYV WHERE KONYV.ISBN = 
-    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    (SELECT ISBN FROM RENDELESI_TETELEK GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY)
     AND KATEGORIA.ID = KONYV.KATEGORIA_ID`);
 }
 
 exports.bestKiado = async() => {
     return await query(`SELECT KIADO.NEV FROM KIADO, KONYV WHERE KONYV.ISBN = 
-    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    (SELECT ISBN FROM RENDELESI_TETELEK GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY)
     AND KIADO.ID = KONYV.KIADO_ID`);
 }
 
 exports.bestUserek = async() => {
     return await query(`SELECT VEZETEKNEV, KERESZTNEV FROM FIOK WHERE FIOK.ID IN 
-    (SELECT FIOK_ID FROM RENDELES GROUP BY FIOK_ID ORDER BY SUM(DARAB) DESC 
-    FETCH FIRST 2 ROWS ONLY)`);
+    (SELECT FIOK_ID FROM RENDELES GROUP BY FIOK_ID ORDER BY COUNT(*) DESC FETCH FIRST 2 ROWS ONLY)`);
 }
 
 exports.utoloDarabok = async() => {
     return await query(`SELECT KONYV.NEV, SZAM FROM KONYV INNER JOIN 
-    (SELECT ISBN AS BELSO_ISBN, SUM(DARABSZAM) AS SZAM FROM ARUL GROUP BY ISBN HAVING SUM(DARABSZAM) > 0 ORDER BY 
+    (SELECT ISBN AS BELSO_ISBN, SUM(DARABSZAM) AS SZAM FROM ARUL GROUP BY ISBN HAVING SUM(DARABSZAM) > 0 AND SUM(DARABSZAM) < 3 ORDER BY 
     SUM(DARABSZAM) ASC FETCH FIRST 5 ROWS ONLY) ON KONYV.ISBN = BELSO_ISBN`);
 }
 
@@ -108,7 +124,7 @@ exports.elfogyott = async() => {
 exports.bestKategoriabestSeller = async() => {
     return await query(`SELECT KONYV.NEV, KIADO.NEV FROM KIADO, KONYV WHERE KONYV.KATEGORIA_ID = 
     (SELECT KATEGORIA.ID FROM KATEGORIA, KONYV WHERE KONYV.ISBN = 
-    (SELECT ISBN FROM RENDELES GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY) 
+    (SELECT ISBN FROM RENDELESI_TETELEK GROUP BY ISBN ORDER BY SUM(DARAB) DESC FETCH FIRST 1 ROWS ONLY)
     AND KATEGORIA.ID = KONYV.KATEGORIA_ID) AND KONYV.KIADO_ID = KIADO.ID FETCH FIRST 3 ROWS ONLY`);
 }
 

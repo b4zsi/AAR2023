@@ -48,10 +48,11 @@ exports.getBoltById = async (id) => {
 async function query (query, list = []) {
     let result;
     let conn;
+
     try {
         conn = await db.getConnection(dbConfig);
         result = await conn.execute(query, list);
-
+        await conn.commit();
     } catch (err) {
         console.log(err);
     } finally {
@@ -67,4 +68,35 @@ async function query (query, list = []) {
     return result;
 }
 
+async function queryWithRollback (queries) {
+    let conn;
+    let code = 0;
+
+    try {
+        conn = await db.getConnection(dbConfig);
+
+        for (let query of queries){
+            await conn.execute(query.toString(), []);
+        }
+
+        code = 1;
+        await conn.commit();
+    } catch (err) {
+        if (conn) {
+            await conn.rollback();
+        }
+    } finally {
+        if (conn) {
+            try {
+                await conn.close();
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
+    }
+
+    return code;
+}
+
 exports.query = query;
+exports.queryWithRollback = queryWithRollback;

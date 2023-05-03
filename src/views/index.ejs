@@ -100,14 +100,14 @@
             <% if(locals.siker){ %>
                 <p class="fade-out siker">Sikeres bejelentkezés!</p>
             <% } %>
-            <div class="row row-cols-3 g-3 align-items-center justify-content-center">
+            <div class="row row-cols-3 align-items-center justify-content-center">
                 <% if(locals.table){ %>
                     <% for(let i = 0; i < locals.table.length; i++){ %>
 
-                        <div class="col d-flex justify-content-center">
+                        <div class="col d-flex justify-content-center pb-7">
                             <div class="card">
                                 <img src="/<%- locals.table[i][5] %>" alt="kep" width="500px" height="500px" style="background-size: contain;" class="card-img-top">
-                                <div class="card-body">
+                                <div class="card-body text-center pb-2">
                                     <h5 class="card-title"><%= locals.table[i][0] %></h5>
                                     <p><%= locals.table[i][1] %> oldal</p>
                                     <p><%= locals.table[i][2] %></p>
@@ -115,25 +115,19 @@
                                 </div>
 
                                 <% if(locals.curr_role === 1){ %>
-                                    <form action="/upload" method="get">
+                                    <form action="/konyv" method="get" class="text-center pb-5">
                                         <button type="submit" value="modifiy" class="btn btn-secondary">szerkesztés</button>
                                     </form>
-                                    <form action="/deleteKonyv" method="post">
+                                    <form action="/konyv" method="post" class="text-center pb-5">
                                         <button type="submit" value="delete" class="btn btn-secondary">törlés</button>
                                     </form>
                                 <% } else if(locals.curr_role === 0) { %>
-                                    <form action="/addToKosar" method="post">
-                                        <button type="submit" value="<%= locals.table[i][4] %>" name="isbn" class="btn btn-secondary" style="margin-left: 72px; width: 100px;">Kosárba</button>
+                                    <form action="/addToKosar" method="post" class="text-center pb-5">
+                                        <button type="submit" value="<%= locals.table[i][4] %>" name="isbn" class="btn btn-secondary">Kosárba</button>
                                     </form>
                                 <% } %>
                             </div>
                         </div>
-                    <% } %>
-
-                    <% if(locals.curr_role === 1){ %>
-                    <form action="/upload" method="get">
-                        <button type="submit" value="upload">hozzáadás</button>
-                    </form>
                     <% } %>
                 <% } %>
             </div>

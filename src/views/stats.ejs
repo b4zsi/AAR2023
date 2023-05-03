@@ -1,77 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('includes/head') %>
-    <%- include('includes/header', {oldal: locals.oldal}) %>
+<%- include('includes/head') %>
+<%- include('includes/header', {oldal: locals.oldal}) %>
 <body>
 
-    <header>
-        <div class="container text-center">
-          <h1>Statisztikák az oldalról</h1>
-        </div>
-      </header>
-    
-      <main>
+<header>
+    <div class="container text-center">
+        <p style="font-size:5vw; text-align: center;">Statisztikák az oldalról</p>
+    </div>
+</header>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="card text-center">
-                <h2>Legnépszerűbb író</h2>
-                <p><%= locals.bestSzerzo['rows'][0][1] %> <%= locals.bestSzerzo['rows'][0][0] %></p>
-              </div>
+<main>
+    <div class="container">
+        <div class="row row-cols-3 align-items-center justify-content-center">
+            <div class="col justify-content-center pb-7">
+                <div class="card text-center">
+                    <h2>Legnépszerűbb író</h2>
+                    <p><%= locals.bestSzerzo['rows'][0][1] %> <%= locals.bestSzerzo['rows'][0][0] %></p>
+                </div>
             </div>
 
-            <div class="col-md-4">
-              <div class="card text-center">
-                <h2>Legnépszerűbb kategória</h2>
-                <p><%= locals.bestKategoria['rows'][0][0] %></p>
-              </div>
+            <div class="col-md-4 justify-content-center pb-7">
+                <div class="card text-center">
+                    <h2>Legnépszerűbb kategória</h2>
+                    <p><%= locals.bestKategoria['rows'][0][0] %></p>
+                </div>
             </div>
 
-            <div class="col-md-4">
-              <div class="card text-center">
-                <h2>Legnépszerűbb kiadó</h2>
-                <p><%= locals.bestKiado['rows'][0][0] %></p>
-              </div>
+            <div class="col-md-4 justify-content-center pb-7">
+                <div class="card text-center">
+                    <h2>Legnépszerűbb kiadó</h2>
+                    <p><%= locals.bestKiado['rows'][0][0] %></p>
+                </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 justify-content-center pb-7">
                 <div class="card text-center">
                     <h2>Utolsó darabok</h2>
                     <% for(let i = 0;i < locals.utoloDarabok['rows'].length;i++) { %>
-                    <p><%= locals.utoloDarabok['rows'][i][0] %> | <%= locals.utoloDarabok['rows'][i][1] %> db</p>
+                        <p><%= locals.utoloDarabok['rows'][i][0] %> | <%= locals.utoloDarabok['rows'][i][1] %> db</p>
                     <% } %>
                 </div>
-              </div>
+            </div>
 
-              <div class="col-md-4">
+            <div class="col-md-4 justify-content-center pb-7">
                 <div class="card text-center">
-                  <h2>Legvaluable felhasználók</h2>
-                  <% for(let i = 0;i < locals.bestUserek['rows'].length;i++) { %>
-                  <p><%= locals.bestUserek['rows'][i][0] %></p>
-                  <% } %>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="card text-center">
-                  <h2>Out of Stock</h2>
-                  <% for(let i = 0;i < locals.elfogyott['rows'].length;i++) { %>
-                    <p><%= locals.elfogyott['rows'][i][0] %></p>
+                    <h2>Legvaluable felhasználók</h2>
+                    <% for(let i = 0;i < locals.bestUserek['rows'].length;i++) { %>
+                        <p><%= locals.bestUserek['rows'][i][0] %></p>
                     <% } %>
                 </div>
-              </div>
+            </div>
 
-              <div class="col-md-4">
+            <div class="col-md-4 justify-content-center pb-7">
                 <div class="card text-center">
-                  <h2>Legnépszerűbb kategória bestsellerei</h2>
-                  <% for(let i = 0;i < locals.bestKategoriabestSeller['rows'].length;i++) { %>
-                    <p><%= locals.bestKategoriabestSeller['rows'][i][0] %> | <%= locals.bestKategoriabestSeller['rows'][i][1] %></p>
+                    <h2>Out of Stock</h2>
+                    <% for(let i = 0;i < locals.elfogyott['rows'].length;i++) { %>
+                        <p><%= locals.elfogyott['rows'][i][0] %></p>
                     <% } %>
                 </div>
-              </div>
-          </div>
+            </div>
+
+            <div class="col-md-4 justify-content-center pb-7">
+                <div class="card text-center">
+                    <h2>Legnépszerűbb kategória bestsellerei</h2>
+                    <% for(let i = 0;i < locals.bestKategoriabestSeller['rows'].length;i++) { %>
+                        <p><%= locals.bestKategoriabestSeller['rows'][i][0] %>
+                            | <%= locals.bestKategoriabestSeller['rows'][i][1] %></p>
+                    <% } %>
+                </div>
+            </div>
         </div>
-      </main>
+    </div>
+</main>
 </body>
 </html>

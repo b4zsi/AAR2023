@@ -377,15 +377,15 @@
 
                                                 <ul id="shipping_method">
                                                     <li>
-                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate1" value="flat_rate:1" class="shipping_method">
+                                                        <input type="radio" name="szallitas" required data-index="0" id="shipping_method_0_flat_rate1" value="0" class="shipping_method">
                                                         <label for="shipping_method_0_flat_rate1">Átvétel a boltunkba: Ingyenes</label>
                                                     </li>
                                                     <li>
-                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate2" value="flat_rate:2" class="shipping_method" checked="checked">
+                                                        <input type="radio" name="szallitas" required data-index="0" id="shipping_method_0_flat_rate2" value="1000" class="shipping_method" checked="checked">
                                                         <label for="shipping_method_0_flat_rate2">Átvevőhelyeken: <span class="woocommerce-Price-amount amount">1000 Ft</span></label>
                                                     </li>
                                                     <li>
-                                                        <input type="radio" name="shipping_method[0]" required data-index="0" id="shipping_method_0_flat_rate3" value="flat_rate:2" class="shipping_method" checked="checked">
+                                                        <input type="radio" name="szallitas" required data-index="0" id="shipping_method_0_flat_rate3" value="2000" class="shipping_method" checked="checked">
                                                         <label for="shipping_method_0_flat_rate3">Házhozszállítás: <span class="woocommerce-Price-amount amount">2000 Ft</span></label>
                                                     </li>
                                                 </ul>
@@ -407,21 +407,21 @@
                                                 <div id="payment" class="woocommerce-checkout-payment">
                                                     <ul class="wc_payment_methods payment_methods methods">
                                                         <li class="wc_payment_method payment_method_bacs">
-                                                            <input id="payment_method_bacs" type="radio" class="input-radio" required name="payment_method" value="bacs" data-order_button_text="">
+                                                            <input id="payment_method_bacs" type="radio" class="input-radio" required name="fizetes_formaja" value="banki_atutalas" data-order_button_text="">
                                                             <label for="payment_method_bacs">Banki átutalás </label>
                                                             <div class="payment_box payment_method_bacs" style="display: block;">
                                                                 <p>Fizesse be közvetlenül a bankszámlánkra. Kérjük, hogy a fizetési megjegyzésbe írja bele a rendelési azonosítóját. Megrendelését nem szállítjuk ki, amíg az összeg meg nem érkezett számlánkra.</p>
                                                             </div>
                                                         </li>
                                                         <li class="wc_payment_method payment_method_cheque">
-                                                            <input id="payment_method_cheque" type="radio" class="input-radio" required name="payment_method" value="cheque" data-order_button_text="">
+                                                            <input id="payment_method_cheque" type="radio" class="input-radio" required name="fizetes_formaja" value="csekk" data-order_button_text="">
                                                             <label for="payment_method_cheque">Fizetési csekkel </label>
                                                             <div class="payment_box payment_method_cheque" style="display: block;">
                                                                 <p>Kérjük, küldjön csekket egyik üzletünkhöz a megfelelően adatokkal. Tartalmazza a nevét, utcáját, városát, megyéjét és irányítószámát.</p>
                                                             </div>
                                                         </li>
                                                         <li class="wc_payment_method payment_method_cod">
-                                                            <input id="payment_method_cod" type="radio" class="input-radio" required name="payment_method" value="cod" checked="checked" data-order_button_text="">
+                                                            <input id="payment_method_cod" type="radio" class="input-radio" required name="fizetes_formaja" value="készpénz_utánvét" checked="checked" data-order_button_text="">
                                                             <label for="payment_method_cod">Fizetés átvételnél </label>
                                                             <div class="payment_box payment_method_cod" style="display: block;">
                                                                 <p>Fizetés utánvétnél készpénzzel.</p>
@@ -436,7 +436,11 @@
                                                 <tbody>
                                                     <tr class="order-total">
                                                         <th>Végösszeg</th>
-                                                        <td data-title="Total"><strong><span><%= locals.konyvosszeg %> Ft</span></strong> </td>
+                                                        <td data-title="Total">
+                                                            <label for="vegosszeg" class="m-0">
+                                                                <input name="vegosszeg" type="text" class="border-0 p-0 font-weight-bolder text-right" READONLY value="<%= locals.konyvosszeg %> Ft">
+                                                            </label>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

@@ -3,7 +3,7 @@
     <%- include('includes/head') %>
     <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
-
+        <p style="font-size:5vw; text-align: center;">Szerzők:</p>
         <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
             <form class="form text-center" action="/editSzerzo" method="post">
                 <label>

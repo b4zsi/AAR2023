@@ -4,7 +4,7 @@
     <%- include('includes/header', {oldal: locals.oldal}) %>
     <body>
         <% if(locals.table){ %>
-        <h1>Könyvek</h1>
+            <p style="font-size:5vw; text-align: center;">Könyvek:</p>
         <% if(locals.szerkesztendo && locals.szerkesztendo['rows'].length){ %>
 
             <form class="form text-center" action="/editKonyv" method="post" enctype="multipart/form-data">

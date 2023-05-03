@@ -5,6 +5,8 @@ const konyv_db = require('../modell/konyv');
 const jwt = require('jsonwebtoken')
 const path = require("path");
 const fs = require("fs");
+const {queryForRendeles, queryForRendelesiTetelek, setRendeles} = require("../modell/db");
+const os = require("os");
 
 
 module.exports = function(app) {
@@ -244,7 +246,7 @@ module.exports = function(app) {
         return res.redirect('index');
     })
 
-    app.post("/item", async (req, res) => {
+    app.post("/item", restrict_only_user, async (req, res) => {
         let { mennyi, isbn } = req.query;
         const jsonStr = req.cookies.isbn;
         let array = JSON.parse(jsonStr);
@@ -266,7 +268,7 @@ module.exports = function(app) {
         return res.redirect('/kosar');
     });
 
-    app.post("/deleteItem", async (req, res) => {
+    app.post("/deleteItem", restrict_only_user, async (req, res) => {
         let { isbn } = req.query;
         const jsonStr = req.cookies.isbn;
         let array = JSON.parse(jsonStr);
@@ -282,15 +284,27 @@ module.exports = function(app) {
     app.post('/rendel', restrict_only_user, async (req, res) => {
         const jsonStr = req.cookies.isbn;
         const array = JSON.parse(jsonStr);
+        const osszeg = parseInt(req.body.vegosszeg) + parseInt(req.body.szallitas)
         let user = (await db.getFiokByEmail(req.body.curr_email)).rows[0];
+        let queries = [];
 
-        for(let i of array) {
-            let konyv = (await db.getKonyvByISBN(i.isbn)).rows[0];
-            await db.setRendeles(i.isbn, user[0], konyv[4], i.darab);
+        await db.setRendeles(user[0], osszeg);
+
+        const rendelesi_ID = (await db.getLegujabbRendeles()).rows[0][0];
+
+        for (let i of array) {
+            queries.push(queryForRendelesiTetelek(parseInt(rendelesi_ID), i.isbn, i.darab));
         }
 
-        res.cookie('isbn', { expires: Date.now() });
-        res.redirect('index');
+        const value = await db.setRendelesVeg(queries);
+
+        if (parseInt(value) === 0) {
+            await db.deleteRendelesOnFail();
+            res.redirect('kosar');
+        } else {
+            res.cookie('isbn', {expires: Date.now()});
+            res.redirect('index');
+        }
     });
 
 }

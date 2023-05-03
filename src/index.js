@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const oracledb = require("oracledb");
-oracledb.autoCommit = true;
 
 const dbConfig = require("./config/database");
 const cookieParser = require("cookie-parser");
